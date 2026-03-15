@@ -1,3 +1,10 @@
-CLAUDE.md   
-BRIEF.md
+node_modules/
+.env
+dist/
+*.log
+.DS_Store
+
+# Planning files (not part of the codebase)
 .planning/
+CLAUDE.md
+BRIEF.md
