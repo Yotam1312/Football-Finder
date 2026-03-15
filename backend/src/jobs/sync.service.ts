@@ -26,6 +26,10 @@ const TRACKED_LEAGUES = [
 // Season arithmetic — API-Football uses the year the season started.
 // Seasons that start mid-year (e.g. August 2025) are referred to as "2025".
 // So in March 2026 we are in the 2025/26 season → season = 2025.
+//
+// NOTE: The free API-Football plan only grants access to seasons 2022–2024.
+// Until a paid plan is active, this function caps at 2024. Remove the cap
+// once you upgrade to a paid plan and the 2025 season becomes accessible.
 function getCurrentSeason(): number {
   const now = new Date();
   const year = now.getFullYear();
@@ -33,7 +37,10 @@ function getCurrentSeason(): number {
 
   // If it's June or later, the current season started this year
   // If it's before June, the current season started last year
-  return month >= 6 ? year : year - 1;
+  const season = month >= 6 ? year : year - 1;
+
+  // Free plan cap — remove this line when upgrading to a paid API plan
+  return Math.min(season, 2024);
 }
 
 // Remove diacritics (accented characters) from city names so they can be searched
@@ -48,15 +55,12 @@ function normalizeCity(city: string): string {
 
 // Fetch fixtures for a single league from API-Football
 // Returns the raw response array or throws on network/API error
+//
+// NOTE: When on a paid plan with current season access, restore the date filter
+// (from: today, to: today + 3 months) to limit API response size.
+// With the free plan and season 2024, we fetch all season fixtures (no date filter)
+// since the 2024/25 season is fully in the past and date filtering would return nothing.
 async function fetchLeagueFixtures(leagueId: number, season: number): Promise<any[]> {
-  const today = new Date();
-  const threeMonthsLater = new Date();
-  threeMonthsLater.setMonth(today.getMonth() + 3);
-
-  // Format dates as YYYY-MM-DD for the API
-  const fromDate = today.toISOString().split('T')[0];
-  const toDate = threeMonthsLater.toISOString().split('T')[0];
-
   const response = await axios.get('https://v3.football.api-sports.io/fixtures', {
     headers: {
       'x-apisports-key': process.env.API_FOOTBALL_KEY!,
@@ -64,8 +68,6 @@ async function fetchLeagueFixtures(leagueId: number, season: number): Promise<an
     params: {
       league: leagueId,
       season: season,
-      from: fromDate,
-      to: toDate,
     },
   });
 
