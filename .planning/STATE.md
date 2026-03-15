@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 02-match-discovery-02-01-PLAN.md
-last_updated: "2026-03-15T13:48:50.553Z"
+stopped_at: Completed 02-match-discovery-02-02-PLAN.md
+last_updated: "2026-03-15T14:23:32.866Z"
 last_activity: 2026-03-15 — Phase 1 fully complete; DB migrated, 3789 fixtures synced from API-Football (2024 season)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 1
+  completed_plans: 2
   percent: 20
 ---
 
@@ -51,6 +51,7 @@ Progress: [██░░░░░░░░] 20%
 
 *Updated after each plan completion*
 | Phase 02-match-discovery P01 | 4 | 2 tasks | 5 files |
+| Phase 02-match-discovery P02 | 20 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase1]: No retry on sync failure — old data stays in DB; failure logged, next league continues
 - [Phase 02-match-discovery]: Wave 0 TDD pattern: test scaffolds written before implementation so Plans 02/03 have a clear green target
 - [Phase 02-match-discovery]: Used modern ts-jest transform syntax instead of deprecated globals config to eliminate runtime warnings
+- [Phase 02-match-discovery]: syncStandings() reuses TRACKED_LEAGUES and getCurrentSeason() for consistency with fixture sync
+- [Phase 02-match-discovery]: Standings fetched after fixtures in runFixtureSync() — admin trigger and cron both keep standings current
 
 ### Pending Todos
 
@@ -86,6 +89,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T13:48:50.549Z
-Stopped at: Completed 02-match-discovery-02-01-PLAN.md
+Last session: 2026-03-15T14:23:32.862Z
+Stopped at: Completed 02-match-discovery-02-02-PLAN.md
 Resume file: None
