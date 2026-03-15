@@ -64,10 +64,13 @@ Plans:
   3. User can see all posts on a team's FanBase page organized in tabs: All / Seat Tips / Pubs and Food / Local Crowd / I'm Going
   4. User can read every post on a team's FanBase page without being asked to log in or verify an email
   5. Team cards in the team selection step display a post count badge so users can see which teams have the most community activity
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md — Backend FanBase API (6 endpoints + 5 integration test files)
+- [ ] 03-02-PLAN.md — Frontend types, hooks, and utility functions (6 hooks + types + toSlug)
+- [ ] 03-03-PLAN.md — FanBase Hub page (3-step navigation + live search + Navbar + App routes)
+- [ ] 03-04-PLAN.md — Team FanBase page (tabs + post cards + pagination + disabled Add button)
 
 ### Phase 4: Auth and Posting
 **Goal**: A user can create any type of FanBase post after email verification, and a full account holder can upvote posts, edit or delete their own posts, and track favorite teams
@@ -108,6 +111,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/1 | Complete | 2026-03-15 |
 | 2. Match Discovery | 6/6 | Complete | 2026-03-15 |
-| 3. FanBase Browse | 0/TBD | Not started | - |
+| 3. FanBase Browse | 0/4 | Not started | - |
 | 4. Auth and Posting | 0/TBD | Not started | - |
 | 5. Polish and Launch | 0/TBD | Not started | - |
