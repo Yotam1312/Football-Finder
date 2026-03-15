@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 02-match-discovery-02-03-PLAN.md
-last_updated: "2026-03-15T14:29:29.768Z"
+stopped_at: Completed 02-match-discovery-02-04-PLAN.md
+last_updated: "2026-03-15T14:35:06.173Z"
 last_activity: 2026-03-15 — Phase 1 fully complete; DB migrated, 3789 fixtures synced from API-Football (2024 season)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 3
+  completed_plans: 4
   percent: 20
 ---
 
@@ -53,6 +53,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02-match-discovery P01 | 4 | 2 tasks | 5 files |
 | Phase 02-match-discovery P02 | 20 | 2 tasks | 4 files |
 | Phase 02-match-discovery P03 | 4 | 2 tasks | 11 files |
+| Phase 02-match-discovery P04 | 3 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,8 @@ Recent decisions affecting current work:
 - [Phase 02-match-discovery]: Standings fetched after fixtures in runFixtureSync() — admin trigger and cron both keep standings current
 - [Phase 02-match-discovery]: Used --legacy-peer-deps for @tailwindcss/vite because Vite 8 is outside Tailwind v4 peer dep range — functionally compatible
 - [Phase 02-match-discovery]: Tailwind v4 needs only @import 'tailwindcss' in index.css — no tailwind.config.js required
+- [Phase 02-match-discovery]: Used default import for prisma (import prisma from database) — database.ts uses export default
+- [Phase 02-match-discovery]: Route order: /search registered before /:id to prevent 'search' being treated as a numeric match id
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T14:29:29.764Z
-Stopped at: Completed 02-match-discovery-02-03-PLAN.md
+Last session: 2026-03-15T14:35:06.170Z
+Stopped at: Completed 02-match-discovery-02-04-PLAN.md
 Resume file: None
