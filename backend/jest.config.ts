@@ -7,11 +7,11 @@ const config: Config = {
   testEnvironment: 'node',
   // Look for test files in __tests__ directories or files ending in .test.ts
   testMatch: ['**/__tests__/**/*.test.ts'],
-  // ts-jest needs to know about the TypeScript config
-  globals: {
-    'ts-jest': {
+  // ts-jest transform configuration (modern syntax to avoid deprecation warnings)
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
       tsconfig: 'tsconfig.json',
-    },
+    }],
   },
 };
 
