@@ -12,12 +12,12 @@
 
 ### Match Search & Discovery
 
-- [ ] **MATCH-01**: User can search for matches by entering a city and a date range on the homepage
+- [x] **MATCH-01**: User can search for matches by entering a city and a date range on the homepage
 - [x] **MATCH-02**: User can see all matches in the searched city and date range as a list of match cards (team logos, league, date/time, venue)
 - [x] **MATCH-03**: User can view full match details (team crests, league badge, date/time, venue, team stats)
-- [ ] **MATCH-04**: User can click a "Buy Tickets" link on a match detail page (redirects to external seller)
+- [x] **MATCH-04**: User can click a "Buy Tickets" link on a match detail page (redirects to external seller)
 - [ ] **MATCH-05**: User can click "Navigate to Stadium" and be taken to Google Maps directions for that venue
-- [ ] **MATCH-06**: User can navigate from a match detail page to either team's FanBase page
+- [x] **MATCH-06**: User can navigate from a match detail page to either team's FanBase page
 
 ### FanBase — Navigation & Browse
 
