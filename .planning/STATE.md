@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 03-fanbase-browse-03-03-PLAN.md
-last_updated: "2026-03-15T15:55:52.077Z"
+stopped_at: Completed 03-fanbase-browse-03-04-PLAN.md
+last_updated: "2026-03-15T16:00:11.992Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
   percent: 100
 ---
 
@@ -58,6 +58,7 @@ Progress: [████████████████████] 100%
 | Phase 02-match-discovery P06 | 15 | 2 tasks | 3 files |
 | Phase 03-fanbase-browse P02 | 10 | 2 tasks | 9 files |
 | Phase 03-fanbase-browse P03 | 18 | 2 tasks | 10 files |
+| Phase 03-fanbase-browse P04 | 2 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,9 @@ Recent decisions affecting current work:
 - [Phase 03-fanbase-browse P02]: useFanbaseTeam throws distinct Team not found error on 404 for page-level error differentiation
 - [Phase 03-fanbase-browse P03]: Single FanBasePage component handles /fanbase, /fanbase/:country, /fanbase/:country/:league — avoids code duplication while keeping browser back/forward natural
 - [Phase 03-fanbase-browse P03]: TeamLogo size='sm' used in TeamGrid — plan spec said 'md' but TeamLogo only supports 'sm'|'lg'; sm (40px) appropriate for 4-col grid
+- [Phase 03-fanbase-browse]: PostCard uses switch on post.postType to keep PostFeed free of type-checking logic
+- [Phase 03-fanbase-browse]: Tab state in ?tab= URL param — shareable links and browser back/forward work naturally
+- [Phase 03-fanbase-browse]: Page resets to 1 on tab change to avoid stale pagination state when switching tabs
 
 ### Pending Todos
 
@@ -112,6 +116,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T15:55:52.074Z
-Stopped at: Completed 03-fanbase-browse-03-03-PLAN.md
+Last session: 2026-03-15T16:00:11.988Z
+Stopped at: Completed 03-fanbase-browse-03-04-PLAN.md
 Resume file: None
