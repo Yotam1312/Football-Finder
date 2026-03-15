@@ -172,6 +172,91 @@ async function upsertFixture(fixture: any, leagueRecord: any, countryTimezone: s
   });
 }
 
+// Fetches league standings from API-Football and upserts into TeamStanding.
+// Called once per league per night — 10 leagues = 10 API calls.
+// Uses the same season cap as fixture sync (2024 on free plan).
+// Each standing entry is upserted by the unique key [teamId, leagueId, season].
+async function syncStandings(): Promise<void> {
+  const season = getCurrentSeason(); // already capped at 2024 for free plan
+
+  for (const league of TRACKED_LEAGUES) {
+    try {
+      // Fetch standings from API-Football
+      const response = await axios.get('https://v3.football.api-sports.io/standings', {
+        params: { league: league.id, season },
+        headers: {
+          'x-apisports-key': process.env.API_FOOTBALL_KEY!,
+        },
+      });
+
+      // Navigate the nested response structure:
+      // response.data.response[0].league.standings[0] is the main standings group
+      const leagueStandings = response.data?.response?.[0]?.league?.standings?.[0];
+      if (!leagueStandings || !Array.isArray(leagueStandings)) {
+        console.log(`[Sync] No standings data for league ${league.name} (ID: ${league.id}) season ${season}`);
+        continue;
+      }
+
+      // Look up our internal League record by its API-Football ID
+      const leagueRecord = await prisma.league.findUnique({
+        where: { apiFootballId: league.id },
+      });
+      if (!leagueRecord) {
+        console.log(`[Sync] League ${league.name} not found in DB — skipping standings`);
+        continue;
+      }
+
+      // Upsert each team's standing row
+      for (const standing of leagueStandings) {
+        // Look up our internal Team record using the API-Football team id
+        const team = await prisma.team.findUnique({
+          where: { apiFootballId: standing.team.id },
+        });
+        if (!team) continue; // team not tracked in our DB — skip
+
+        await prisma.teamStanding.upsert({
+          where: {
+            teamId_leagueId_season: {
+              teamId: team.id,
+              leagueId: leagueRecord.id,
+              season,
+            },
+          },
+          update: {
+            position:     standing.rank,
+            played:       standing.all.played,
+            wins:         standing.all.win,
+            draws:        standing.all.draw,
+            losses:       standing.all.lose,
+            goalsFor:     standing.all.goals.for,
+            goalsAgainst: standing.all.goals.against,
+            points:       standing.points,
+          },
+          create: {
+            teamId:       team.id,
+            leagueId:     leagueRecord.id,
+            season,
+            position:     standing.rank,
+            played:       standing.all.played,
+            wins:         standing.all.win,
+            draws:        standing.all.draw,
+            losses:       standing.all.lose,
+            goalsFor:     standing.all.goals.for,
+            goalsAgainst: standing.all.goals.against,
+            points:       standing.points,
+          },
+        });
+      }
+
+      console.log(`[Sync] Standings synced for ${league.name} (ID: ${league.id}) season ${season}`);
+    } catch (error) {
+      // Log failure and continue to the next league — same pattern as fixture sync.
+      // Old standings stay in DB; this league will retry on the next nightly run.
+      console.error(`[Sync] Failed to sync standings for ${league.name}:`, error);
+    }
+  }
+}
+
 // Main sync function — called by the cron job and the admin trigger endpoint
 // Fetches all 10 leagues sequentially to avoid rate limiting
 export async function runFixtureSync(): Promise<void> {
@@ -205,4 +290,10 @@ export async function runFixtureSync(): Promise<void> {
   }
 
   console.log(`[Sync] Completed. Total fixtures: ${totalFixtures}. Failed leagues: ${failedLeagues}/10`);
+
+  // Sync standings after fixtures — one API call per league (10 calls total)
+  // Standings data is used on the match detail page to show team form (Plan 06)
+  console.log('[Sync] Starting standings sync...');
+  await syncStandings();
+  console.log('[Sync] Standings sync complete');
 }
