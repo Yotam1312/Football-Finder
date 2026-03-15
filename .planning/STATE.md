@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 02-match-discovery-02-05-PLAN.md
-last_updated: "2026-03-15T14:40:05.076Z"
+stopped_at: Completed 02-match-discovery-02-06-PLAN.md
+last_updated: "2026-03-15T14:47:08.974Z"
 last_activity: 2026-03-15 — Phase 1 fully complete; DB migrated, 3789 fixtures synced from API-Football (2024 season)
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 5
-  percent: 20
+  completed_plans: 6
+  percent: 40
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 
 ## Current Position
 
-Phase: 1 of 5 (Foundation) — COMPLETE
-Plan: 1 of 1 complete
-Status: All 5 tasks complete — proceeding to Phase 2
-Last activity: 2026-03-15 — Phase 1 fully complete; DB migrated, 3789 fixtures synced from API-Football (2024 season)
+Phase: 2 of 5 (Match Discovery) — COMPLETE
+Plan: 6 of 6 complete
+Status: All Phase 2 tasks complete — Phase 3 (FanBase) is next
+Last activity: 2026-03-15 — Phase 2 complete; match detail page, StatBar, FanBase links, and all MATCH requirements delivered
 
-Progress: [██░░░░░░░░] 20%
+Progress: [████████████████████] 100%
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02-match-discovery P03 | 4 | 2 tasks | 11 files |
 | Phase 02-match-discovery P04 | 3 | 2 tasks | 4 files |
 | Phase 02-match-discovery P05 | 15 | 2 tasks | 8 files |
+| Phase 02-match-discovery P06 | 15 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 - [Phase 02-match-discovery]: Route order: /search registered before /:id to prevent 'search' being treated as a numeric match id
 - [Phase 02-match-discovery]: URL params drive results page state — city/from/to in URL allows browser back/forward and direct link sharing
 - [Phase 02-match-discovery]: import type required for type-only imports in this project (verbatimModuleSyntax enabled in tsconfig)
+- [Phase 02-match-discovery]: StatBar returns null early when both standings null — avoids empty card for untracked teams
+- [Phase 02-match-discovery]: season capped client-side at Math.min(currentYear-1, 2024) to match backend API-Football free-plan cap
+- [Phase 02-match-discovery]: Navigate to Stadium falls back to buildMapsUrl when googleMapsUrl is null — graceful degradation for all venues
 
 ### Pending Todos
 
@@ -98,6 +102,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T14:40:05.073Z
-Stopped at: Completed 02-match-discovery-02-05-PLAN.md
+Last session: 2026-03-15T14:47:08.970Z
+Stopped at: Completed 02-match-discovery-02-06-PLAN.md
 Resume file: None
