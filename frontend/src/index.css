@@ -1,0 +1,19 @@
+/* Tailwind CSS v4 — this single import brings in all Tailwind utilities */
+@import "tailwindcss";
+
+/* Design tokens from BRIEF.md */
+:root {
+  --color-primary: #16a34a;
+  --color-primary-dark: #15803d;
+  --color-primary-hover: #22c55e;
+  --color-bg: #FAFAFA;
+  --color-card: #FFFFFF;
+  --color-text: #1F2937;
+  --color-text-secondary: #6B7280;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+}
