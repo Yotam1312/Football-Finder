@@ -5,6 +5,7 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import healthRoutes from './routes/health.routes';
 import adminRoutes from './routes/admin.routes';
+import matchRoutes from './routes/match.routes';
 
 const app = express();
 
@@ -37,5 +38,6 @@ app.use(limiter);
 // Routes
 app.use('/api', healthRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/matches', matchRoutes);
 
 export default app;
