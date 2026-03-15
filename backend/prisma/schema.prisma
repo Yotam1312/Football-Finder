@@ -17,12 +17,13 @@ datasource db {
 // ─────────────────────────────────────────────
 
 model League {
-  id            Int     @id @default(autoincrement())
-  apiFootballId Int     @unique // ID from API-Football — used to identify leagues across sync runs
+  id            Int            @id @default(autoincrement())
+  apiFootballId Int            @unique // ID from API-Football — used to identify leagues across sync runs
   name          String
   country       String
   logoUrl       String?
   matches       Match[]
+  standings     TeamStanding[] // Phase 2 — standings for each team in this league
 }
 
 model Stadium {
@@ -47,6 +48,7 @@ model Team {
   awayMatches   Match[]        @relation("AwayTeam")
   posts         Post[]         // Phase 3+
   favoritedBy   UserFavorite[] // Phase 4
+  standings     TeamStanding[] // Phase 2 — league table positions for match detail page
 }
 
 model Match {
@@ -58,6 +60,7 @@ model Match {
   stadiumId     Int?     // nullable — API sometimes returns no venue
   matchDate     DateTime // stored as UTC; derive local time on display using stadium.timezone
   status        String   @default("NS") // NS=Not Started, 1H, HT, 2H, FT, etc.
+  ticketUrl     String?  // nullable — populated when an affiliate ticket link is available; null hides the Buy Tickets button
 
   league    League   @relation(fields: [leagueId], references: [id])
   homeTeam  Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
@@ -66,6 +69,28 @@ model Match {
 
   // Index on matchDate — Phase 2 searches filter by date range
   @@index([matchDate])
+}
+
+model TeamStanding {
+  id            Int    @id @default(autoincrement())
+  teamId        Int
+  leagueId      Int
+  season        Int
+  position      Int    // league table position (1 = top)
+  played        Int
+  wins          Int
+  draws         Int
+  losses        Int
+  goalsFor      Int
+  goalsAgainst  Int
+  points        Int
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  league League @relation(fields: [leagueId], references: [id])
+
+  // A team has exactly one standing per league per season
+  @@unique([teamId, leagueId, season])
+  @@index([teamId])
 }
 
 // ─────────────────────────────────────────────
