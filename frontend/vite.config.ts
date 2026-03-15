@@ -14,7 +14,7 @@ export default defineConfig({
     // Without this, the browser would try to fetch from port 5173 (frontend)
     // instead of port 3000 (backend), causing CORS errors.
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/api': 'http://localhost:3001',
     },
   },
 });

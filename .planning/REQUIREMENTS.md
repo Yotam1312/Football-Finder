@@ -21,11 +21,11 @@
 
 ### FanBase — Navigation & Browse
 
-- [ ] **FAN-01**: User can browse FanBase by selecting Country → League → Team in a 3-step flow
-- [ ] **FAN-02**: User can search for a team directly from the FanBase Hub (bypasses 3-step flow)
-- [ ] **FAN-03**: User can see a team's FanBase page with posts organized in tabs: All / Seat Tips / Pubs & Food / Local Crowd / I'm Going
-- [ ] **FAN-04**: User can read all FanBase posts without creating an account
-- [ ] **FAN-05**: User can see post counts on team cards in the team selection step
+- [x] **FAN-01**: User can browse FanBase by selecting Country → League → Team in a 3-step flow
+- [x] **FAN-02**: User can search for a team directly from the FanBase Hub (bypasses 3-step flow)
+- [x] **FAN-03**: User can see a team's FanBase page with posts organized in tabs: All / Seat Tips / Pubs & Food / Local Crowd / I'm Going
+- [x] **FAN-04**: User can read all FanBase posts without creating an account
+- [x] **FAN-05**: User can see post counts on team cards in the team selection step
 
 ### FanBase — Posting (Email-Verified)
 

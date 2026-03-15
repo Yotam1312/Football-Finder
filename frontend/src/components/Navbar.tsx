@@ -16,7 +16,9 @@ export const Navbar: React.FC = () => {
           <Link to="/" className="text-gray-600 hover:text-green-600 transition-colors">
             Home
           </Link>
-          {/* FanBase link added in Phase 3 */}
+          <Link to="/fanbase" className="text-gray-600 hover:text-green-600 transition-colors">
+            FanBase
+          </Link>
         </div>
       </div>
     </nav>

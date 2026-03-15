@@ -4,6 +4,8 @@ import { Navbar } from './components/Navbar';
 import { HomePage } from './pages/HomePage';
 import { ResultsPage } from './pages/ResultsPage';
 import { MatchDetailPage } from './pages/MatchDetailPage';
+import { FanBasePage } from './pages/FanBasePage';
+import { TeamFanBasePage } from './pages/TeamFanBasePage';
 
 // AnimatePresence enables smooth page transition animations.
 // key={location.pathname} tells Framer Motion when a route change happens.
@@ -17,18 +19,12 @@ export default function App() {
           <Route path="/"          element={<HomePage />} />
           <Route path="/results"   element={<ResultsPage />} />
           <Route path="/match/:id" element={<MatchDetailPage />} />
-          {/* Phase 3 stub — MATCH-06 links here; real page built in Phase 3 */}
-          <Route
-            path="/fanbase/team/:teamId"
-            element={
-              <div className="flex items-center justify-center min-h-screen">
-                <div className="text-center">
-                  <h1 className="text-2xl font-bold text-gray-800">FanBase Coming Soon</h1>
-                  <p className="text-gray-500 mt-2">Community features launch in Phase 3.</p>
-                </div>
-              </div>
-            }
-          />
+          {/* FanBase hub — all 3 steps handled by one component via useParams */}
+          <Route path="/fanbase"                    element={<FanBasePage />} />
+          <Route path="/fanbase/:country"           element={<FanBasePage />} />
+          <Route path="/fanbase/:country/:league"   element={<FanBasePage />} />
+          {/* Team FanBase page — /fanbase/team/:teamId is a static prefix "team", beats dynamic :country */}
+          <Route path="/fanbase/team/:teamId"       element={<TeamFanBasePage />} />
         </Routes>
       </AnimatePresence>
     </>
