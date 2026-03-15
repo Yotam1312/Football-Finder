@@ -1,0 +1,171 @@
+// Prisma schema for Football Finder
+// All tables are defined upfront to avoid migrations against live data.
+// Tables marked "Phase 3+" won't have data written until later phases,
+// but their structure is locked in from the start.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// MATCH DATA (Phase 1 — actively written by sync job)
+// ─────────────────────────────────────────────
+
+model League {
+  id            Int     @id @default(autoincrement())
+  apiFootballId Int     @unique // ID from API-Football — used to identify leagues across sync runs
+  name          String
+  country       String
+  logoUrl       String?
+  matches       Match[]
+}
+
+model Stadium {
+  id             Int     @id @default(autoincrement())
+  name           String
+  city           String  // original city name from API (e.g. "München")
+  cityNormalized String  // diacritics removed, lowercased (e.g. "munchen") — used for city search
+  timezone       String  // IANA timezone string (e.g. "Europe/Berlin")
+  googleMapsUrl  String? // filled in manually or Phase 2
+  matches        Match[]
+
+  // Index on cityNormalized — this is the field users search by in Phase 2
+  @@index([cityNormalized])
+}
+
+model Team {
+  id            Int            @id @default(autoincrement())
+  apiFootballId Int            @unique
+  name          String
+  logoUrl       String?
+  homeMatches   Match[]        @relation("HomeTeam")
+  awayMatches   Match[]        @relation("AwayTeam")
+  posts         Post[]         // Phase 3+
+  favoritedBy   UserFavorite[] // Phase 4
+}
+
+model Match {
+  id            Int      @id @default(autoincrement())
+  apiFootballId Int      @unique // fixture.id from API-Football — upsert key
+  leagueId      Int
+  homeTeamId    Int
+  awayTeamId    Int
+  stadiumId     Int?     // nullable — API sometimes returns no venue
+  matchDate     DateTime // stored as UTC; derive local time on display using stadium.timezone
+  status        String   @default("NS") // NS=Not Started, 1H, HT, 2H, FT, etc.
+
+  league    League   @relation(fields: [leagueId], references: [id])
+  homeTeam  Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam  Team     @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  stadium   Stadium? @relation(fields: [stadiumId], references: [id])
+
+  // Index on matchDate — Phase 2 searches filter by date range
+  @@index([matchDate])
+}
+
+// ─────────────────────────────────────────────
+// AUTH + USERS (Phase 4 — schema defined now, used later)
+// ─────────────────────────────────────────────
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  passwordHash String?  // null for email-only (Level 2) users; set when upgrading to Level 3
+  createdAt    DateTime @default(now())
+
+  posts     Post[]
+  upvotes   Upvote[]
+  favorites UserFavorite[]
+  tokens    VerificationToken[]
+}
+
+model VerificationToken {
+  id              Int       @id @default(autoincrement())
+  token           String    @unique // random URL-safe token sent via email
+  userId          Int?      // null until user creates a full account
+  email           String    // always stored — used to look up user on verification
+  expiresAt       DateTime
+  usedAt          DateTime? // set when token is consumed; null tokens are still valid
+  pendingPostData Json?     // stores serialized form data during email verification flow
+
+  user User? @relation(fields: [userId], references: [id])
+
+  // Index on token — every verification request queries by token
+  @@index([token])
+}
+
+// ─────────────────────────────────────────────
+// FANBASE POSTS (Phase 3 read, Phase 4 write)
+// ─────────────────────────────────────────────
+
+model Post {
+  id           Int      @id @default(autoincrement())
+  teamId       Int
+  userId       Int?     // null for email-only (Level 2) posts
+  postType     PostType
+  title        String
+  body         String
+  authorName   String   // display name for the post — not tied to User.name
+  authorEmail  String   // used to attribute posts to accounts
+  photoUrl     String?  // Seat Tip posts only — stored in Azure Blob Storage (Phase 4)
+  seatSection  String?  // Seat Tip posts only
+  seatRow      String?
+  seatNumber   String?
+  seatRating   Int?     // 1–5 stars
+  pubName      String?  // Pub Recommendation posts only
+  pubAddress   String?
+  pubDistance  String?  // e.g. "5 min walk"
+  matchId      Int?     // I'm Going posts only — links to a specific Match
+  upvoteCount  Int      @default(0)
+  reported     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  team    Team    @relation(fields: [teamId], references: [id])
+  user    User?   @relation(fields: [userId], references: [id])
+  upvotes Upvote[]
+
+  // teamId index — Phase 3 queries fetch all posts for a team
+  @@index([teamId])
+  // postType index — tab filtering queries by type
+  @@index([postType])
+}
+
+model Upvote {
+  id     Int @id @default(autoincrement())
+  postId Int
+  userId Int
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  // Prevent duplicate upvotes — one user can upvote a post exactly once
+  @@unique([postId, userId])
+}
+
+model UserFavorite {
+  id     Int @id @default(autoincrement())
+  userId Int
+  teamId Int
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum PostType {
+  GENERAL_TIP        // General advice about going to a match
+  SEAT_TIP           // Seat-specific tip with optional photo
+  PUB_RECOMMENDATION // Pub or food spot near the stadium
+  IM_GOING           // "I'm attending this match" post
+}
