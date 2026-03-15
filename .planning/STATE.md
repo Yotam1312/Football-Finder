@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 02-match-discovery-02-06-PLAN.md
-last_updated: "2026-03-15T14:56:07.986Z"
-last_activity: 2026-03-15 — Phase 2 complete; match detail page, StatBar, FanBase links, and all MATCH requirements delivered
+status: in-progress
+stopped_at: Completed 03-fanbase-browse-03-01-PLAN.md
+last_updated: "2026-03-15T15:55:00.000Z"
+last_activity: 2026-03-15 — Phase 3 Plan 1 complete; 6 FanBase API endpoints live with 17 passing integration tests
 progress:
   total_phases: 5
   completed_phases: 1
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-03-15)
 
 ## Current Position
 
-Phase: 2 of 5 (Match Discovery) — COMPLETE
-Plan: 6 of 6 complete
-Status: All Phase 2 tasks complete — Phase 3 (FanBase) is next
-Last activity: 2026-03-15 — Phase 2 complete; match detail page, StatBar, FanBase links, and all MATCH requirements delivered
+Phase: 3 of 5 (FanBase Browse) — IN PROGRESS
+Plan: 1 of 4 complete
+Status: Plan 1 complete — 6 FanBase API endpoints live, 17 tests passing
+Last activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 
 Progress: [████████████████████] 100%
 
@@ -85,6 +85,10 @@ Recent decisions affecting current work:
 - [Phase 02-match-discovery]: StatBar returns null early when both standings null — avoids empty card for untracked teams
 - [Phase 02-match-discovery]: season capped client-side at Math.min(currentYear-1, 2024) to match backend API-Football free-plan cap
 - [Phase 02-match-discovery]: Navigate to Stadium falls back to buildMapsUrl when googleMapsUrl is null — graceful degradation for all venues
+- [Phase 03-fanbase-browse P01]: Two-step query in getTeamsByLeague (Set deduplication) avoids N+1 without raw SQL
+- [Phase 03-fanbase-browse P01]: Route prefix ordering: /teams/search (plural) before /team/:teamId (singular) — different prefixes prevent Express param collision
+- [Phase 03-fanbase-browse P01]: getTeamPosts always filters reported=false to keep public content clean
+- [Phase 03-fanbase-browse P01]: PostType validated against explicit VALID_POST_TYPES array rather than importing Prisma enum values at runtime
 
 ### Pending Todos
 
@@ -102,6 +106,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T14:47:08.970Z
-Stopped at: Completed 02-match-discovery-02-06-PLAN.md
+Last session: 2026-03-15T15:55:00Z
+Stopped at: Completed 03-fanbase-browse-03-01-PLAN.md
 Resume file: None
