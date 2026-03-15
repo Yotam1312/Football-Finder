@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 02-match-discovery-02-04-PLAN.md
-last_updated: "2026-03-15T14:35:06.173Z"
+stopped_at: Completed 02-match-discovery-02-05-PLAN.md
+last_updated: "2026-03-15T14:40:05.076Z"
 last_activity: 2026-03-15 — Phase 1 fully complete; DB migrated, 3789 fixtures synced from API-Football (2024 season)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 20
 ---
 
@@ -54,6 +54,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 02-match-discovery P02 | 20 | 2 tasks | 4 files |
 | Phase 02-match-discovery P03 | 4 | 2 tasks | 11 files |
 | Phase 02-match-discovery P04 | 3 | 2 tasks | 4 files |
+| Phase 02-match-discovery P05 | 15 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - [Phase 02-match-discovery]: Tailwind v4 needs only @import 'tailwindcss' in index.css — no tailwind.config.js required
 - [Phase 02-match-discovery]: Used default import for prisma (import prisma from database) — database.ts uses export default
 - [Phase 02-match-discovery]: Route order: /search registered before /:id to prevent 'search' being treated as a numeric match id
+- [Phase 02-match-discovery]: URL params drive results page state — city/from/to in URL allows browser back/forward and direct link sharing
+- [Phase 02-match-discovery]: import type required for type-only imports in this project (verbatimModuleSyntax enabled in tsconfig)
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T14:35:06.170Z
-Stopped at: Completed 02-match-discovery-02-04-PLAN.md
+Last session: 2026-03-15T14:40:05.073Z
+Stopped at: Completed 02-match-discovery-02-05-PLAN.md
 Resume file: None
