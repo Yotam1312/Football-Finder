@@ -5,6 +5,7 @@ import { useFanbaseTeam } from '../hooks/useFanbaseTeam';
 import { useFanbasePosts } from '../hooks/useFanbasePosts';
 import { TeamLogo } from '../components/TeamLogo';
 import { PostFeed } from '../components/fanbase/PostFeed';
+import { CreatePostModal } from '../components/fanbase/CreatePostModal';
 
 // Maps URL tab slugs to PostType enum values used by the API's ?type= filter.
 // 'all' maps to undefined so the API returns posts of every type (no filter applied).
@@ -29,6 +30,9 @@ export const TeamFanBasePage: React.FC = () => {
 
   // Track which page of posts is shown — reset to 1 whenever the tab changes
   const [page, setPage] = useState(1);
+
+  // Controls whether the CreatePostModal is open
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Look up the PostType filter for the active tab (undefined for 'all' = no filter)
   const postType = TAB_TO_POST_TYPE[activeTab];
@@ -98,13 +102,10 @@ export const TeamFanBasePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Add button — visible but disabled in Phase 3 (posting not yet implemented).
-                  The title attribute shows "Posting coming soon" as a tooltip on hover.
-                  No login prompt is shown — the page is fully public (FAN-04). */}
+              {/* Add button — opens the CreatePostModal. Any visitor can post (FAN-04). */}
               <button
-                disabled
-                title="Posting coming soon"
-                className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium opacity-50 cursor-not-allowed"
+                onClick={() => setIsModalOpen(true)}
+                className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
               >
                 + Add Your Tip
               </button>
@@ -123,6 +124,15 @@ export const TeamFanBasePage: React.FC = () => {
           onPageChange={setPage}
         />
       </div>
+
+      {/* Create post modal — rendered at root level to escape the content container */}
+      {isModalOpen && team && (
+        <CreatePostModal
+          teamId={parseInt(teamId!, 10)}
+          teamName={team.name}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </motion.div>
   );
 };
