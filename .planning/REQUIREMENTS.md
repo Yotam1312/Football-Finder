@@ -42,10 +42,10 @@
 
 - [x] **AUTH-01**: Email-verified user can upgrade to a full account by setting a password
 - [x] **AUTH-02**: Full account user can log in with email + password and stay logged in across sessions
-- [ ] **AUTH-03**: Full account user can upvote posts
-- [ ] **AUTH-04**: Full account user can edit their own posts
-- [ ] **AUTH-05**: Full account user can delete their own posts
-- [ ] **AUTH-06**: Full account user can track favorite teams
+- [x] **AUTH-03**: Full account user can upvote posts
+- [x] **AUTH-04**: Full account user can edit their own posts
+- [x] **AUTH-05**: Full account user can delete their own posts
+- [x] **AUTH-06**: Full account user can track favorite teams
 - [x] **AUTH-07**: User can log out from any page
 
 ### Static Pages & Polish

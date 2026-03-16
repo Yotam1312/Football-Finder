@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-auth-and-posting-04-01-PLAN.md
-last_updated: "2026-03-16T14:26:46.835Z"
+stopped_at: Completed 04-auth-and-posting-04-02-PLAN.md
+last_updated: "2026-03-16T14:33:21.361Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 15
-  completed_plans: 11
+  completed_plans: 12
   percent: 73
 ---
 
@@ -76,6 +76,7 @@ Progress: [████████████████████] 100%
 | Phase 03-fanbase-browse P03 | 18 | 2 tasks | 10 files |
 | Phase 03-fanbase-browse P04 | 2 | 2 tasks | 7 files |
 | Phase 04-auth-and-posting P04-01 | 35 | 3 tasks | 8 files |
+| Phase 04-auth-and-posting P04-02 | 4 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -120,6 +121,9 @@ Recent decisions affecting current work:
 - [Phase 04-auth-and-posting]: bcryptjs not bcrypt — same API, no native compilation needed
 - [Phase 04-auth-and-posting]: setAuthCookie() helper centralizes JWT signing; secure:true only in production
 - [Phase 04-auth-and-posting]: getMe derives level dynamically from DB (passwordHash null check) not from JWT level field
+- [Phase 04-auth-and-posting]: Upvote toggle uses $transaction array form to keep Upvote row and upvoteCount counter atomically in sync
+- [Phase 04-auth-and-posting]: editPost uses conditional spread for each optional field — avoids overwriting existing data with undefined
+- [Phase 04-auth-and-posting]: deletePost deletes upvotes with deleteMany before deleting the post to avoid foreign key constraint error
 
 ### Pending Todos
 
@@ -137,6 +141,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-16T14:26:46.831Z
-Stopped at: Completed 04-auth-and-posting-04-01-PLAN.md
+Last session: 2026-03-16T14:33:21.357Z
+Stopped at: Completed 04-auth-and-posting-04-02-PLAN.md
 Resume file: None
