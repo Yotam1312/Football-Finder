@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Scaffold the backend, define the database schema, and get European match fixtures syncing from API-Football into PostgreSQL nightly — *Completed 2026-03-15*
 - [x] **Phase 2: Match Discovery** - Build the city + date search, match results list, and full match detail page with tickets and stadium navigation — *Completed 2026-03-15*
 - [x] **Phase 3: FanBase Browse** - Build the Country → League → Team navigation and team FanBase pages with tabbed post feeds (read-only, no account needed) (completed 2026-03-15)
-- [ ] **Phase 4: Auth and Posting** - Add email-verified post creation for all post types, photo uploads, and full account features (upvote, edit/delete, favorite teams)
+- [x] **Phase 4: Auth and Posting** - Add email-verified post creation for all post types, photo uploads, and full account features (upvote, edit/delete, favorite teams) (completed 2026-03-16)
 - [ ] **Phase 5: Polish and Launch** - Transportation guide, contact page, 404 page, mobile responsiveness audit, and FanBase seeding before going live
 
 ## Phase Details
@@ -116,5 +116,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 1/1 | Complete | 2026-03-15 |
 | 2. Match Discovery | 6/6 | Complete | 2026-03-15 |
 | 3. FanBase Browse | 4/4 | Complete   | 2026-03-15 |
-| 4. Auth and Posting | 4/5 | In Progress|  |
+| 4. Auth and Posting | 5/5 | Complete   | 2026-03-16 |
 | 5. Polish and Launch | 0/TBD | Not started | - |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-auth-and-posting-04-04-PLAN.md
-last_updated: "2026-03-16T14:43:38.852Z"
+stopped_at: Completed 04-auth-and-posting-04-05-PLAN.md
+last_updated: "2026-03-16T14:52:18.854Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 15
-  completed_plans: 14
+  completed_plans: 15
   percent: 73
 ---
 
@@ -79,6 +79,7 @@ Progress: [████████████████████] 100%
 | Phase 04-auth-and-posting P04-02 | 4 | 2 tasks | 7 files |
 | Phase 04-auth-and-posting P04-03 | 3 | 2 tasks | 7 files |
 | Phase 04-auth-and-posting P04-04 | 4 | 2 tasks | 5 files |
+| Phase 04-auth-and-posting P04-05 | 6 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,8 @@ Recent decisions affecting current work:
 - [Phase 04-auth-and-posting]: upcoming-matches route registered before /team/:teamId to prevent Express param collision
 - [Phase 04-auth-and-posting]: match picker uses plain fetch+useEffect not TanStack Query — one-off load on form step render
 - [Phase 04-auth-and-posting]: optional post fields conditionally spread into payload to avoid sending undefined values to API
+- [Phase 04-auth-and-posting]: PostCardActions created as shared component to avoid duplicating upvote/edit/delete logic across all 4 post card types
+- [Phase 04-auth-and-posting]: Edit modal reuses CreatePostModal with editPost prop: email field hidden, PUT used instead of POST
 
 ### Pending Todos
 
@@ -148,6 +151,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-16T14:43:38.848Z
-Stopped at: Completed 04-auth-and-posting-04-04-PLAN.md
+Last session: 2026-03-16T14:52:18.850Z
+Stopped at: Completed 04-auth-and-posting-04-05-PLAN.md
 Resume file: None
