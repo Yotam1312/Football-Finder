@@ -4,6 +4,7 @@ import type { Post } from '../../types';
 import { PostCard } from './PostCard';
 import { SkeletonCard } from '../SkeletonCard';
 
+
 // Tab configuration — single source of truth so no magic strings are scattered around.
 const TABS = [
   { slug: 'all',         label: 'All' },
@@ -33,12 +34,17 @@ interface PostFeedProps {
   total: number;
   page: number;
   onPageChange: (page: number) => void;
+  // These three are passed down to PostCard → PostCardActions for upvote/edit/delete
+  teamId: string | undefined;
+  postType: string | undefined;
+  onEdit: (post: Post) => void;
 }
 
 // PostFeed renders the tab bar, animated post list, per-tab empty states, and pagination.
 // The parent (TeamFanBasePage) owns the URL state and passes it down as props.
 export const PostFeed: React.FC<PostFeedProps> = ({
   activeTab, onTabChange, posts, isLoading, total, page, onPageChange,
+  teamId, postType, onEdit,
 }) => {
   const isEmpty = !isLoading && posts.length === 0;
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -95,7 +101,14 @@ export const PostFeed: React.FC<PostFeedProps> = ({
           {!isLoading && posts.length > 0 && (
             <div className="space-y-4">
               {posts.map(post => (
-                <PostCard key={post.id} post={post} />
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  teamId={teamId}
+                  postType={postType}
+                  page={page}
+                  onEdit={onEdit}
+                />
               ))}
             </div>
           )}

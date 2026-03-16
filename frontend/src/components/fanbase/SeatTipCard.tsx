@@ -1,8 +1,14 @@
 import React from 'react';
 import type { Post } from '../../types';
-import { formatRelativeTime } from '../../utils/formatDate';
+import { PostCardActions } from './PostCardActions';
 
-interface SeatTipCardProps { post: Post }
+interface SeatTipCardProps {
+  post: Post;
+  teamId: string | undefined;
+  postType: string | undefined;
+  page: number;
+  onEdit: (post: Post) => void;
+}
 
 // Renders a star rating as filled/empty star characters (1–5).
 // Shows nothing if the rating is null or 0.
@@ -21,7 +27,7 @@ const StarRating: React.FC<{ rating: number | null }> = ({ rating }) => {
 
 // Post card for SEAT_TIP posts — shows seat location, star rating, and tip body.
 // Photos are a Phase 4 feature (Azure Blob Storage) — photoUrl is intentionally ignored here.
-export const SeatTipCard: React.FC<SeatTipCardProps> = ({ post }) => {
+export const SeatTipCard: React.FC<SeatTipCardProps> = ({ post, teamId, postType, page, onEdit }) => {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
       {/* Seat location — section, row, and seat number in a row */}
@@ -39,11 +45,8 @@ export const SeatTipCard: React.FC<SeatTipCardProps> = ({ post }) => {
         <p className="mt-3 text-gray-700 text-sm leading-relaxed">{post.body}</p>
       )}
 
-      {/* Common footer: author name, relative timestamp, and upvote count */}
-      <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between text-xs text-gray-400">
-        <span>{post.authorName} · {formatRelativeTime(post.createdAt)}</span>
-        <span>▲ {post.upvoteCount}</span>
-      </div>
+      {/* Shared footer: author name, timestamp, upvote button, edit/delete for owners */}
+      <PostCardActions post={post} teamId={teamId} postType={postType} page={page} onEdit={onEdit} />
     </div>
   );
 };

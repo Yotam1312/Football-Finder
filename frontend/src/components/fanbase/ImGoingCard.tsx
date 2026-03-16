@@ -1,12 +1,18 @@
 import React from 'react';
 import type { Post } from '../../types';
-import { formatRelativeTime } from '../../utils/formatDate';
+import { PostCardActions } from './PostCardActions';
 
-interface ImGoingCardProps { post: Post }
+interface ImGoingCardProps {
+  post: Post;
+  teamId: string | undefined;
+  postType: string | undefined;
+  page: number;
+  onEdit: (post: Post) => void;
+}
 
 // Post card for IM_GOING posts — shows the "I'm Going!" badge, a message, and an optional match reference.
 // Phase 4 will resolve matchId to a real match name when the match join is added.
-export const ImGoingCard: React.FC<ImGoingCardProps> = ({ post }) => {
+export const ImGoingCard: React.FC<ImGoingCardProps> = ({ post, teamId, postType, page, onEdit }) => {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
       {/* Green badge announcing the user is going to the match */}
@@ -24,11 +30,8 @@ export const ImGoingCard: React.FC<ImGoingCardProps> = ({ post }) => {
         <p className="text-xs text-gray-400">Match #{post.matchId}</p>
       )}
 
-      {/* Common footer: author name, relative timestamp, and upvote count */}
-      <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between text-xs text-gray-400">
-        <span>{post.authorName} · {formatRelativeTime(post.createdAt)}</span>
-        <span>▲ {post.upvoteCount}</span>
-      </div>
+      {/* Shared footer: author name, timestamp, upvote button, edit/delete for owners */}
+      <PostCardActions post={post} teamId={teamId} postType={postType} page={page} onEdit={onEdit} />
     </div>
   );
 };

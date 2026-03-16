@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { PostType, CreatePostInput } from '../../types/index';
+import { useQueryClient } from '@tanstack/react-query';
+import type { Post, PostType, CreatePostInput } from '../../types/index';
 
 // Shape of an upcoming match returned by the backend
 interface UpcomingMatch {
@@ -13,6 +14,8 @@ interface CreatePostModalProps {
   teamId: number;
   teamName: string;
   onClose: () => void;
+  // When provided, the modal opens in edit mode — pre-fills all fields and uses PUT
+  editPost?: Post;
 }
 
 // The 4 post types users can pick from, with display labels and descriptions
@@ -66,40 +69,50 @@ const StarRating: React.FC<{
   );
 };
 
-// Multi-step modal for creating a FanBase post.
-// Step 1 — type picker: user picks one of 4 post types
-// Step 2 — form: user fills in type-specific fields plus name and email
-// Step 3 — check-email: confirmation screen after successful submission
+// Multi-step modal for creating or editing a FanBase post.
+// Create mode (default):
+//   Step 1 — type picker: user picks one of 4 post types
+//   Step 2 — form: user fills in type-specific fields plus name and email
+//   Step 3 — check-email: confirmation screen after successful submission
+// Edit mode (when editPost prop is provided):
+//   Starts directly on Step 2 with fields pre-filled from the existing post.
+//   Submit calls PUT /api/posts/:id instead of POST /api/auth/request-post.
 export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   teamId,
   teamName,
   onClose,
+  editPost,
 }) => {
-  // Which step of the modal the user is on
-  const [step, setStep] = useState<'type-picker' | 'form' | 'check-email'>('type-picker');
+  const queryClient = useQueryClient();
 
-  // The post type the user selected on step 1
-  const [postType, setPostType] = useState<PostType | null>(null);
+  // In edit mode, skip the type picker and start directly on the form
+  const [step, setStep] = useState<'type-picker' | 'form' | 'check-email'>(
+    editPost ? 'form' : 'type-picker'
+  );
 
-  // ── Common form fields ──
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [authorName, setAuthorName] = useState('');
+  // Pre-select the post type in edit mode
+  const [postType, setPostType] = useState<PostType | null>(editPost?.postType ?? null);
+
+  // ── Common form fields — pre-filled in edit mode ──
+  const [title, setTitle] = useState(editPost?.title ?? '');
+  const [body, setBody] = useState(editPost?.body ?? '');
+  const [authorName, setAuthorName] = useState(editPost?.authorName ?? '');
+  // Email is not pre-filled in edit mode — the backend doesn't re-send a verification email
   const [email, setEmail] = useState('');
 
-  // ── Seat Tip fields ──
-  const [seatSection, setSeatSection] = useState('');
-  const [seatRow, setSeatRow] = useState('');
-  const [seatNumber, setSeatNumber] = useState('');
-  const [seatRating, setSeatRating] = useState<number | null>(null);
+  // ── Seat Tip fields — pre-filled in edit mode ──
+  const [seatSection, setSeatSection] = useState(editPost?.seatSection ?? '');
+  const [seatRow, setSeatRow] = useState(editPost?.seatRow ?? '');
+  const [seatNumber, setSeatNumber] = useState(editPost?.seatNumber ?? '');
+  const [seatRating, setSeatRating] = useState<number | null>(editPost?.seatRating ?? null);
 
-  // ── Pub Recommendation fields ──
-  const [pubName, setPubName] = useState('');
-  const [pubAddress, setPubAddress] = useState('');
-  const [pubDistance, setPubDistance] = useState('');
+  // ── Pub Recommendation fields — pre-filled in edit mode ──
+  const [pubName, setPubName] = useState(editPost?.pubName ?? '');
+  const [pubAddress, setPubAddress] = useState(editPost?.pubAddress ?? '');
+  const [pubDistance, setPubDistance] = useState(editPost?.pubDistance ?? '');
 
-  // ── I'm Going fields ──
-  const [matchId, setMatchId] = useState<number | null>(null);
+  // ── I'm Going fields — pre-filled in edit mode ──
+  const [matchId, setMatchId] = useState<number | null>(editPost?.matchId ?? null);
   const [upcomingMatches, setUpcomingMatches] = useState<UpcomingMatch[]>([]);
   const [matchesLoading, setMatchesLoading] = useState(false);
 
@@ -107,7 +120,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Store the submitted email so step 3 can display it
+  // Store the submitted email so step 3 can display it (only used in create mode)
   const [submittedEmail, setSubmittedEmail] = useState('');
 
   // When the user lands on the form step with IM_GOING type,
@@ -143,9 +156,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     if (!title.trim()) return 'Title is required';
     if (!body.trim()) return 'Message is required';
     if (!authorName.trim()) return 'Your name is required';
-    if (!email.trim()) return 'Your email is required';
-    // Basic email format check
-    if (!email.includes('@') || !email.includes('.')) return 'Please enter a valid email address';
+    // Email is only required when creating a new post (not editing)
+    if (!editPost) {
+      if (!email.trim()) return 'Your email is required';
+      if (!email.includes('@') || !email.includes('.')) return 'Please enter a valid email address';
+    }
     // Pub name is required for pub recommendations
     if (postType === 'PUB_RECOMMENDATION' && !pubName.trim()) {
       return 'Pub name is required for a pub recommendation';
@@ -153,8 +168,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     return null;
   };
 
-  // Assembles the CreatePostInput and POSTs it to the backend.
-  // On success, transitions to step 3. On error, shows an inline message.
+  // Submits the form — uses PUT for edits, POST for new posts.
   const handleSubmit = async () => {
     const error = validateForm();
     if (error) {
@@ -162,10 +176,57 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
       return;
     }
 
-    // Store the email before the API call so step 3 can display it
-    setSubmittedEmail(email);
     setSubmitError(null);
     setIsSubmitting(true);
+
+    // ── Edit mode: PUT /api/posts/:id ──
+    if (editPost) {
+      // Build edit payload with only the fields that have values (don't send undefined)
+      const editPayload: Record<string, unknown> = {
+        title: title.trim(),
+        body: body.trim(),
+        authorName: authorName.trim(),
+        ...(postType === 'SEAT_TIP' && {
+          ...(seatSection.trim() && { seatSection: seatSection.trim() }),
+          ...(seatRow.trim() && { seatRow: seatRow.trim() }),
+          ...(seatNumber.trim() && { seatNumber: seatNumber.trim() }),
+          ...(seatRating !== null && { seatRating }),
+        }),
+        ...(postType === 'PUB_RECOMMENDATION' && {
+          pubName: pubName.trim(),
+          ...(pubAddress.trim() && { pubAddress: pubAddress.trim() }),
+          ...(pubDistance.trim() && { pubDistance: pubDistance.trim() }),
+        }),
+        ...(postType === 'IM_GOING' && matchId !== null && { matchId }),
+      };
+
+      try {
+        const res = await fetch(`/api/posts/${editPost.id}`, {
+          method: 'PUT',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(editPayload),
+        });
+
+        if (res.ok) {
+          // Refresh the posts feed so the updated post is shown immediately
+          queryClient.invalidateQueries({ queryKey: ['fanbase', 'posts'] });
+          onClose();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          setSubmitError(data.error ?? 'Failed to update post. Please try again.');
+        }
+      } catch {
+        setSubmitError('Network error. Please check your connection and try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    // ── Create mode: POST /api/auth/request-post ──
+    // Store the email before the API call so step 3 can display it
+    setSubmittedEmail(email);
 
     // Build the payload — only include optional fields that have values
     const postData: CreatePostInput = {
@@ -260,15 +321,17 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         {/* ── Step 2: Post Form ── */}
         {step === 'form' && postType && (
           <div className="p-6">
-            {/* Header row with back button */}
+            {/* Header row — in edit mode the Back button is hidden (no type-picker step) */}
             <div className="flex items-center gap-3 mb-2">
-              <button
-                onClick={() => setStep('type-picker')}
-                className="text-gray-400 hover:text-gray-600 text-sm"
-                aria-label="Go back"
-              >
-                ← Back
-              </button>
+              {!editPost && (
+                <button
+                  onClick={() => setStep('type-picker')}
+                  className="text-gray-400 hover:text-gray-600 text-sm"
+                  aria-label="Go back"
+                >
+                  ← Back
+                </button>
+              )}
               <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
                 {selectedTypeLabel}
               </span>
@@ -281,7 +344,9 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               </button>
             </div>
 
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Share your tip</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
+              {editPost ? 'Edit your tip' : 'Share your tip'}
+            </h2>
 
             {/* Common fields for all post types */}
             <div className="space-y-4">
@@ -448,21 +513,24 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Email <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
-                    placeholder="We'll send a verification link here"
-                  />
-                  <p className="text-xs text-gray-400 mt-1">
-                    We'll send you a link to verify and publish your post — no account needed.
-                  </p>
-                </div>
+                {/* Email field — only shown when creating a new post, not when editing */}
+                {!editPost && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Your Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
+                      placeholder="We'll send a verification link here"
+                    />
+                    <p className="text-xs text-gray-400 mt-1">
+                      We'll send you a link to verify and publish your post — no account needed.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Inline error message shown above the submit button */}
@@ -472,13 +540,16 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 </p>
               )}
 
-              {/* Submit button — disabled and shows "Sending..." while the API call is in flight */}
+              {/* Submit button — label and action differ between create and edit mode */}
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="w-full bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isSubmitting ? 'Sending...' : 'Send Verification Email'}
+                {isSubmitting
+                  ? (editPost ? 'Saving...' : 'Sending...')
+                  : (editPost ? 'Save Changes' : 'Send Verification Email')
+                }
               </button>
             </div>
           </div>
