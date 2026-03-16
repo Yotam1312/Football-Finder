@@ -6,6 +6,8 @@ import { ResultsPage } from './pages/ResultsPage';
 import { MatchDetailPage } from './pages/MatchDetailPage';
 import { FanBasePage } from './pages/FanBasePage';
 import { TeamFanBasePage } from './pages/TeamFanBasePage';
+import { LoginPage } from './pages/LoginPage';
+import { SetPasswordPage } from './pages/SetPasswordPage';
 
 // AnimatePresence enables smooth page transition animations.
 // key={location.pathname} tells Framer Motion when a route change happens.
@@ -25,6 +27,9 @@ export default function App() {
           <Route path="/fanbase/:country/:league"   element={<FanBasePage />} />
           {/* Team FanBase page — /fanbase/team/:teamId is a static prefix "team", beats dynamic :country */}
           <Route path="/fanbase/team/:teamId"       element={<TeamFanBasePage />} />
+          {/* Auth pages — Phase 4 */}
+          <Route path="/login"         element={<LoginPage />} />
+          <Route path="/set-password"  element={<SetPasswordPage />} />
         </Routes>
       </AnimatePresence>
     </>
