@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-auth-and-posting-04-03-PLAN.md
-last_updated: "2026-03-16T14:37:48.392Z"
+stopped_at: Completed 04-auth-and-posting-04-04-PLAN.md
+last_updated: "2026-03-16T14:43:38.852Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
   percent: 73
 ---
 
@@ -78,6 +78,7 @@ Progress: [████████████████████] 100%
 | Phase 04-auth-and-posting P04-01 | 35 | 3 tasks | 8 files |
 | Phase 04-auth-and-posting P04-02 | 4 | 2 tasks | 7 files |
 | Phase 04-auth-and-posting P04-03 | 3 | 2 tasks | 7 files |
+| Phase 04-auth-and-posting P04-04 | 4 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -127,6 +128,9 @@ Recent decisions affecting current work:
 - [Phase 04-auth-and-posting]: deletePost deletes upvotes with deleteMany before deleting the post to avoid foreign key constraint error
 - [Phase 04-auth-and-posting]: AuthProvider placed inside BrowserRouter so context can use router hooks in future
 - [Phase 04-auth-and-posting]: No logout button for Level 2 users — they have no password to log back in with
+- [Phase 04-auth-and-posting]: upcoming-matches route registered before /team/:teamId to prevent Express param collision
+- [Phase 04-auth-and-posting]: match picker uses plain fetch+useEffect not TanStack Query — one-off load on form step render
+- [Phase 04-auth-and-posting]: optional post fields conditionally spread into payload to avoid sending undefined values to API
 
 ### Pending Todos
 
@@ -144,6 +148,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-16T14:37:48.388Z
-Stopped at: Completed 04-auth-and-posting-04-03-PLAN.md
+Last session: 2026-03-16T14:43:38.848Z
+Stopped at: Completed 04-auth-and-posting-04-04-PLAN.md
 Resume file: None
