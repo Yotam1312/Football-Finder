@@ -9,6 +9,8 @@ import adminRoutes from './routes/admin.routes';
 import matchRoutes from './routes/match.routes';
 import fanbaseRoutes from './routes/fanbase.routes';
 import authRoutes from './routes/auth.routes';
+import postsRoutes from './routes/posts.routes';
+import usersRoutes from './routes/users.routes';
 
 const app = express();
 
@@ -47,5 +49,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/fanbase', fanbaseRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postsRoutes);
+app.use('/api/users', usersRoutes);
 
 export default app;
