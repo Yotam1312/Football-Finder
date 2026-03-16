@@ -8,6 +8,7 @@ import healthRoutes from './routes/health.routes';
 import adminRoutes from './routes/admin.routes';
 import matchRoutes from './routes/match.routes';
 import fanbaseRoutes from './routes/fanbase.routes';
+import authRoutes from './routes/auth.routes';
 
 const app = express();
 
@@ -45,5 +46,6 @@ app.use('/api', healthRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/fanbase', fanbaseRoutes);
+app.use('/api/auth', authRoutes);
 
 export default app;
