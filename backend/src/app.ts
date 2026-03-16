@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import healthRoutes from './routes/health.routes';
 import adminRoutes from './routes/admin.routes';
 import matchRoutes from './routes/match.routes';
@@ -25,7 +26,10 @@ app.use(cors({
 // 4. Parse JSON request bodies
 app.use(express.json());
 
-// 5. Rate limiting — max 100 requests per 15 minutes per IP
+// 5. Parse httpOnly cookies — required to read req.cookies.token in auth middleware
+app.use(cookieParser());
+
+// 6. Rate limiting — max 100 requests per 15 minutes per IP
 // This protects against brute force and scraping
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
