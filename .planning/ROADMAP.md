@@ -82,10 +82,14 @@ Plans:
   3. User can request a new verification email if the original link expired, and the new link works correctly
   4. Email-verified user can upgrade to a full account by setting a password, then log in with email + password and stay logged in across browser sessions
   5. Full account user can upvote posts, edit their own posts, delete their own posts, track favorite teams, and log out from any page
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — Auth backend: packages, middleware, email service, and all 7 auth endpoints
+- [ ] 04-02-PLAN.md — Post mutation endpoints: upvote toggle, edit, delete, and favorite team toggle
+- [ ] 04-03-PLAN.md — Frontend auth context, Navbar auth state, login page, and set-password page
+- [ ] 04-04-PLAN.md — Post creation modal: type picker, all 4 post type forms, and email submission
+- [ ] 04-05-PLAN.md — Post ownership UI, upvote button, heart icon, and verify page
 
 ### Phase 5: Polish and Launch
 **Goal**: The product is complete, mobile-friendly, and not empty — ready for real users to visit on launch day
@@ -112,5 +116,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 1/1 | Complete | 2026-03-15 |
 | 2. Match Discovery | 6/6 | Complete | 2026-03-15 |
 | 3. FanBase Browse | 4/4 | Complete   | 2026-03-15 |
-| 4. Auth and Posting | 0/TBD | Not started | - |
+| 4. Auth and Posting | 1/5 | In Progress|  |
 | 5. Polish and Launch | 0/TBD | Not started | - |
