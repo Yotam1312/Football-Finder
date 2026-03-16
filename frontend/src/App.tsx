@@ -8,6 +8,7 @@ import { FanBasePage } from './pages/FanBasePage';
 import { TeamFanBasePage } from './pages/TeamFanBasePage';
 import { LoginPage } from './pages/LoginPage';
 import { SetPasswordPage } from './pages/SetPasswordPage';
+import { VerifyPage } from './pages/VerifyPage';
 
 // AnimatePresence enables smooth page transition animations.
 // key={location.pathname} tells Framer Motion when a route change happens.
@@ -30,6 +31,7 @@ export default function App() {
           {/* Auth pages — Phase 4 */}
           <Route path="/login"         element={<LoginPage />} />
           <Route path="/set-password"  element={<SetPasswordPage />} />
+          <Route path="/verify/:token" element={<VerifyPage />} />
         </Routes>
       </AnimatePresence>
     </>
