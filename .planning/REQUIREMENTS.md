@@ -54,7 +54,7 @@
 - [ ] **PAGE-02**: Contact page has a working contact form (sends email to site owner) and displays social media links
 - [ ] **PAGE-03**: Site has a 404 page for unknown routes
 - [ ] **PAGE-04**: All pages are mobile-responsive with touch-friendly targets (48px minimum)
-- [ ] **PAGE-05**: FanBase is seeded with at least 3 genuine posts per major team (Chelsea, Arsenal, Barcelona, Real Madrid, Bayern, PSG, Juventus) covering all post types before public launch
+- [x] **PAGE-05**: FanBase is seeded with at least 3 genuine posts per major team (Chelsea, Arsenal, Barcelona, Real Madrid, Bayern, PSG, Juventus) covering all post types before public launch
 
 ---
 
