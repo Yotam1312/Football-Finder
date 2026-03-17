@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 05-polish-and-launch-05-05-PLAN.md
-last_updated: "2026-03-17T21:31:43.051Z"
+stopped_at: Completed 05-polish-and-launch-05-06-PLAN.md
+last_updated: "2026-03-17T21:51:39.331Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 21
-  completed_plans: 20
+  completed_plans: 21
   percent: 73
 ---
 
@@ -86,6 +86,7 @@ Progress: [████████████████████] 100%
 | Phase 05-polish-and-launch PP05-04 | 4 | 2 tasks | 8 files |
 | Phase 05-polish-and-launch P05-05 | 3 | 1 tasks | 10 files |
 | Phase 05-polish-and-launch P05 | 10 | 2 tasks | 10 files |
+| Phase 05-polish-and-launch P06 | 15 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -149,6 +150,8 @@ Recent decisions affecting current work:
 - [Phase 05-polish-and-launch]: overflow-x-auto wrapper around StatBar prevents horizontal scroll on narrow screens without modifying the component itself
 - [Phase 05-polish-and-launch]: flex-wrap on Navbar main row prevents overflow at 375px without hiding links
 - [Phase 05-polish-and-launch]: overflow-x-auto wrapper around StatBar prevents horizontal scroll on narrow screens without modifying the component itself
+- [Phase 05-polish-and-launch]: PSG team stored as 'Paris Saint Germain' (no hyphen) — searched with 'Saint Germain' for resilience in seed script
+- [Phase 05-polish-and-launch]: Seed idempotency via count() on @seed.footballfinder.com emails — single check, zero inserts if any seed posts exist
 
 ### Pending Todos
 
@@ -166,6 +169,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-17T21:31:43.047Z
-Stopped at: Completed 05-polish-and-launch-05-05-PLAN.md
+Last session: 2026-03-17T21:51:39.325Z
+Stopped at: Completed 05-polish-and-launch-05-06-PLAN.md
 Resume file: None
