@@ -4,6 +4,7 @@ import type { Post } from '../../types';
 import { PostCard } from './PostCard';
 import { SkeletonCard } from '../SkeletonCard';
 
+
 // Tab configuration — single source of truth so no magic strings are scattered around.
 const TABS = [
   { slug: 'all',         label: 'All' },
@@ -33,12 +34,17 @@ interface PostFeedProps {
   total: number;
   page: number;
   onPageChange: (page: number) => void;
+  // These three are passed down to PostCard → PostCardActions for upvote/edit/delete
+  teamId: string | undefined;
+  postType: string | undefined;
+  onEdit: (post: Post) => void;
 }
 
 // PostFeed renders the tab bar, animated post list, per-tab empty states, and pagination.
 // The parent (TeamFanBasePage) owns the URL state and passes it down as props.
 export const PostFeed: React.FC<PostFeedProps> = ({
   activeTab, onTabChange, posts, isLoading, total, page, onPageChange,
+  teamId, postType, onEdit,
 }) => {
   const isEmpty = !isLoading && posts.length === 0;
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -51,7 +57,7 @@ export const PostFeed: React.FC<PostFeedProps> = ({
           <button
             key={tab.slug}
             onClick={() => onTabChange(tab.slug)}
-            className={`px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px ${
+            className={`px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px min-h-[48px] ${
               activeTab === tab.slug
                 ? 'border-green-500 text-green-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -95,7 +101,14 @@ export const PostFeed: React.FC<PostFeedProps> = ({
           {!isLoading && posts.length > 0 && (
             <div className="space-y-4">
               {posts.map(post => (
-                <PostCard key={post.id} post={post} />
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  teamId={teamId}
+                  postType={postType}
+                  page={page}
+                  onEdit={onEdit}
+                />
               ))}
             </div>
           )}
@@ -108,7 +121,7 @@ export const PostFeed: React.FC<PostFeedProps> = ({
           <button
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1}
-            className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors min-h-[48px]"
           >
             ← Previous
           </button>
@@ -118,7 +131,7 @@ export const PostFeed: React.FC<PostFeedProps> = ({
           <button
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
-            className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors min-h-[48px]"
           >
             Next →
           </button>

@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useFanbaseTeam } from '../hooks/useFanbaseTeam';
 import { useFanbasePosts } from '../hooks/useFanbasePosts';
 import { TeamLogo } from '../components/TeamLogo';
 import { PostFeed } from '../components/fanbase/PostFeed';
+import { CreatePostModal } from '../components/fanbase/CreatePostModal';
+import { AuthGateModal } from '../components/fanbase/AuthGateModal';
+import { useAuth } from '../context/AuthContext';
+import type { Post } from '../types';
 
 // Maps URL tab slugs to PostType enum values used by the API's ?type= filter.
 // 'all' maps to undefined so the API returns posts of every type (no filter applied).
@@ -17,11 +21,11 @@ const TAB_TO_POST_TYPE: Record<string, string | undefined> = {
 };
 
 // Team FanBase page — the destination users reach from the hub or search.
-// Fully public and read-only in Phase 3 — no login required (satisfies FAN-04).
-// Phase 4 will remove the `disabled` attribute from the Add button and wire the post form.
+// Phase 4 additions: heart icon for Level 3 favorites, upvote/edit/delete on posts.
 export const TeamFanBasePage: React.FC = () => {
   const { teamId } = useParams<{ teamId: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
 
   // Read active tab from the URL so the tab state is shareable via link.
   // Default to 'all' when the ?tab= param is not present.
@@ -29,6 +33,19 @@ export const TeamFanBasePage: React.FC = () => {
 
   // Track which page of posts is shown — reset to 1 whenever the tab changes
   const [page, setPage] = useState(1);
+
+  // Controls whether the CreatePostModal is open
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Controls whether the AuthGateModal is open (shown to guests who click Add Your Tip)
+  const [isAuthGateOpen, setIsAuthGateOpen] = useState(false);
+
+  // When editPost is set, the modal opens in edit mode with that post's data pre-filled.
+  // Cleared back to null when the modal closes.
+  const [editPost, setEditPost] = useState<Post | null>(null);
+
+  // Heart/favorite state — only relevant for Level 3 users
+  const [isFavorited, setIsFavorited] = useState(false);
 
   // Look up the PostType filter for the active tab (undefined for 'all' = no filter)
   const postType = TAB_TO_POST_TYPE[activeTab];
@@ -40,10 +57,72 @@ export const TeamFanBasePage: React.FC = () => {
   const posts = postsData?.posts ?? [];
   const total = postsData?.total ?? 0;
 
+  // On mount and when user changes: check if this team is already favorited.
+  // Only runs for Level 3 users — guests and Level 2 don't have favorites.
+  useEffect(() => {
+    if (user?.level !== 3 || !teamId) return;
+
+    const checkFavorite = async () => {
+      try {
+        const res = await fetch('/api/users/favorites', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          // favoriteTeamIds is an array of team IDs
+          const teamIdNum = parseInt(teamId, 10);
+          setIsFavorited((data.favoriteTeamIds ?? []).includes(teamIdNum));
+        }
+      } catch {
+        // Non-critical — favorite state just won't be shown
+      }
+    };
+
+    checkFavorite();
+  }, [user, teamId]);
+
+  // Toggles the favorite status for this team.
+  // Calls POST /api/users/favorites/:teamId — backend handles add/remove toggle.
+  const handleToggleFavorite = async () => {
+    if (!teamId) return;
+    try {
+      const res = await fetch(`/api/users/favorites/${teamId}`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (res.ok) {
+        setIsFavorited((prev) => !prev);
+      }
+    } catch {
+      // Fail silently — user can try again
+    }
+  };
+
   // When the user switches tabs, update the URL and reset to page 1
   const handleTabChange = (slug: string) => {
     setSearchParams({ tab: slug });
     setPage(1);
+  };
+
+  // Opens the modal in edit mode for the given post
+  const handleEditPost = (post: Post) => {
+    setEditPost(post);
+    setIsModalOpen(true);
+  };
+
+  // Closes the modal and clears any edit state
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditPost(null);
+  };
+
+  // Handles clicking the "+ Add Your Tip" button.
+  // Guests see the AuthGateModal directing them to register or log in.
+  // Logged-in users see the CreatePostModal directly.
+  const handleAddTipClick = () => {
+    if (!user) {
+      setIsAuthGateOpen(true);
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   // Error state — team not found or network error
@@ -75,7 +154,7 @@ export const TeamFanBasePage: React.FC = () => {
           ← FanBase Hub
         </Link>
 
-        {/* Team header card — shows logo, name, and total post count */}
+        {/* Team header card — shows logo, name, total post count, and heart icon for Level 3 */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
           {teamLoading ? (
             // Skeleton placeholder while team data loads
@@ -91,20 +170,31 @@ export const TeamFanBasePage: React.FC = () => {
               <div className="flex items-center gap-4">
                 <TeamLogo team={team} size="lg" />
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
+                  {/* Team name with optional heart icon for Level 3 users */}
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
+                    {/* Heart icon — only shown to Level 3 users */}
+                    {/* p-2 gives a ~44px touch area around the 24px icon — close enough to 48px */}
+                    {user?.level === 3 && (
+                      <button
+                        onClick={handleToggleFavorite}
+                        className="text-2xl transition-colors p-2 -m-2"
+                        title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+                      >
+                        {isFavorited ? '❤️' : '🤍'}
+                      </button>
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-0.5">
                     FanBase · {team._count.posts} {team._count.posts === 1 ? 'post' : 'posts'}
                   </p>
                 </div>
               </div>
 
-              {/* Add button — visible but disabled in Phase 3 (posting not yet implemented).
-                  The title attribute shows "Posting coming soon" as a tooltip on hover.
-                  No login prompt is shown — the page is fully public (FAN-04). */}
+              {/* Add button — guests see AuthGateModal; logged-in users see CreatePostModal */}
               <button
-                disabled
-                title="Posting coming soon"
-                className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium opacity-50 cursor-not-allowed"
+                onClick={handleAddTipClick}
+                className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors min-h-[48px]"
               >
                 + Add Your Tip
               </button>
@@ -121,8 +211,27 @@ export const TeamFanBasePage: React.FC = () => {
           total={total}
           page={page}
           onPageChange={setPage}
+          teamId={teamId}
+          postType={postType}
+          onEdit={handleEditPost}
         />
       </div>
+
+      {/* Create/edit post modal — only reachable for logged-in users */}
+      {isModalOpen && team && (
+        <CreatePostModal
+          teamId={parseInt(teamId!, 10)}
+          teamName={team.name}
+          onClose={handleModalClose}
+          editPost={editPost ?? undefined}
+        />
+      )}
+
+      {/* Auth gate modal — shown to guests who click Add Your Tip */}
+      <AuthGateModal
+        isOpen={isAuthGateOpen}
+        onClose={() => setIsAuthGateOpen(false)}
+      />
     </motion.div>
   );
 };

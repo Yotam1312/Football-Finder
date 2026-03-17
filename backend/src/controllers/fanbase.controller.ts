@@ -171,6 +171,52 @@ export const getTeamById = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/fanbase/team/:teamId/upcoming-matches
+// Returns upcoming matches for a team (home and away) in the next 3 months.
+// Only returns matches with status 'NS' (Not Started).
+// Used by the "I'm Going" post type match picker in the CreatePostModal.
+// Returns an empty array when no upcoming matches are found — this is a valid result.
+export const getUpcomingMatches = async (req: Request, res: Response) => {
+  try {
+    const teamId = parseInt(req.params.teamId, 10);
+    if (isNaN(teamId)) {
+      return res.status(400).json({ error: 'teamId must be a number' });
+    }
+
+    // Calculate the date range: now → 3 months from now
+    const now = new Date();
+    const threeMonthsFromNow = new Date();
+    threeMonthsFromNow.setMonth(now.getMonth() + 3);
+
+    const matches = await prisma.match.findMany({
+      where: {
+        OR: [
+          { homeTeamId: teamId },
+          { awayTeamId: teamId },
+        ],
+        matchDate: {
+          gte: now,
+          lte: threeMonthsFromNow,
+        },
+        status: 'NS', // Only Not Started matches — past and live matches are excluded
+      },
+      include: {
+        homeTeam: { select: { id: true, name: true, logoUrl: true } },
+        awayTeam: { select: { id: true, name: true, logoUrl: true } },
+        stadium: { select: { name: true, city: true, timezone: true } },
+        league: { select: { name: true } },
+      },
+      orderBy: { matchDate: 'asc' },
+      take: 20, // cap at 20 to keep the dropdown short
+    });
+
+    res.json({ matches });
+  } catch (error) {
+    console.error('Error fetching upcoming matches:', error);
+    res.status(500).json({ error: 'Failed to fetch upcoming matches' });
+  }
+};
+
 // GET /api/fanbase/team/:teamId/posts?type=&page=
 // Returns paginated posts for a team, newest first.
 // - type: optional PostType filter (GENERAL_TIP, SEAT_TIP, PUB_RECOMMENDATION, IM_GOING)

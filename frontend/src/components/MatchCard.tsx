@@ -68,7 +68,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
       <div className="flex gap-3">
         <Link
           to={`/match/${match.id}`}
-          className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-4 rounded-lg text-center transition-colors"
+          className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-4 rounded-lg text-center transition-colors min-h-[48px] flex items-center justify-center"
         >
           View Details
         </Link>
@@ -76,7 +76,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
           href={mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 border border-green-600 text-green-600 hover:bg-green-50 text-sm font-medium py-2 px-4 rounded-lg text-center transition-colors"
+          className="flex-1 border border-green-600 text-green-600 hover:bg-green-50 text-sm font-medium py-2 px-4 rounded-lg text-center transition-colors min-h-[48px] flex items-center justify-center"
         >
           Navigate to Stadium
         </a>

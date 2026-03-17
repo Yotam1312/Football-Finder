@@ -33,28 +33,28 @@
 - [ ] **POST-02**: User can create a Seat Tip post with section, row, seat number, star rating, and optional photo
 - [ ] **POST-03**: User can create a Pub Recommendation post with pub name, address, distance from stadium, and description
 - [ ] **POST-04**: User can create an "I'm Going" post announcing they're attending an upcoming match
-- [ ] **POST-05**: Post creation requires email verification: user receives a link, clicks it, and post goes live (no password)
-- [ ] **POST-06**: Post data (form content) is preserved through the email verification flow — user does not need to re-fill the form after clicking the link
-- [ ] **POST-07**: User can request a new verification email if the original link expired (resend option)
+- [x] **POST-05**: Post creation requires email verification: user receives a link, clicks it, and post goes live (no password)
+- [x] **POST-06**: Post data (form content) is preserved through the email verification flow — user does not need to re-fill the form after clicking the link
+- [x] **POST-07**: User can request a new verification email if the original link expired (resend option)
 - [ ] **POST-08**: User can upload a photo from their seat when creating a Seat Tip post (max 5MB, jpg/png/webp)
 
 ### Authentication — Full Account (Level 3)
 
-- [ ] **AUTH-01**: Email-verified user can upgrade to a full account by setting a password
-- [ ] **AUTH-02**: Full account user can log in with email + password and stay logged in across sessions
-- [ ] **AUTH-03**: Full account user can upvote posts
-- [ ] **AUTH-04**: Full account user can edit their own posts
-- [ ] **AUTH-05**: Full account user can delete their own posts
-- [ ] **AUTH-06**: Full account user can track favorite teams
-- [ ] **AUTH-07**: User can log out from any page
+- [x] **AUTH-01**: Email-verified user can upgrade to a full account by setting a password
+- [x] **AUTH-02**: Full account user can log in with email + password and stay logged in across sessions
+- [x] **AUTH-03**: Full account user can upvote posts
+- [x] **AUTH-04**: Full account user can edit their own posts
+- [x] **AUTH-05**: Full account user can delete their own posts
+- [x] **AUTH-06**: Full account user can track favorite teams
+- [x] **AUTH-07**: User can log out from any page
 
 ### Static Pages & Polish
 
-- [ ] **PAGE-01**: Transportation guide page is accessible showing transit options, ride services, long-distance travel, and app links
-- [ ] **PAGE-02**: Contact page has a working contact form (sends email to site owner) and displays social media links
-- [ ] **PAGE-03**: Site has a 404 page for unknown routes
-- [ ] **PAGE-04**: All pages are mobile-responsive with touch-friendly targets (48px minimum)
-- [ ] **PAGE-05**: FanBase is seeded with at least 3 genuine posts per major team (Chelsea, Arsenal, Barcelona, Real Madrid, Bayern, PSG, Juventus) covering all post types before public launch
+- [x] **PAGE-01**: Transportation guide page is accessible showing transit options, ride services, long-distance travel, and app links
+- [x] **PAGE-02**: Contact page has a working contact form (sends email to site owner) and displays social media links
+- [x] **PAGE-03**: Site has a 404 page for unknown routes
+- [x] **PAGE-04**: All pages are mobile-responsive with touch-friendly targets (48px minimum)
+- [x] **PAGE-05**: FanBase is seeded with at least 3 genuine posts per major team (Chelsea, Arsenal, Barcelona, Real Madrid, Bayern, PSG, Juventus) covering all post types before public launch
 
 ---
 

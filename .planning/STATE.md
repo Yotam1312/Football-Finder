@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
+stopped_at: Completed 05-polish-and-launch-05-06-PLAN.md
+last_updated: "2026-03-17T21:51:39.331Z"
+last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
+progress:
+  total_phases: 5
+  completed_phases: 4
+  total_plans: 21
+  completed_plans: 21
+  percent: 73
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: completed
 stopped_at: Completed 03-fanbase-browse-03-04-PLAN.md
 last_updated: "2026-03-15T16:04:00.213Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
-  total_phases: 5
+  [███████░░░] 73%
   completed_phases: 2
   total_plans: 10
   completed_plans: 10
@@ -59,6 +75,18 @@ Progress: [████████████████████] 100%
 | Phase 03-fanbase-browse P02 | 10 | 2 tasks | 9 files |
 | Phase 03-fanbase-browse P03 | 18 | 2 tasks | 10 files |
 | Phase 03-fanbase-browse P04 | 2 | 2 tasks | 7 files |
+| Phase 04-auth-and-posting P04-01 | 35 | 3 tasks | 8 files |
+| Phase 04-auth-and-posting P04-02 | 4 | 2 tasks | 7 files |
+| Phase 04-auth-and-posting P04-03 | 3 | 2 tasks | 7 files |
+| Phase 04-auth-and-posting P04-04 | 4 | 2 tasks | 5 files |
+| Phase 04-auth-and-posting P04-05 | 6 | 2 tasks | 13 files |
+| Phase 05-polish-and-launch P05-01 | 3 | 2 tasks | 5 files |
+| Phase 05-polish-and-launch P02 | 12 | 2 tasks | 6 files |
+| Phase 05-polish-and-launch P03 | 1 | 2 tasks | 3 files |
+| Phase 05-polish-and-launch PP05-04 | 4 | 2 tasks | 8 files |
+| Phase 05-polish-and-launch P05-05 | 3 | 1 tasks | 10 files |
+| Phase 05-polish-and-launch P05 | 10 | 2 tasks | 10 files |
+| Phase 05-polish-and-launch P06 | 15 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -99,6 +127,31 @@ Recent decisions affecting current work:
 - [Phase 03-fanbase-browse]: PostCard uses switch on post.postType to keep PostFeed free of type-checking logic
 - [Phase 03-fanbase-browse]: Tab state in ?tab= URL param — shareable links and browser back/forward work naturally
 - [Phase 03-fanbase-browse]: Page resets to 1 on tab change to avoid stale pagination state when switching tabs
+- [Phase 04-auth-and-posting]: nanoid pinned to 3.3.7 — v5 is ESM-only, breaks CommonJS tsconfig
+- [Phase 04-auth-and-posting]: bcryptjs not bcrypt — same API, no native compilation needed
+- [Phase 04-auth-and-posting]: setAuthCookie() helper centralizes JWT signing; secure:true only in production
+- [Phase 04-auth-and-posting]: getMe derives level dynamically from DB (passwordHash null check) not from JWT level field
+- [Phase 04-auth-and-posting]: Upvote toggle uses $transaction array form to keep Upvote row and upvoteCount counter atomically in sync
+- [Phase 04-auth-and-posting]: editPost uses conditional spread for each optional field — avoids overwriting existing data with undefined
+- [Phase 04-auth-and-posting]: deletePost deletes upvotes with deleteMany before deleting the post to avoid foreign key constraint error
+- [Phase 04-auth-and-posting]: AuthProvider placed inside BrowserRouter so context can use router hooks in future
+- [Phase 04-auth-and-posting]: No logout button for Level 2 users — they have no password to log back in with
+- [Phase 04-auth-and-posting]: upcoming-matches route registered before /team/:teamId to prevent Express param collision
+- [Phase 04-auth-and-posting]: match picker uses plain fetch+useEffect not TanStack Query — one-off load on form step render
+- [Phase 04-auth-and-posting]: optional post fields conditionally spread into payload to avoid sending undefined values to API
+- [Phase 04-auth-and-posting]: PostCardActions created as shared component to avoid duplicating upvote/edit/delete logic across all 4 post card types
+- [Phase 04-auth-and-posting]: Edit modal reuses CreatePostModal with editPost prop: email field hidden, PUT used instead of POST
+- [Phase 05-polish-and-launch]: Hybrid three-level auth retired: requestPost, verifyToken, resendVerification removed; register() issues Level 3 cookie immediately with no email verification step
+- [Phase 05-polish-and-launch]: Inline handler in contact.routes.ts rather than separate controller — CLAUDE.md says avoid over-engineering for a single endpoint
+- [Phase 05-polish-and-launch]: Jest mock for email.service in contact tests — prevents SMTP/Ethereal network calls in test environment
+- [Phase 05-polish-and-launch]: AuthGateModal intercepts guest clicks on Add Your Tip — modal keeps user on same page instead of redirecting
+- [Phase 05-polish-and-launch]: CreatePostModal posts directly to POST /api/posts with cookie auth — hybrid email-verification flow fully retired from frontend
+- [Phase 05-polish-and-launch]: flex-wrap on Navbar main row prevents overflow at 375px without hiding links
+- [Phase 05-polish-and-launch]: overflow-x-auto wrapper around StatBar prevents horizontal scroll on narrow screens without modifying the component itself
+- [Phase 05-polish-and-launch]: flex-wrap on Navbar main row prevents overflow at 375px without hiding links
+- [Phase 05-polish-and-launch]: overflow-x-auto wrapper around StatBar prevents horizontal scroll on narrow screens without modifying the component itself
+- [Phase 05-polish-and-launch]: PSG team stored as 'Paris Saint Germain' (no hyphen) — searched with 'Saint Germain' for resilience in seed script
+- [Phase 05-polish-and-launch]: Seed idempotency via count() on @seed.footballfinder.com emails — single check, zero inserts if any seed posts exist
 
 ### Pending Todos
 
@@ -116,6 +169,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-15T16:00:11.988Z
-Stopped at: Completed 03-fanbase-browse-03-04-PLAN.md
+Last session: 2026-03-17T21:51:39.325Z
+Stopped at: Completed 05-polish-and-launch-05-06-PLAN.md
 Resume file: None

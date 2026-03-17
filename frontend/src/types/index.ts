@@ -98,4 +98,41 @@ export interface Post {
   matchId: number | null;        // IM_GOING only — links to a specific Match
   upvoteCount: number;           // read-only in Phase 3
   createdAt: string;             // ISO string from API — use formatRelativeTime() to display
+  userId: number | null;         // null for email-only (Level 2) posts; set for Level 3 accounts
+  authorEmail: string;           // used to match posts to the logged-in user for edit/delete
+}
+
+// ─────────────────────────────────────────────
+// AUTH TYPES (Phase 4)
+// ─────────────────────────────────────────────
+
+// The authenticated user returned by GET /api/auth/me
+// level 2 = email-verified only; level 3 = full account with password
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+  level: 2 | 3;
+  age?: number | null;
+  favoriteClubId?: number | null;
+}
+
+// Input type for POST /api/auth/request-post
+// All post type fields are optional — only used when applicable to the post type
+export interface CreatePostInput {
+  teamId: number;
+  teamName: string;
+  postType: PostType;
+  title: string;
+  body: string;
+  authorName: string;
+  email: string;
+  seatSection?: string;
+  seatRow?: string;
+  seatNumber?: string;
+  seatRating?: number;
+  pubName?: string;
+  pubAddress?: string;
+  pubDistance?: string;
+  matchId?: number;
 }

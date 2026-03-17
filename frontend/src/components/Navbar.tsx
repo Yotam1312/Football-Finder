@@ -1,24 +1,87 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 // Top navigation bar — shown on every page.
-// Kept simple: logo/brand name on the left, no auth links yet (Phase 4).
+// Shows auth-aware content on the right side based on the current user's level.
 export const Navbar: React.FC = () => {
+  const { user, isLoading, logout } = useAuth();
+
   return (
     <nav className="bg-white shadow-sm border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
+      {/* flex-wrap allows the nav to break into two lines on very narrow screens */}
+      <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+        <Link to="/" className="flex items-center gap-2 min-h-[48px]">
           {/* Simple text logo — replace with SVG icon in Phase 5 polish */}
           <span className="text-2xl font-bold text-green-600">Football</span>
           <span className="text-2xl font-bold text-gray-800">Finder</span>
         </Link>
-        <div className="flex items-center gap-6">
-          <Link to="/" className="text-gray-600 hover:text-green-600 transition-colors">
+        {/* gap-4 on mobile (instead of gap-6) saves horizontal space */}
+        <div className="flex items-center gap-4 flex-wrap">
+          <Link
+            to="/"
+            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+          >
             Home
           </Link>
-          <Link to="/fanbase" className="text-gray-600 hover:text-green-600 transition-colors">
+          <Link
+            to="/fanbase"
+            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+          >
             FanBase
           </Link>
+          <Link
+            to="/transport"
+            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+          >
+            Transport
+          </Link>
+
+          {/* Auth section — rendered based on login state */}
+          {isLoading ? (
+            // Placeholder shown briefly while /api/auth/me is in flight
+            // Prevents flickering between guest and logged-in states
+            <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+          ) : user === null ? (
+            // Guest (Level 1) — show Login and Register buttons
+            <div className="flex items-center gap-3">
+              <Link
+                to="/login"
+                className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/register"
+                className="text-sm bg-green-600 text-white px-3 py-2 rounded-md hover:bg-green-700 transition-colors min-h-[48px] flex items-center"
+              >
+                Register
+              </Link>
+            </div>
+          ) : user.level === 2 ? (
+            // Level 2: email-verified but no password set yet
+            // No logout button — they have no password to log back in with
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-700">Hi, {user.name}</span>
+              <Link
+                to="/set-password"
+                className="text-sm text-green-600 hover:underline min-h-[48px] flex items-center"
+              >
+                Set a password
+              </Link>
+            </div>
+          ) : (
+            // Level 3: full account with password
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-700">Hi, {user.name}</span>
+              <button
+                onClick={logout}
+                className="text-sm text-gray-600 hover:text-red-600 transition-colors min-h-[48px] flex items-center"
+              >
+                Log out
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </nav>

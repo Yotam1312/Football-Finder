@@ -38,7 +38,7 @@ export const MatchDetailPage: React.FC = () => {
           <p className="text-gray-500 text-lg mb-4">Match not found.</p>
           <button
             onClick={() => navigate(-1)}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors min-h-[48px]"
           >
             Go Back
           </button>
@@ -68,7 +68,7 @@ export const MatchDetailPage: React.FC = () => {
         {/* Back button — returns to the results page */}
         <button
           onClick={() => navigate(-1)}
-          className="text-green-600 hover:text-green-700 font-medium mb-6 flex items-center gap-1"
+          className="text-green-600 hover:text-green-700 font-medium mb-6 flex items-center gap-1 min-h-[48px]"
         >
           &larr; Back to Results
         </button>
@@ -103,7 +103,8 @@ export const MatchDetailPage: React.FC = () => {
         </motion.div>
 
         {/* Three info tiles: date, local time, venue */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        {/* 3 columns even on mobile — tiles are short labels so they fit at 375px */}
+        <div className="grid grid-cols-3 gap-2 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
             <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Date</p>
             <p className="text-gray-800 font-semibold text-sm">{matchDate}</p>
@@ -152,16 +153,17 @@ export const MatchDetailPage: React.FC = () => {
           <p className="text-gray-500 text-sm mb-4">
             Read community tips, pub recommendations, and match-day advice from fans.
           </p>
-          <div className="flex gap-3">
+          {/* flex-col on mobile so team names don't get truncated in side-by-side layout */}
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link
               to={`/fanbase/team/${match.homeTeam.id}`}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg text-center text-sm transition-colors"
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg text-center text-sm transition-colors min-h-[48px] flex items-center justify-center"
             >
               {match.homeTeam.name} FanBase
             </Link>
             <Link
               to={`/fanbase/team/${match.awayTeam.id}`}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg text-center text-sm transition-colors"
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg text-center text-sm transition-colors min-h-[48px] flex items-center justify-center"
             >
               {match.awayTeam.name} FanBase
             </Link>
@@ -169,7 +171,9 @@ export const MatchDetailPage: React.FC = () => {
         </div>
 
         {/* Side-by-side team stats comparison (MATCH-03).
+            Wrapped in overflow-x-auto so wide team names don't push the page width.
             StatBar renders nothing if both standings are null. */}
+        <div className="overflow-x-auto">
         <StatBar
           homeTeam={match.homeTeam}
           awayTeam={match.awayTeam}
@@ -177,6 +181,7 @@ export const MatchDetailPage: React.FC = () => {
           awayStanding={match.awayTeamStanding}
           season={season}
         />
+        </div>
 
       </div>
     </div>

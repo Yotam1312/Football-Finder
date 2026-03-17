@@ -46,9 +46,10 @@ model Team {
   logoUrl       String?
   homeMatches   Match[]        @relation("HomeTeam")
   awayMatches   Match[]        @relation("AwayTeam")
-  posts         Post[]         // Phase 3+
-  favoritedBy   UserFavorite[] // Phase 4
-  standings     TeamStanding[] // Phase 2 — league table positions for match detail page
+  posts             Post[]         // Phase 3+
+  favoritedBy       UserFavorite[] // Phase 4
+  standings         TeamStanding[] // Phase 2 — league table positions for match detail page
+  usersWithFavorite User[]         @relation("FavoriteClub") // users who picked this team as favorite
 }
 
 model Match {
@@ -98,16 +99,19 @@ model TeamStanding {
 // ─────────────────────────────────────────────
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  name         String
-  passwordHash String?  // null for email-only (Level 2) users; set when upgrading to Level 3
-  createdAt    DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  name           String
+  passwordHash   String?  // null for email-only (Level 2) users; set when upgrading to Level 3
+  age            Int?     // optional — collected on registration, no minimum enforced
+  favoriteClubId Int?     // optional FK to Team — null if user skips selection
+  createdAt      DateTime @default(now())
 
-  posts     Post[]
-  upvotes   Upvote[]
-  favorites UserFavorite[]
-  tokens    VerificationToken[]
+  posts         Post[]
+  upvotes       Upvote[]
+  favorites     UserFavorite[]
+  tokens        VerificationToken[]
+  favoriteClub  Team?    @relation("FavoriteClub", fields: [favoriteClubId], references: [id])
 }
 
 model VerificationToken {

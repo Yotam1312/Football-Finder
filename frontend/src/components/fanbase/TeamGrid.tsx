@@ -32,7 +32,7 @@ export const TeamGrid: React.FC<TeamGridProps> = ({ teams, isLoading }) => {
         <button
           key={team.id}
           onClick={() => navigate(`/fanbase/team/${team.id}`)}
-          className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all p-4 flex flex-col items-center gap-2 cursor-pointer"
+          className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all p-4 flex flex-col items-center gap-2 cursor-pointer min-h-[80px]"
         >
           {/* TeamLogo accepts 'sm' | 'lg' — using 'sm' (40px) for team grid cards */}
           <TeamLogo team={team} size="sm" />
