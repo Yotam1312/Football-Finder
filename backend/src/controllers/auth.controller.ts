@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/database';
-import { createVerificationToken } from '../lib/token.helpers';
-import { sendVerificationEmail } from '../services/email.service';
 
 // Helper: set the JWT cookie on the response.
 // httpOnly prevents JavaScript from reading it (XSS protection).
@@ -24,185 +22,53 @@ const setAuthCookie = (res: Response, userId: number, level: number): void => {
   });
 };
 
-// POST /api/auth/request-post
-// First step of posting: validates form data, stores it in a VerificationToken,
-// and emails the user a link. The user clicks the link to actually create the post.
-export const requestPost = async (req: Request, res: Response) => {
+// POST /api/auth/register
+// Creates a new full account (Level 3) with email, password, and name.
+// Age and favoriteClubId are optional — stored as null if not provided.
+// Account is active immediately — no email verification step required.
+export const register = async (req: Request, res: Response) => {
   try {
-    const {
-      email,
-      authorName,
-      teamId,
-      teamName,
-      postType,
-      title,
-      body,
-      // optional seat tip fields
-      seatSection,
-      seatRow,
-      seatNumber,
-      seatRating,
-      // optional pub recommendation fields
-      pubName,
-      pubAddress,
-      pubDistance,
-      // optional match link
-      matchId,
-    } = req.body;
+    const { email, password, name, age, favoriteClubId } = req.body;
 
-    // Validate required fields — return 400 if any are missing
-    if (!email || !authorName || !teamId || !teamName || !postType || !title || !body) {
+    // Validate required fields
+    if (!email || !password || !name) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Store the pending post data in the VerificationToken so we can create the post
-    // after the user clicks the email link (without them re-entering the form)
-    const token = await createVerificationToken(email, {
-      teamId,
-      postType,
-      title,
-      body,
-      authorName,
-      seatSection,
-      seatRow,
-      seatNumber,
-      seatRating,
-      pubName,
-      pubAddress,
-      pubDistance,
-      matchId,
-    });
-
-    await sendVerificationEmail(email, token, teamName);
-
-    res.status(200).json({ message: 'Verification email sent' });
-  } catch (error) {
-    console.error('Error in requestPost:', error);
-    res.status(500).json({ error: 'Failed to send verification email' });
-  }
-};
-
-// POST /api/auth/verify/:token
-// Second step of posting: the user clicks the email link with this token.
-// We look up the pending post data, create the post, and set a JWT cookie.
-export const verifyToken = async (req: Request, res: Response) => {
-  try {
-    const { token } = req.params;
-
-    // Look up the token record (include the associated user if one already exists)
-    const tokenRecord = await prisma.verificationToken.findUnique({
-      where: { token },
-      include: { user: true },
-    });
-
-    // Guard checks in order of priority
-    if (!tokenRecord) {
-      return res.status(404).json({ error: 'Verification link not found' });
+    // Password must be at least 8 characters for basic security
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters' });
     }
 
-    if (tokenRecord.usedAt !== null) {
-      return res.status(400).json({ error: 'Link already used' });
+    // Check if email is already registered — return 409 Conflict if so
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      return res.status(409).json({ error: 'Email already registered' });
     }
 
-    if (tokenRecord.expiresAt < new Date()) {
-      return res.status(400).json({ error: 'Link expired', code: 'EXPIRED' });
-    }
+    // Hash password before storing — bcrypt with salt rounds = 10 is the standard
+    // High enough to slow brute force, fast enough that a single hash takes ~100ms
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Cast pendingPostData — Prisma stores it as JsonValue (unknown shape)
-    const postData = tokenRecord.pendingPostData as Record<string, unknown>;
-
-    // Find or create the user by email.
-    // upsert is perfect here: create if new user, return existing if returning visitor.
-    const user = await prisma.user.upsert({
-      where: { email: tokenRecord.email },
-      update: {}, // don't change anything if user already exists
-      create: {
-        email: tokenRecord.email,
-        name: postData.authorName as string,
+    const user = await prisma.user.create({
+      data: {
+        email,
+        name,
+        passwordHash: hashedPassword,
+        age: age ? parseInt(age, 10) : null,
+        favoriteClubId: favoriteClubId ? parseInt(favoriteClubId, 10) : null,
       },
     });
 
-    // Use a Prisma transaction to create the post and mark the token as used
-    // in a single atomic operation. If either fails, both are rolled back.
-    const [post] = await prisma.$transaction([
-      prisma.post.create({
-        data: {
-          teamId: postData.teamId as number,
-          userId: user.id,
-          postType: postData.postType as 'GENERAL_TIP' | 'SEAT_TIP' | 'PUB_RECOMMENDATION' | 'IM_GOING',
-          title: postData.title as string,
-          body: postData.body as string,
-          authorName: postData.authorName as string,
-          authorEmail: tokenRecord.email,
-          seatSection: (postData.seatSection as string | undefined) ?? null,
-          seatRow: (postData.seatRow as string | undefined) ?? null,
-          seatNumber: (postData.seatNumber as string | undefined) ?? null,
-          seatRating: (postData.seatRating as number | undefined) ?? null,
-          pubName: (postData.pubName as string | undefined) ?? null,
-          pubAddress: (postData.pubAddress as string | undefined) ?? null,
-          pubDistance: (postData.pubDistance as string | undefined) ?? null,
-          matchId: (postData.matchId as number | undefined) ?? null,
-        },
-      }),
-      prisma.verificationToken.update({
-        where: { token },
-        data: { usedAt: new Date(), userId: user.id },
-      }),
-    ]);
+    // Issue a Level 3 cookie immediately — registered users are full accounts from the start
+    setAuthCookie(res, user.id, 3);
 
-    // Set a Level 2 cookie — they've verified their email but haven't set a password yet
-    setAuthCookie(res, user.id, 2);
-
-    res.status(200).json({
-      post,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        level: 2,
-      },
+    res.status(201).json({
+      user: { id: user.id, name: user.name, email: user.email, level: 3 },
     });
   } catch (error) {
-    console.error('Error in verifyToken:', error);
-    res.status(500).json({ error: 'Failed to verify token' });
-  }
-};
-
-// POST /api/auth/resend
-// Creates a new verification token using the data from an expired token,
-// then sends a fresh email. The user provides the old token string.
-export const resendVerification = async (req: Request, res: Response) => {
-  try {
-    const { expiredToken } = req.body;
-
-    // Find the old token record
-    const oldRecord = await prisma.verificationToken.findUnique({
-      where: { token: expiredToken },
-    });
-
-    if (!oldRecord) {
-      return res.status(404).json({ error: 'Token not found' });
-    }
-
-    const postData = oldRecord.pendingPostData as Record<string, unknown>;
-
-    // Create a fresh token with the same pending post data
-    const newToken = await createVerificationToken(oldRecord.email, oldRecord.pendingPostData as object);
-
-    // Get the team name so we can use it in the email subject
-    const teamId = postData.teamId as number;
-    const team = await prisma.team.findUnique({
-      where: { id: teamId },
-    });
-
-    const teamName = team?.name || 'Your Team';
-
-    await sendVerificationEmail(oldRecord.email, newToken, teamName);
-
-    res.status(200).json({ message: 'New verification email sent' });
-  } catch (error) {
-    console.error('Error in resendVerification:', error);
-    res.status(500).json({ error: 'Failed to resend verification email' });
+    console.error('Error in register:', error);
+    res.status(500).json({ error: 'Registration failed' });
   }
 };
 

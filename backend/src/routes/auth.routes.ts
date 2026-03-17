@@ -4,19 +4,10 @@ import * as authController from '../controllers/auth.controller';
 
 const router = express.Router();
 
-// POST /api/auth/request-post
-// Step 1 of post creation: validate the email, store pending post data,
-// and send a verification email. No auth required — this is the entry point.
-router.post('/request-post', authController.requestPost);
-
-// POST /api/auth/verify/:token
-// Step 2 of post creation: the user clicks the email link, this endpoint
-// verifies the token, creates the post, and sets a Level 2 JWT cookie.
-router.post('/verify/:token', authController.verifyToken);
-
-// POST /api/auth/resend
-// Resend the verification email using an expired token as a reference.
-router.post('/resend', authController.resendVerification);
+// POST /api/auth/register
+// Create a new full account. No email verification step — account is active immediately.
+// Requires: email, password (min 8 chars), name. Optional: age, favoriteClubId.
+router.post('/register', authController.register);
 
 // POST /api/auth/set-password
 // Upgrade a Level 2 user to Level 3 by setting a password.
