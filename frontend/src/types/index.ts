@@ -113,6 +113,8 @@ export interface AuthUser {
   name: string;
   email: string;
   level: 2 | 3;
+  age?: number | null;
+  favoriteClubId?: number | null;
 }
 
 // Input type for POST /api/auth/request-post
