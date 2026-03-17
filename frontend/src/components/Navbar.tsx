@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { MapPin, Navigation, Users, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Top navigation bar — shown on every page.
@@ -9,35 +10,45 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-100">
-      {/* flex-wrap allows the nav to break into two lines on very narrow screens */}
-      <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+      <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+        {/* Left: Logo with green pin icon + brand name */}
         <Link to="/" className="flex items-center gap-2 min-h-[48px]">
-          {/* Simple text logo — replace with SVG icon in Phase 5 polish */}
-          <span className="text-2xl font-bold text-green-600">Football</span>
-          <span className="text-2xl font-bold text-gray-800">Finder</span>
+          <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+            <MapPin className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-xl font-bold text-green-600">Football Finder</span>
         </Link>
-        {/* gap-4 on mobile (instead of gap-6) saves horizontal space */}
-        <div className="flex items-center gap-4 flex-wrap">
-          <Link
-            to="/"
-            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
-          >
-            Home
-          </Link>
-          <Link
-            to="/fanbase"
-            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
-          >
-            FanBase
-          </Link>
-          <Link
-            to="/transport"
-            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
-          >
-            Transport
-          </Link>
 
-          {/* Auth section — rendered based on login state */}
+        {/* Center: Nav links with icons — flex-1 + justify-center keeps them truly centered
+            regardless of how wide the auth section on the right is */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex items-center gap-12">
+            <Link
+              to="/transport"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px]"
+            >
+              <Navigation className="w-4 h-4" />
+              Transportation &amp; Navigation
+            </Link>
+            <Link
+              to="/fanbase"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px]"
+            >
+              <Users className="w-4 h-4" />
+              FanBase Hub
+            </Link>
+            <Link
+              to="/contact"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px]"
+            >
+              <Phone className="w-4 h-4" />
+              Contact Us
+            </Link>
+          </div>
+        </div>
+
+        {/* Right: Auth section — rendered based on login state */}
+        <div className="flex items-center">
           {isLoading ? (
             // Placeholder shown briefly while /api/auth/me is in flight
             // Prevents flickering between guest and logged-in states
