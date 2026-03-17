@@ -9,6 +9,7 @@ import { TeamFanBasePage } from './pages/TeamFanBasePage';
 import { LoginPage } from './pages/LoginPage';
 import { SetPasswordPage } from './pages/SetPasswordPage';
 import { VerifyPage } from './pages/VerifyPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 // AnimatePresence enables smooth page transition animations.
 // key={location.pathname} tells Framer Motion when a route change happens.
@@ -32,6 +33,8 @@ export default function App() {
           <Route path="/login"         element={<LoginPage />} />
           <Route path="/set-password"  element={<SetPasswordPage />} />
           <Route path="/verify/:token" element={<VerifyPage />} />
+          {/* Catch-all — must be the last route; shows 404 page for unknown URLs */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AnimatePresence>
     </>
