@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import type { Post, PostType, CreatePostInput } from '../../types/index';
+import { useAuth } from '../../context/AuthContext';
+import type { Post, PostType } from '../../types/index';
 
 // Shape of an upcoming match returned by the backend
 interface UpcomingMatch {
@@ -72,11 +73,12 @@ const StarRating: React.FC<{
 // Multi-step modal for creating or editing a FanBase post.
 // Create mode (default):
 //   Step 1 — type picker: user picks one of 4 post types
-//   Step 2 — form: user fills in type-specific fields plus name and email
-//   Step 3 — check-email: confirmation screen after successful submission
+//   Step 2 — form: user fills in type-specific fields plus their name
 // Edit mode (when editPost prop is provided):
 //   Starts directly on Step 2 with fields pre-filled from the existing post.
-//   Submit calls PUT /api/posts/:id instead of POST /api/auth/request-post.
+//   Submit calls PUT /api/posts/:id instead of POST /api/posts.
+// The email verification step (formerly step 3) has been removed — posts are now
+// submitted directly with the auth cookie by logged-in Level 3 users.
 export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   teamId,
   teamName,
@@ -84,9 +86,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   editPost,
 }) => {
   const queryClient = useQueryClient();
+  // Get the logged-in user so we can pre-fill the author name
+  const { user } = useAuth();
 
   // In edit mode, skip the type picker and start directly on the form
-  const [step, setStep] = useState<'type-picker' | 'form' | 'check-email'>(
+  const [step, setStep] = useState<'type-picker' | 'form'>(
     editPost ? 'form' : 'type-picker'
   );
 
@@ -96,9 +100,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   // ── Common form fields — pre-filled in edit mode ──
   const [title, setTitle] = useState(editPost?.title ?? '');
   const [body, setBody] = useState(editPost?.body ?? '');
-  const [authorName, setAuthorName] = useState(editPost?.authorName ?? '');
-  // Email is not pre-filled in edit mode — the backend doesn't re-send a verification email
-  const [email, setEmail] = useState('');
+  // Pre-fill author name from existing post (edit) or from the logged-in user's name
+  const [authorName, setAuthorName] = useState(
+    editPost?.authorName ?? user?.name ?? ''
+  );
 
   // ── Seat Tip fields — pre-filled in edit mode ──
   const [seatSection, setSeatSection] = useState(editPost?.seatSection ?? '');
@@ -119,9 +124,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   // ── Submission state ──
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  // Store the submitted email so step 3 can display it (only used in create mode)
-  const [submittedEmail, setSubmittedEmail] = useState('');
 
   // When the user lands on the form step with IM_GOING type,
   // fetch upcoming matches from the backend to populate the dropdown.
@@ -156,11 +158,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     if (!title.trim()) return 'Title is required';
     if (!body.trim()) return 'Message is required';
     if (!authorName.trim()) return 'Your name is required';
-    // Email is only required when creating a new post (not editing)
-    if (!editPost) {
-      if (!email.trim()) return 'Your email is required';
-      if (!email.includes('@') || !email.includes('.')) return 'Please enter a valid email address';
-    }
     // Pub name is required for pub recommendations
     if (postType === 'PUB_RECOMMENDATION' && !pubName.trim()) {
       return 'Pub name is required for a pub recommendation';
@@ -224,19 +221,16 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
       return;
     }
 
-    // ── Create mode: POST /api/auth/request-post ──
-    // Store the email before the API call so step 3 can display it
-    setSubmittedEmail(email);
-
-    // Build the payload — only include optional fields that have values
-    const postData: CreatePostInput = {
+    // ── Create mode: POST /api/posts ──
+    // The modal is only reachable by logged-in users (guests see AuthGateModal instead).
+    // The auth cookie is sent automatically with credentials: 'include'.
+    const postPayload: Record<string, unknown> = {
       teamId,
       teamName,
       postType: postType!,
       title: title.trim(),
       body: body.trim(),
       authorName: authorName.trim(),
-      email: email.trim(),
       ...(postType === 'SEAT_TIP' && {
         ...(seatSection.trim() && { seatSection: seatSection.trim() }),
         ...(seatRow.trim() && { seatRow: seatRow.trim() }),
@@ -252,17 +246,22 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     };
 
     try {
-      const res = await fetch('/api/auth/request-post', {
+      const res = await fetch('/api/posts', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postData),
+        body: JSON.stringify(postPayload),
       });
 
       if (res.ok) {
-        setStep('check-email');
+        // Refresh the posts feed so the new post appears immediately
+        queryClient.invalidateQueries({ queryKey: ['fanbase', 'posts'] });
+        onClose();
+      } else if (res.status === 401) {
+        // Not authenticated — this shouldn't happen if AuthGateModal is working,
+        // but handle it gracefully just in case
+        setSubmitError('You must be logged in to post. Please refresh the page and try again.');
       } else {
-        // Try to extract a meaningful error message from the API response
         const data = await res.json().catch(() => ({}));
         setSubmitError(data.error ?? 'Something went wrong. Please try again.');
       }
@@ -498,12 +497,21 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 </div>
               )}
 
-              {/* Author details — always shown at the bottom */}
-              <div className="border-t border-gray-100 pt-4 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Name <span className="text-red-500">*</span>
-                  </label>
+              {/* Author name — always shown at the bottom */}
+              <div className="border-t border-gray-100 pt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Name <span className="text-red-500">*</span>
+                </label>
+                {/* If the user is logged in, show their name as read-only — it comes from their account */}
+                {user ? (
+                  <input
+                    type="text"
+                    value={authorName}
+                    readOnly
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-600 cursor-not-allowed"
+                    title="Your name comes from your account"
+                  />
+                ) : (
                   <input
                     type="text"
                     value={authorName}
@@ -511,25 +519,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
                     placeholder="How should we credit you?"
                   />
-                </div>
-
-                {/* Email field — only shown when creating a new post, not when editing */}
-                {!editPost && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Your Email <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
-                      placeholder="We'll send a verification link here"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">
-                      We'll send you a link to verify and publish your post — no account needed.
-                    </p>
-                  </div>
                 )}
               </div>
 
@@ -547,44 +536,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 className="w-full bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting
-                  ? (editPost ? 'Saving...' : 'Sending...')
-                  : (editPost ? 'Save Changes' : 'Send Verification Email')
+                  ? (editPost ? 'Saving...' : 'Posting...')
+                  : (editPost ? 'Save Changes' : 'Post Tip')
                 }
               </button>
             </div>
-          </div>
-        )}
-
-        {/* ── Step 3: Check Email ── */}
-        {step === 'check-email' && (
-          <div className="p-6 text-center">
-            <div className="flex items-center justify-end mb-4">
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
-                aria-label="Close modal"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="mb-4 text-5xl">📧</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Check your inbox!</h2>
-            <p className="text-gray-600 text-sm mb-3">
-              We've sent a verification link to your email. Click the link to publish your post.
-            </p>
-            {submittedEmail && (
-              <p className="text-sm font-medium text-gray-800 bg-gray-50 rounded-lg px-4 py-2 inline-block mb-6">
-                {submittedEmail}
-              </p>
-            )}
-
-            <button
-              onClick={onClose}
-              className="w-full bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-green-700 transition-colors"
-            >
-              Close
-            </button>
           </div>
         )}
       </div>

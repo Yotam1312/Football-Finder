@@ -6,6 +6,7 @@ import { useFanbasePosts } from '../hooks/useFanbasePosts';
 import { TeamLogo } from '../components/TeamLogo';
 import { PostFeed } from '../components/fanbase/PostFeed';
 import { CreatePostModal } from '../components/fanbase/CreatePostModal';
+import { AuthGateModal } from '../components/fanbase/AuthGateModal';
 import { useAuth } from '../context/AuthContext';
 import type { Post } from '../types';
 
@@ -35,6 +36,9 @@ export const TeamFanBasePage: React.FC = () => {
 
   // Controls whether the CreatePostModal is open
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Controls whether the AuthGateModal is open (shown to guests who click Add Your Tip)
+  const [isAuthGateOpen, setIsAuthGateOpen] = useState(false);
 
   // When editPost is set, the modal opens in edit mode with that post's data pre-filled.
   // Cleared back to null when the modal closes.
@@ -110,6 +114,17 @@ export const TeamFanBasePage: React.FC = () => {
     setEditPost(null);
   };
 
+  // Handles clicking the "+ Add Your Tip" button.
+  // Guests see the AuthGateModal directing them to register or log in.
+  // Logged-in users see the CreatePostModal directly.
+  const handleAddTipClick = () => {
+    if (!user) {
+      setIsAuthGateOpen(true);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   // Error state — team not found or network error
   if (teamError) {
     return (
@@ -175,9 +190,9 @@ export const TeamFanBasePage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Add button — opens the CreatePostModal. Any visitor can post (FAN-04). */}
+              {/* Add button — guests see AuthGateModal; logged-in users see CreatePostModal */}
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={handleAddTipClick}
                 className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
               >
                 + Add Your Tip
@@ -201,7 +216,7 @@ export const TeamFanBasePage: React.FC = () => {
         />
       </div>
 
-      {/* Create/edit post modal — rendered at root level to escape the content container */}
+      {/* Create/edit post modal — only reachable for logged-in users */}
       {isModalOpen && team && (
         <CreatePostModal
           teamId={parseInt(teamId!, 10)}
@@ -210,6 +225,12 @@ export const TeamFanBasePage: React.FC = () => {
           editPost={editPost ?? undefined}
         />
       )}
+
+      {/* Auth gate modal — shown to guests who click Add Your Tip */}
+      <AuthGateModal
+        isOpen={isAuthGateOpen}
+        onClose={() => setIsAuthGateOpen(false)}
+      />
     </motion.div>
   );
 };

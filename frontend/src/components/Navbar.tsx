@@ -32,8 +32,21 @@ export const Navbar: React.FC = () => {
             // Prevents flickering between guest and logged-in states
             <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
           ) : user === null ? (
-            // Guest (Level 1) — no login button; the page is accessible at /login
-            null
+            // Guest (Level 1) — show Login and Register buttons
+            <div className="flex items-center gap-3">
+              <Link
+                to="/login"
+                className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/register"
+                className="text-sm bg-green-600 text-white px-3 py-2 rounded-md hover:bg-green-700 transition-colors min-h-[48px] flex items-center"
+              >
+                Register
+              </Link>
+            </div>
           ) : user.level === 2 ? (
             // Level 2: email-verified but no password set yet
             // No logout button — they have no password to log back in with
