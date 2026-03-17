@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 05-polish-and-launch-05-03-PLAN.md
-last_updated: "2026-03-17T21:10:37.373Z"
+stopped_at: Completed 05-polish-and-launch-05-04-PLAN.md
+last_updated: "2026-03-17T21:16:41.007Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 21
-  completed_plans: 18
+  completed_plans: 19
   percent: 73
 ---
 
@@ -83,6 +83,7 @@ Progress: [████████████████████] 100%
 | Phase 05-polish-and-launch P05-01 | 3 | 2 tasks | 5 files |
 | Phase 05-polish-and-launch P02 | 12 | 2 tasks | 6 files |
 | Phase 05-polish-and-launch P03 | 1 | 2 tasks | 3 files |
+| Phase 05-polish-and-launch PP05-04 | 4 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,8 @@ Recent decisions affecting current work:
 - [Phase 05-polish-and-launch]: Hybrid three-level auth retired: requestPost, verifyToken, resendVerification removed; register() issues Level 3 cookie immediately with no email verification step
 - [Phase 05-polish-and-launch]: Inline handler in contact.routes.ts rather than separate controller — CLAUDE.md says avoid over-engineering for a single endpoint
 - [Phase 05-polish-and-launch]: Jest mock for email.service in contact tests — prevents SMTP/Ethereal network calls in test environment
+- [Phase 05-polish-and-launch]: AuthGateModal intercepts guest clicks on Add Your Tip — modal keeps user on same page instead of redirecting
+- [Phase 05-polish-and-launch]: CreatePostModal posts directly to POST /api/posts with cookie auth — hybrid email-verification flow fully retired from frontend
 
 ### Pending Todos
 
@@ -157,6 +160,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-17T21:10:37.368Z
-Stopped at: Completed 05-polish-and-launch-05-03-PLAN.md
+Last session: 2026-03-17T21:16:41.002Z
+Stopped at: Completed 05-polish-and-launch-05-04-PLAN.md
 Resume file: None
