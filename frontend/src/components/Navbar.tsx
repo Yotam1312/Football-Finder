@@ -22,6 +22,9 @@ export const Navbar: React.FC = () => {
           <Link to="/fanbase" className="text-gray-600 hover:text-green-600 transition-colors">
             FanBase
           </Link>
+          <Link to="/transport" className="text-gray-600 hover:text-green-600 transition-colors">
+            Transport
+          </Link>
 
           {/* Auth section — rendered based on login state */}
           {isLoading ? (

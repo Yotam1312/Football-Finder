@@ -9,6 +9,7 @@ import { TeamFanBasePage } from './pages/TeamFanBasePage';
 import { LoginPage } from './pages/LoginPage';
 import { SetPasswordPage } from './pages/SetPasswordPage';
 import { VerifyPage } from './pages/VerifyPage';
+import { TransportPage } from './pages/TransportPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // AnimatePresence enables smooth page transition animations.
@@ -33,6 +34,8 @@ export default function App() {
           <Route path="/login"         element={<LoginPage />} />
           <Route path="/set-password"  element={<SetPasswordPage />} />
           <Route path="/verify/:token" element={<VerifyPage />} />
+          {/* Static info pages — Phase 5 polish */}
+          <Route path="/transport" element={<TransportPage />} />
           {/* Catch-all — must be the last route; shows 404 page for unknown URLs */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
