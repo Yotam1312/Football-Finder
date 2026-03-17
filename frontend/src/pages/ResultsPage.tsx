@@ -43,7 +43,7 @@ export const ResultsPage: React.FC = () => {
           </p>
           <button
             onClick={() => navigate('/')}
-            className="text-green-600 hover:text-green-700 text-sm font-medium"
+            className="text-green-600 hover:text-green-700 text-sm font-medium min-h-[48px] flex items-center"
           >
             &larr; New Search
           </button>
@@ -74,7 +74,7 @@ export const ResultsPage: React.FC = () => {
             <p className="text-gray-500 text-lg">Something went wrong. Please try again.</p>
             <button
               onClick={() => navigate('/')}
-              className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors min-h-[48px]"
             >
               Back to Search
             </button>
@@ -90,7 +90,7 @@ export const ResultsPage: React.FC = () => {
             </p>
             <button
               onClick={() => navigate('/')}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors min-h-[48px]"
             >
               Try Another Search
             </button>
@@ -117,7 +117,7 @@ export const ResultsPage: React.FC = () => {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors min-h-[48px]"
             >
               &larr; Previous
             </button>
@@ -127,7 +127,7 @@ export const ResultsPage: React.FC = () => {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors min-h-[48px]"
             >
               Next &rarr;
             </button>

@@ -9,20 +9,31 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
+      {/* flex-wrap allows the nav to break into two lines on very narrow screens */}
+      <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+        <Link to="/" className="flex items-center gap-2 min-h-[48px]">
           {/* Simple text logo — replace with SVG icon in Phase 5 polish */}
           <span className="text-2xl font-bold text-green-600">Football</span>
           <span className="text-2xl font-bold text-gray-800">Finder</span>
         </Link>
-        <div className="flex items-center gap-6">
-          <Link to="/" className="text-gray-600 hover:text-green-600 transition-colors">
+        {/* gap-4 on mobile (instead of gap-6) saves horizontal space */}
+        <div className="flex items-center gap-4 flex-wrap">
+          <Link
+            to="/"
+            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+          >
             Home
           </Link>
-          <Link to="/fanbase" className="text-gray-600 hover:text-green-600 transition-colors">
+          <Link
+            to="/fanbase"
+            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+          >
             FanBase
           </Link>
-          <Link to="/transport" className="text-gray-600 hover:text-green-600 transition-colors">
+          <Link
+            to="/transport"
+            className="text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px] flex items-center"
+          >
             Transport
           </Link>
 
@@ -54,7 +65,7 @@ export const Navbar: React.FC = () => {
               <span className="text-sm text-gray-700">Hi, {user.name}</span>
               <Link
                 to="/set-password"
-                className="text-sm text-green-600 hover:underline"
+                className="text-sm text-green-600 hover:underline min-h-[48px] flex items-center"
               >
                 Set a password
               </Link>
@@ -65,7 +76,7 @@ export const Navbar: React.FC = () => {
               <span className="text-sm text-gray-700">Hi, {user.name}</span>
               <button
                 onClick={logout}
-                className="text-sm text-gray-600 hover:text-red-600 transition-colors"
+                className="text-sm text-gray-600 hover:text-red-600 transition-colors min-h-[48px] flex items-center"
               >
                 Log out
               </button>

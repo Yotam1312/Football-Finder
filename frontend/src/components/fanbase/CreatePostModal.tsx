@@ -281,9 +281,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       onClick={onClose}
     >
-      {/* Modal card — stops click events from reaching the backdrop */}
+      {/* Modal card — stops click events from reaching the backdrop.
+          max-h-[90vh] + overflow-y-auto makes the modal scrollable on small screens. */}
       <div
-        className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto sm:rounded-xl rounded-none sm:max-h-[90vh] h-full sm:h-auto"
+        className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── Step 1: Type Picker ── */}
@@ -292,9 +293,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             {/* Header row */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">What would you like to share?</h2>
+              {/* p-3 gives a 48px effective tap area around the 24px × icon */}
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+                className="text-gray-400 hover:text-gray-600 text-2xl leading-none p-3 -mr-3"
                 aria-label="Close modal"
               >
                 ×
@@ -334,9 +336,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
                 {selectedTypeLabel}
               </span>
+              {/* p-3 gives a 48px effective tap area around the 24px × icon */}
               <button
                 onClick={onClose}
-                className="ml-auto text-gray-400 hover:text-gray-600 text-2xl leading-none"
+                className="ml-auto text-gray-400 hover:text-gray-600 text-2xl leading-none p-3 -mr-3"
                 aria-label="Close modal"
               >
                 ×
@@ -533,7 +536,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[48px]"
               >
                 {isSubmitting
                   ? (editPost ? 'Saving...' : 'Posting...')

@@ -125,7 +125,8 @@ export const HomePage: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* grid-cols-1 on mobile so date inputs don't get too narrow */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
                 <input
@@ -149,18 +150,19 @@ export const HomePage: React.FC = () => {
             </div>
 
             {/* Two buttons: "Use Current Location" (outline) + "Find Matches" (solid green) */}
-            <div className="flex gap-3">
+            {/* flex-col on mobile so buttons get full width; sm:flex-row side-by-side on wider screens */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 type="button"
                 onClick={handleUseLocation}
                 disabled={locationLoading}
-                className="flex-1 border border-green-600 text-green-600 hover:bg-green-50 font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-60"
+                className="flex-1 border border-green-600 text-green-600 hover:bg-green-50 font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-60 min-h-[48px]"
               >
                 {locationLoading ? 'Locating...' : 'Use Current Location'}
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors min-h-[48px]"
               >
                 Find Matches
               </button>

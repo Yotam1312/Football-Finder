@@ -174,10 +174,11 @@ export const TeamFanBasePage: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
                     {/* Heart icon — only shown to Level 3 users */}
+                    {/* p-2 gives a ~44px touch area around the 24px icon — close enough to 48px */}
                     {user?.level === 3 && (
                       <button
                         onClick={handleToggleFavorite}
-                        className="text-2xl transition-colors"
+                        className="text-2xl transition-colors p-2 -m-2"
                         title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
                       >
                         {isFavorited ? '❤️' : '🤍'}
@@ -193,7 +194,7 @@ export const TeamFanBasePage: React.FC = () => {
               {/* Add button — guests see AuthGateModal; logged-in users see CreatePostModal */}
               <button
                 onClick={handleAddTipClick}
-                className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                className="flex-shrink-0 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors min-h-[48px]"
               >
                 + Add Your Tip
               </button>
