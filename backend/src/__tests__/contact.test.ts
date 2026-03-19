@@ -5,7 +5,6 @@ import app from '../app';
 // This prevents test failures from network/SMTP issues and keeps tests fast.
 jest.mock('../services/email.service', () => ({
   sendContactEmail: jest.fn().mockResolvedValue(undefined),
-  sendVerificationEmail: jest.fn().mockResolvedValue(undefined),
 }));
 
 describe('POST /api/contact', () => {
