@@ -9,11 +9,6 @@ const router = express.Router();
 // Requires: email, password (min 8 chars), name. Optional: age, favoriteClubId.
 router.post('/register', authController.register);
 
-// POST /api/auth/set-password
-// Upgrade a Level 2 user to Level 3 by setting a password.
-// requireAuth ensures the user is logged in (Level 2 cookie required).
-router.post('/set-password', requireAuth, authController.setPassword);
-
 // POST /api/auth/login
 // Full account login: email + password. Returns a Level 3 JWT cookie.
 router.post('/login', authController.login);
