@@ -35,7 +35,7 @@ jest.mock('../config/database', () => ({
 
 // Mock the email service to avoid real SMTP calls
 jest.mock('../services/email.service', () => ({
-  sendVerificationEmail: jest.fn().mockResolvedValue(undefined),
+  sendContactEmail: jest.fn().mockResolvedValue(undefined),
 }));
 
 // Mock nanoid so we get predictable token values in tests
