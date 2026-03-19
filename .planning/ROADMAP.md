@@ -35,16 +35,23 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 ## Phase Details
 
 ### Phase 9: OAuth Foundation
-**Goal**: Users can sign in to Football Finder using their Google account, with all existing Level 3 features working through the new OAuth session
+**Goal**: Users can sign in to Football Finder using their Google account or email+password, with all existing Level 3 features working through both session types and the user table reset to a clean slate
 **Depends on**: Nothing (first v2.0 phase)
 **Requirements**: OAUTH-01, OAUTH-02, OAUTH-03, OAUTH-04
 **Success Criteria** (what must be TRUE):
   1. A user clicks "Continue with Google" and is redirected to Google, then returned to the site as a logged-in user — no registration form appears
   2. A first-time Google sign-in creates an account automatically using the user's Google name and email, visible in their profile
-  3. The user's Google profile picture appears as their avatar on their posts and in the nav bar
+  3. The user's Google profile picture appears as their avatar on their posts and profile page
   4. A signed-in user can create posts, upvote, edit and delete their own posts, and save favorite teams — all features that required Level 3 in v1 work identically
   5. A user who was registered under the old email+password system can sign in with Google and access the site (clean slate after user table reset)
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Schema migration + user table reset (add googleId/avatarUrl/country, fix cascades, drop VerificationToken, truncate users)
+- [ ] 09-02-PLAN.md — Google OAuth backend (google-auth-library, /google redirect, /google/callback, updated getMe)
+- [ ] 09-03-PLAN.md — Profile management API (PATCH /api/users/me, PATCH /api/users/me/password, DELETE /api/users/me)
+- [ ] 09-04-PLAN.md — Frontend auth pages (LoginPage + RegisterPage Google buttons, WelcomePage, delete SetPasswordPage, update AuthUser type)
+- [ ] 09-05-PLAN.md — Navbar dropdown + ProfilePage (Hi name dropdown, /profile full edit page with avatar/password/delete)
 
 ### Phase 10: Photo Upload
 **Goal**: Users creating a Seat Tip post can attach one photo, which is stored in Azure Blob and shown on the published post
@@ -97,7 +104,7 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 9. OAuth Foundation | v2.0 | 0/TBD | Not started | - |
+| 9. OAuth Foundation | v2.0 | 0/5 | Not started | - |
 | 10. Photo Upload | v2.0 | 0/TBD | Not started | - |
 | 11. Global League Expansion | v2.0 | 0/TBD | Not started | - |
 | 12. Date Filters | v2.0 | 0/TBD | Not started | - |

@@ -102,31 +102,22 @@ model User {
   id             Int      @id @default(autoincrement())
   email          String   @unique
   name           String
-  passwordHash   String?  // null for email-only (Level 2) users; set when upgrading to Level 3
-  age            Int?     // optional — collected on registration, no minimum enforced
-  favoriteClubId Int?     // optional FK to Team — null if user skips selection
+  passwordHash   String?  // null for Google-only users; set for email+password users
+  googleId       String?  @unique  // null for email+password users; set after Google sign-in
+  avatarUrl      String?  // Google profile photo URL (Phase 9) or custom upload URL (Phase 10)
+  age            Int?     // optional — collected on registration or profile edit
+  country        String?  // optional — shown and editable on the profile page
+  favoriteClubId Int?     // optional FK to Team
   createdAt      DateTime @default(now())
 
+  // Posts: SetNull — when user is deleted, posts survive with userId = null (anonymous)
   posts         Post[]
+  // Upvotes: Cascade — deleted when user is deleted (upvotes have no meaning without a user)
   upvotes       Upvote[]
+  // Favorites: Cascade — deleted when user is deleted
   favorites     UserFavorite[]
-  tokens        VerificationToken[]
   favoriteClub  Team?    @relation("FavoriteClub", fields: [favoriteClubId], references: [id])
-}
-
-model VerificationToken {
-  id              Int       @id @default(autoincrement())
-  token           String    @unique // random URL-safe token sent via email
-  userId          Int?      // null until user creates a full account
-  email           String    // always stored — used to look up user on verification
-  expiresAt       DateTime
-  usedAt          DateTime? // set when token is consumed; null tokens are still valid
-  pendingPostData Json?     // stores serialized form data during email verification flow
-
-  user User? @relation(fields: [userId], references: [id])
-
-  // Index on token — every verification request queries by token
-  @@index([token])
+  // Note: tokens relation removed — VerificationToken model is dropped in this migration
 }
 
 // ─────────────────────────────────────────────
@@ -156,7 +147,7 @@ model Post {
   createdAt    DateTime @default(now())
 
   team    Team    @relation(fields: [teamId], references: [id])
-  user    User?   @relation(fields: [userId], references: [id])
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   upvotes Upvote[]
 
   // teamId index — Phase 3 queries fetch all posts for a team
@@ -171,7 +162,7 @@ model Upvote {
   userId Int
 
   post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Prevent duplicate upvotes — one user can upvote a post exactly once
   @@unique([postId, userId])
@@ -182,7 +173,7 @@ model UserFavorite {
   userId Int
   teamId Int
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   team Team @relation(fields: [teamId], references: [id])
 
   @@unique([userId, teamId])
