@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
 milestone: v2.0
-milestone_name: Global & Real-Time
-status: roadmap
-stopped_at: ~
-last_updated: "2026-03-19T00:00:00.000Z"
-last_activity: 2026-03-19 — v2.0 roadmap created (Phases 9-13)
+milestone_name: — Global & Real-Time
+status: planning
+stopped_at: Completed 09-01-PLAN.md (schema migration + user table reset)
+last_updated: "2026-03-19T20:54:41.654Z"
+last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 5
+  completed_plans: 1
   percent: 0
 ---
 
@@ -46,6 +46,7 @@ Progress: [░░░░░░░░░░] 0%
 | - | - | - | - |
 
 *Updated after each plan completion*
+| Phase 09-oauth-foundation P01 | 51min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -59,6 +60,8 @@ Recent decisions affecting current work:
 - [v2.0 Roadmap]: Live scores deferred from v2.0 scope — free API plan (100 req/day) cannot sustain 60s polling; build behind feature flag only after paid plan confirmed
 - [v2.0 Roadmap]: Photo upload (Phase 10) requires Azure Blob CORS pre-flight before any multer code; multer v2.1.1 required (patches CVE-2025-47935, CVE-2025-47944)
 - [v2.0 Roadmap]: POST /api/admin/sync must be locked with API key header before Phase 11 league expansion (sync cost increases from ~18 to ~36+ req/day)
+- [Phase 09-oauth-foundation]: Used prisma migrate deploy (non-interactive) instead of migrate dev — Claude Code shell lacks TTY; authored migration SQL manually
+- [Phase 09-oauth-foundation]: VerificationToken table dropped — email-based Level 2 auth flow replaced by Google OAuth in Phase 9; token.helpers.ts replaced with comment stub
 
 ### Pending Todos
 
@@ -78,6 +81,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-19
-Stopped at: v2.0 roadmap created — Phases 9-13 defined
+Last session: 2026-03-19T20:54:41.651Z
+Stopped at: Completed 09-01-PLAN.md (schema migration + user table reset)
 Resume file: None

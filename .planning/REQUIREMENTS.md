@@ -4,10 +4,10 @@
 
 ### OAuth & Authentication
 
-- [ ] **OAUTH-01**: User can sign in to Football Finder with their Google account
-- [ ] **OAUTH-02**: First-time Google sign-in automatically creates an account using the user's Google name and email
-- [ ] **OAUTH-03**: User's Google profile picture appears as their avatar across the site
-- [ ] **OAUTH-04**: All v1 Level 3 features (create posts, upvote, edit/delete posts, favorite teams) work with a Google OAuth session
+- [x] **OAUTH-01**: User can sign in to Football Finder with their Google account
+- [x] **OAUTH-02**: First-time Google sign-in automatically creates an account using the user's Google name and email
+- [x] **OAUTH-03**: User's Google profile picture appears as their avatar across the site
+- [x] **OAUTH-04**: All v1 Level 3 features (create posts, upvote, edit/delete posts, favorite teams) work with a Google OAuth session
 
 ### Photo Upload
 
@@ -59,10 +59,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| OAUTH-01 | Phase 9 — OAuth Foundation | Pending |
-| OAUTH-02 | Phase 9 — OAuth Foundation | Pending |
-| OAUTH-03 | Phase 9 — OAuth Foundation | Pending |
-| OAUTH-04 | Phase 9 — OAuth Foundation | Pending |
+| OAUTH-01 | Phase 9 — OAuth Foundation | Complete |
+| OAUTH-02 | Phase 9 — OAuth Foundation | Complete |
+| OAUTH-03 | Phase 9 — OAuth Foundation | Complete |
+| OAUTH-04 | Phase 9 — OAuth Foundation | Complete |
 | PHOTO-01 | Phase 10 — Photo Upload | Pending |
 | PHOTO-02 | Phase 10 — Photo Upload | Pending |
 | PHOTO-03 | Phase 10 — Photo Upload | Pending |

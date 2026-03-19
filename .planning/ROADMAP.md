@@ -104,7 +104,7 @@ Plans:
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 9. OAuth Foundation | v2.0 | 0/5 | Not started | - |
+| 9. OAuth Foundation | 1/5 | In Progress|  | - |
 | 10. Photo Upload | v2.0 | 0/TBD | Not started | - |
 | 11. Global League Expansion | v2.0 | 0/TBD | Not started | - |
 | 12. Date Filters | v2.0 | 0/TBD | Not started | - |
