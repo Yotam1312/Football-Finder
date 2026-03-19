@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 07-tech-debt-cleanup-07-01-PLAN.md
-last_updated: "2026-03-19T10:00:42.171Z"
+stopped_at: Completed 08-nyquist-compliance-08-01-PLAN.md
+last_updated: "2026-03-19T10:33:28.175Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
   total_phases: 8
-  completed_phases: 6
-  total_plans: 23
-  completed_plans: 23
+  completed_phases: 7
+  total_plans: 24
+  completed_plans: 24
   percent: 100
 ---
 
@@ -105,6 +105,7 @@ Progress: [████████████████████] 100%
 | Phase 05-polish-and-launch P06 | 15 | 1 tasks | 1 files |
 | Phase 06-post-creation-backend P01 | 2 | 2 tasks | 3 files |
 | Phase 07-tech-debt-cleanup P01 | 188 | 2 tasks | 5 files |
+| Phase 08-nyquist-compliance P01 | 12 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -174,6 +175,8 @@ Recent decisions affecting current work:
 - [Phase 06-post-creation-backend]: router.post('/') registered before router.post('/:postId/upvote') to avoid Express param collision in posts routes
 - [Phase 07-tech-debt-cleanup]: Level 2 guard uses !user || user.level < 3 — both guests and email-only users directed to AuthGateModal
 - [Phase 07-tech-debt-cleanup]: sendVerificationEmail removed from email.service.ts — hybrid email-verification flow fully retired; contact email is only active send path
+- [Phase 08-nyquist-compliance]: Stub format used for phases 03, 04, 06: retroactive notes referencing VERIFICATION.md avoid fabricating per-task maps for completed phases
+- [Phase 08-nyquist-compliance]: Force-added VALIDATION.md files to git with git add -f — consistent with existing project convention for .planning/ files
 
 ### Pending Todos
 
@@ -191,6 +194,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-19T10:00:42.166Z
-Stopped at: Completed 07-tech-debt-cleanup-07-01-PLAN.md
+Last session: 2026-03-19T10:33:28.170Z
+Stopped at: Completed 08-nyquist-compliance-08-01-PLAN.md
 Resume file: None
