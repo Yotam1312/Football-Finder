@@ -126,10 +126,39 @@ Plans:
 Plans:
 - [ ] 06-01-PLAN.md — createPost controller + POST /api/posts route + integration tests
 
+### Phase 7: Tech Debt Cleanup
+**Goal:** Close all tracking and code quality gaps identified in the v1.1 audit — tick pre-GSD requirement checkboxes, fix the Level 2 UX edge case, and remove dead code
+**Depends on**: Phase 6
+**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05
+**Gap Closure:** Closes gaps from v1.1-MILESTONE-AUDIT.md — orphaned pre-GSD requirements + dead code + Level 2 UX fix
+**Success Criteria** (what must be TRUE):
+  1. FOUND-01 through FOUND-05 are marked `[x]` in REQUIREMENTS.md
+  2. A Level 2 user who clicks "Add Tip" sees the AuthGateModal (not a 403 error)
+  3. `sendVerificationEmail` is removed from `email.service.ts`
+  4. `CreatePostInput` interface is removed from `frontend/src/types/index.ts`
+
+Plans:
+- [ ] 07-01-PLAN.md — Requirements tracking update + Level 2 UX fix + dead code removal
+
+### Phase 8: Nyquist Compliance
+**Goal:** All phase VALIDATION.md files are complete and `nyquist_compliant: true` so the milestone can be cleanly archived
+**Depends on**: Phase 7
+**Requirements**: (documentation/tracking — no new requirements)
+**Gap Closure:** Closes Nyquist compliance gaps from v1.1-MILESTONE-AUDIT.md — missing VALIDATION.md for phases 03, 04, 06 and draft status for phases 02, 05
+**Success Criteria** (what must be TRUE):
+  1. Phase 02 VALIDATION.md is updated to `nyquist_compliant: true`
+  2. Phase 03 VALIDATION.md exists and is `nyquist_compliant: true`
+  3. Phase 04 VALIDATION.md exists and is `nyquist_compliant: true`
+  4. Phase 05 VALIDATION.md is updated to `nyquist_compliant: true`
+  5. Phase 06 VALIDATION.md exists and is `nyquist_compliant: true`
+
+Plans:
+- [ ] 08-01-PLAN.md — Create/update VALIDATION.md files for phases 02–06
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -138,4 +167,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. FanBase Browse | 4/4 | Complete   | 2026-03-15 |
 | 4. Auth and Posting | 5/5 | Complete   | 2026-03-16 |
 | 5. Polish and Launch | 6/6 | Complete   | 2026-03-17 |
-| 6. Post Creation Backend | 0/1 | Pending | — |
+| 6. Post Creation Backend | 1/1 | Complete   | 2026-03-19 |
+| 7. Tech Debt Cleanup | 0/1 | Pending | — |
+| 8. Nyquist Compliance | 0/1 | Pending | — |

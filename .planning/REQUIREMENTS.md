@@ -4,11 +4,11 @@
 
 ### Foundation & Infrastructure
 
-- [ ] **FOUND-01**: System stores European match fixtures in PostgreSQL (England, Spain, Germany, Italy, France — top 2 leagues each)
-- [ ] **FOUND-02**: Nightly sync job fetches upcoming fixtures from API-Football and upserts into DB (never on user request)
-- [ ] **FOUND-03**: Express backend is scaffolded with security middleware (helmet, cors, rate limiting, morgan)
-- [ ] **FOUND-04**: Prisma schema defines all tables with correct indexes (city, match_date, team_id, post_type, token)
-- [ ] **FOUND-05**: Match times are stored as UTC in DB and displayed in venue local timezone on frontend
+- [x] **FOUND-01**: System stores European match fixtures in PostgreSQL (England, Spain, Germany, Italy, France — top 2 leagues each)
+- [x] **FOUND-02**: Nightly sync job fetches upcoming fixtures from API-Football and upserts into DB (never on user request)
+- [x] **FOUND-03**: Express backend is scaffolded with security middleware (helmet, cors, rate limiting, morgan)
+- [x] **FOUND-04**: Prisma schema defines all tables with correct indexes (city, match_date, team_id, post_type, token)
+- [x] **FOUND-05**: Match times are stored as UTC in DB and displayed in venue local timezone on frontend
 
 ### Match Search & Discovery
 
@@ -29,10 +29,10 @@
 
 ### FanBase — Posting (Email-Verified)
 
-- [ ] **POST-01**: User can create a General Tip post by providing name, email, title, and body *(gap: Phase 6)*
-- [ ] **POST-02**: User can create a Seat Tip post with section, row, seat number, star rating, and optional photo *(gap: Phase 6)*
-- [ ] **POST-03**: User can create a Pub Recommendation post with pub name, address, distance from stadium, and description *(gap: Phase 6)*
-- [ ] **POST-04**: User can create an "I'm Going" post announcing they're attending an upcoming match *(gap: Phase 6)*
+- [x] **POST-01**: User can create a General Tip post by providing name, email, title, and body *(gap: Phase 6)*
+- [x] **POST-02**: User can create a Seat Tip post with section, row, seat number, star rating, and optional photo *(gap: Phase 6)*
+- [x] **POST-03**: User can create a Pub Recommendation post with pub name, address, distance from stadium, and description *(gap: Phase 6)*
+- [x] **POST-04**: User can create an "I'm Going" post announcing they're attending an upcoming match *(gap: Phase 6)*
 - [~] **POST-05**: ~~Post creation requires email verification~~ — *Superseded by Phase 5: hybrid email-verification flow replaced with direct register+login. Post creation now requires a password account.*
 - [~] **POST-06**: ~~Post data preserved through email verification flow~~ — *Superseded by Phase 5: pendingPostData mechanism removed alongside hybrid flow.*
 - [~] **POST-07**: ~~User can request a new verification email~~ — *Superseded by Phase 5: resend endpoint removed. Standard password reset applies.*
@@ -93,6 +93,8 @@
 | Phase 4 — Auth and Posting | POST-05~(superseded)~, POST-06~(superseded)~, POST-07~(superseded)~, POST-08~(deferred)~, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07 | 7 active |
 | Phase 6 — Post Creation Backend (gap closure) | POST-01, POST-02, POST-03, POST-04 | 4 |
 | Phase 5 — Polish and Launch | PAGE-01, PAGE-02, PAGE-03, PAGE-04, PAGE-05 | 5 |
+| Phase 7 — Tech Debt Cleanup (gap closure) | FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05 | 5 (tracking update) |
+| Phase 8 — Nyquist Compliance (gap closure) | (documentation only) | 0 new |
 
 **Total: 36/36 requirements mapped. No orphans.**
-**Post-audit: 4 unsatisfied (POST-01 to POST-04) assigned to Phase 6. 3 superseded (POST-05/06/07). 1 deferred (POST-08).**
+**Post v1.1 audit: All requirements satisfied or superseded/deferred. Phases 7–8 close tracking gaps.**
