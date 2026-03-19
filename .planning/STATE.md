@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 06-post-creation-backend-06-01-PLAN.md
-last_updated: "2026-03-19T09:11:08.362Z"
+stopped_at: Completed 07-tech-debt-cleanup-07-01-PLAN.md
+last_updated: "2026-03-19T10:00:42.171Z"
 last_activity: 2026-03-15 — Phase 3 Plan 1 (FanBase API endpoints) complete
 progress:
-  total_phases: 6
-  completed_phases: 5
-  total_plans: 22
-  completed_plans: 22
+  total_phases: 8
+  completed_phases: 6
+  total_plans: 23
+  completed_plans: 23
   percent: 100
 ---
 
@@ -104,6 +104,7 @@ Progress: [████████████████████] 100%
 | Phase 05-polish-and-launch P05 | 10 | 2 tasks | 10 files |
 | Phase 05-polish-and-launch P06 | 15 | 1 tasks | 1 files |
 | Phase 06-post-creation-backend P01 | 2 | 2 tasks | 3 files |
+| Phase 07-tech-debt-cleanup P01 | 188 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -171,6 +172,8 @@ Recent decisions affecting current work:
 - [Phase 05-polish-and-launch]: Seed idempotency via count() on @seed.footballfinder.com emails — single check, zero inserts if any seed posts exist
 - [Phase 06-post-creation-backend]: createPost fetches authorName/authorEmail from DB so they cannot be spoofed from request body
 - [Phase 06-post-creation-backend]: router.post('/') registered before router.post('/:postId/upvote') to avoid Express param collision in posts routes
+- [Phase 07-tech-debt-cleanup]: Level 2 guard uses !user || user.level < 3 — both guests and email-only users directed to AuthGateModal
+- [Phase 07-tech-debt-cleanup]: sendVerificationEmail removed from email.service.ts — hybrid email-verification flow fully retired; contact email is only active send path
 
 ### Pending Todos
 
@@ -188,6 +191,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-19T09:11:08.358Z
-Stopped at: Completed 06-post-creation-backend-06-01-PLAN.md
+Last session: 2026-03-19T10:00:42.166Z
+Stopped at: Completed 07-tech-debt-cleanup-07-01-PLAN.md
 Resume file: None
