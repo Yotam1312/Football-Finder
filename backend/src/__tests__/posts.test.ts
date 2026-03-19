@@ -24,6 +24,7 @@ jest.mock('../config/database', () => ({
       findUnique: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
+      create: jest.fn(),
     },
     userFavorite: {
       findUnique: jest.fn(),
@@ -207,5 +208,75 @@ describe('DELETE /api/posts/:postId', () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('message', 'Post deleted');
+  });
+});
+
+describe('POST /api/posts', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('returns 401 without a cookie', async () => {
+    const res = await request(app)
+      .post('/api/posts')
+      .send({ teamId: 10, postType: 'GENERAL_TIP', title: 'Test', body: 'Body' });
+    expect(res.status).toBe(401);
+  });
+
+  it('returns 403 for Level 2 user', async () => {
+    const cookie = makeAuthCookie(42, 2);
+    const res = await request(app)
+      .post('/api/posts')
+      .set('Cookie', cookie)
+      .send({ teamId: 10, postType: 'GENERAL_TIP', title: 'Test', body: 'Body' });
+    expect(res.status).toBe(403);
+  });
+
+  it('returns 400 when postType is missing', async () => {
+    const cookie = makeAuthCookie(42, 3);
+    const res = await request(app)
+      .post('/api/posts')
+      .set('Cookie', cookie)
+      .send({ teamId: 10, title: 'Test', body: 'Body' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('postType');
+  });
+
+  it('returns 400 when teamId is missing', async () => {
+    const cookie = makeAuthCookie(42, 3);
+    const res = await request(app)
+      .post('/api/posts')
+      .set('Cookie', cookie)
+      .send({ postType: 'GENERAL_TIP', title: 'Test', body: 'Body' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('teamId');
+  });
+
+  it('creates a General Tip post and returns 201', async () => {
+    const cookie = makeAuthCookie(42, 3);
+
+    // Mock: user lookup returns a valid user
+    (mockPrisma.user.findUnique as jest.Mock).mockResolvedValue({
+      id: 42, name: 'John Fan', email: 'john@example.com',
+    });
+
+    // Mock: post.create returns the new post
+    const createdPost = {
+      id: 99, teamId: 10, userId: 42, postType: 'GENERAL_TIP',
+      title: 'Great atmosphere', body: 'North stand is amazing',
+      authorName: 'John Fan', authorEmail: 'john@example.com',
+      upvoteCount: 0, reported: false, createdAt: new Date(),
+    };
+    (mockPrisma.post.create as jest.Mock).mockResolvedValue(createdPost);
+
+    const res = await request(app)
+      .post('/api/posts')
+      .set('Cookie', cookie)
+      .send({ teamId: 10, postType: 'GENERAL_TIP', title: 'Great atmosphere', body: 'North stand is amazing' });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty('id', 99);
+    expect(res.body).toHaveProperty('postType', 'GENERAL_TIP');
+    expect(res.body).toHaveProperty('authorName', 'John Fan');
   });
 });
