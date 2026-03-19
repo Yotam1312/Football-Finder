@@ -29,13 +29,13 @@
 
 ### FanBase — Posting (Email-Verified)
 
-- [ ] **POST-01**: User can create a General Tip post by providing name, email, title, and body
-- [ ] **POST-02**: User can create a Seat Tip post with section, row, seat number, star rating, and optional photo
-- [ ] **POST-03**: User can create a Pub Recommendation post with pub name, address, distance from stadium, and description
-- [ ] **POST-04**: User can create an "I'm Going" post announcing they're attending an upcoming match
-- [x] **POST-05**: Post creation requires email verification: user receives a link, clicks it, and post goes live (no password)
-- [x] **POST-06**: Post data (form content) is preserved through the email verification flow — user does not need to re-fill the form after clicking the link
-- [x] **POST-07**: User can request a new verification email if the original link expired (resend option)
+- [ ] **POST-01**: User can create a General Tip post by providing name, email, title, and body *(gap: Phase 6)*
+- [ ] **POST-02**: User can create a Seat Tip post with section, row, seat number, star rating, and optional photo *(gap: Phase 6)*
+- [ ] **POST-03**: User can create a Pub Recommendation post with pub name, address, distance from stadium, and description *(gap: Phase 6)*
+- [ ] **POST-04**: User can create an "I'm Going" post announcing they're attending an upcoming match *(gap: Phase 6)*
+- [~] **POST-05**: ~~Post creation requires email verification~~ — *Superseded by Phase 5: hybrid email-verification flow replaced with direct register+login. Post creation now requires a password account.*
+- [~] **POST-06**: ~~Post data preserved through email verification flow~~ — *Superseded by Phase 5: pendingPostData mechanism removed alongside hybrid flow.*
+- [~] **POST-07**: ~~User can request a new verification email~~ — *Superseded by Phase 5: resend endpoint removed. Standard password reset applies.*
 - [ ] **POST-08**: User can upload a photo from their seat when creating a Seat Tip post (max 5MB, jpg/png/webp)
 
 ### Authentication — Full Account (Level 3)
@@ -90,7 +90,9 @@
 | Phase 1 — Foundation | FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05 | 5 |
 | Phase 2 — Match Discovery | MATCH-01, MATCH-02, MATCH-03, MATCH-04, MATCH-05, MATCH-06 | 6 |
 | Phase 3 — FanBase Browse | FAN-01, FAN-02, FAN-03, FAN-04, FAN-05 | 5 |
-| Phase 4 — Auth and Posting | POST-01, POST-02, POST-03, POST-04, POST-05, POST-06, POST-07, POST-08, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07 | 15 |
+| Phase 4 — Auth and Posting | POST-05~(superseded)~, POST-06~(superseded)~, POST-07~(superseded)~, POST-08~(deferred)~, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07 | 7 active |
+| Phase 6 — Post Creation Backend (gap closure) | POST-01, POST-02, POST-03, POST-04 | 4 |
 | Phase 5 — Polish and Launch | PAGE-01, PAGE-02, PAGE-03, PAGE-04, PAGE-05 | 5 |
 
 **Total: 36/36 requirements mapped. No orphans.**
+**Post-audit: 4 unsatisfied (POST-01 to POST-04) assigned to Phase 6. 3 superseded (POST-05/06/07). 1 deferred (POST-08).**

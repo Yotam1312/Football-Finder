@@ -111,10 +111,25 @@ Plans:
 - [ ] 05-05-PLAN.md — Mobile responsiveness audit: 48px touch targets, no horizontal scroll, checkpoint:human-verify
 - [ ] 05-06-PLAN.md — FanBase seed script: 5 fictional users + 28 realistic posts across 7 major teams
 
+### Phase 6: Post Creation Backend
+**Goal:** Users can successfully create all four post types (General Tip, Seat Tip, Pub Recommendation, I'm Going) by adding the missing `POST /api/posts` backend route and controller
+**Depends on**: Phase 4 (auth middleware, Post schema, requireAuth already exist)
+**Requirements**: POST-01, POST-02, POST-03, POST-04
+**Gap Closure:** Closes gaps identified in v1.0 milestone audit — missing backend route for post creation
+**Success Criteria** (what must be TRUE):
+  1. Authenticated user submits a General Tip form and the post appears on the team's FanBase page
+  2. Authenticated user submits a Seat Tip form (with section, row, seat, star rating) and the post appears
+  3. Authenticated user submits a Pub Recommendation form and the post appears
+  4. Authenticated user submits an "I'm Going" form (with selected match) and the post appears
+  5. Unauthenticated request to POST /api/posts returns 401
+
+Plans:
+- [ ] 06-01-PLAN.md — createPost controller + POST /api/posts route + integration tests
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -123,3 +138,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 3. FanBase Browse | 4/4 | Complete   | 2026-03-15 |
 | 4. Auth and Posting | 5/5 | Complete   | 2026-03-16 |
 | 5. Polish and Launch | 6/6 | Complete   | 2026-03-17 |
+| 6. Post Creation Backend | 0/1 | Pending | — |
