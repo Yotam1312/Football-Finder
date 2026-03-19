@@ -30,17 +30,17 @@ A traveler or local types a city and date range and instantly sees every footbal
 - `CreatePostModal.tsx` line 229 — sends unused `teamName` field
 - Photo upload (POST-08) — deferred to v2; `photoUrl` column exists in schema
 
-## Next Milestone Goals (v2.0)
+## Current Milestone: v2.0 — Global & Real-Time
 
-*To be defined — start with `/gsd:new-milestone`*
+**Goal:** Expand Football Finder from a European discovery tool into a global real-time platform with OAuth, live scores, photo uploads, and broader league coverage.
 
-Candidates from backlog:
-- Photo upload for Seat Tip posts (POST-08 — deferred from v1)
-- Google/Facebook OAuth login
-- Advanced search filters (league, price range, capacity)
-- Non-European coverage (South America, MLS, Asia)
-- Live scores and match tracking
-- PWA / installable mobile app
+**Target features:**
+- Photo upload for Seat Tip posts (Azure Blob Storage — POST-08 carried from v1)
+- Google + Facebook OAuth (replaces email+password entirely; user table reset)
+- Finer date filters on match search (specific day picker, time of day)
+- Global league coverage: South America, MLS, Asia added to nightly sync
+- Live scores: real-time polling (30-60s) during active matches on cards + detail pages
+- Mobile feel: app-like experience (full-screen, smooth navigation)
 
 ---
 
@@ -80,7 +80,7 @@ See: [.planning/milestones/v1.0-REQUIREMENTS.md](.planning/milestones/v1.0-REQUI
 - **Tech stack**: Node.js + Express + TypeScript + PostgreSQL (Azure) for backend; React 18 + TypeScript + Vite + Tailwind CSS for frontend; deployed on Azure (backend/DB) and Vercel (frontend)
 - **Match data**: API-Football (api-football.com) — free tier capped at seasons 2022-2024; upgrade to paid plan to remove cap
 - **Student project**: 2nd year CS student — keep code simple, clear, and well-commented. Standard patterns over clever ones.
-- **Geographic scope**: Europe only for v1 — England, Spain, Germany, Italy, France (top 2 leagues each)
+- **Geographic scope**: Europe in v1; expanding to South America, MLS, Asia in v2
 - **Design**: Modern, clean, minimalist. Green (#16a34a) primary. Inspired by Airbnb/Booking.com for sports. Framer Motion animations.
 
 ## Constraints
@@ -99,4 +99,4 @@ See: [.planning/milestones/v1.0-REQUIREMENTS.md](.planning/milestones/v1.0-REQUI
 | PostgreSQL on Azure | Consistent with backend deployment, relational data fits match/team/post structure | Validated |
 
 ---
-*Last updated: 2026-03-19 — v1.0 milestone archived*
+*Last updated: 2026-03-19 — v2.0 milestone started*

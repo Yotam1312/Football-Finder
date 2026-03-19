@@ -57,21 +57,31 @@
 
 ## Traceability
 
-| Phase | Requirements | Count |
-|-------|-------------|-------|
-| TBD — OAuth Foundation | OAUTH-01, OAUTH-02, OAUTH-03, OAUTH-04 | 4 |
-| TBD — Photo Upload | PHOTO-01, PHOTO-02, PHOTO-03 | 3 |
-| TBD — Global Leagues | LEAGUE-01, LEAGUE-02, LEAGUE-03, LEAGUE-04 | 4 |
-| TBD — Date Filters | SEARCH-01, SEARCH-02 | 2 |
-| TBD — Mobile Feel | MOBILE-01, MOBILE-02 | 2 |
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| OAUTH-01 | Phase 9 — OAuth Foundation | Pending |
+| OAUTH-02 | Phase 9 — OAuth Foundation | Pending |
+| OAUTH-03 | Phase 9 — OAuth Foundation | Pending |
+| OAUTH-04 | Phase 9 — OAuth Foundation | Pending |
+| PHOTO-01 | Phase 10 — Photo Upload | Pending |
+| PHOTO-02 | Phase 10 — Photo Upload | Pending |
+| PHOTO-03 | Phase 10 — Photo Upload | Pending |
+| LEAGUE-01 | Phase 11 — Global League Expansion | Pending |
+| LEAGUE-02 | Phase 11 — Global League Expansion | Pending |
+| LEAGUE-03 | Phase 11 — Global League Expansion | Pending |
+| LEAGUE-04 | Phase 11 — Global League Expansion | Pending |
+| SEARCH-01 | Phase 12 — Date Filters | Pending |
+| SEARCH-02 | Phase 12 — Date Filters | Pending |
+| MOBILE-01 | Phase 13 — Mobile Feel | Pending |
+| MOBILE-02 | Phase 13 — Mobile Feel | Pending |
 
-**Total: 14/14 requirements mapped.**
+**Total: 14/14 requirements mapped. Coverage: 100%.**
 
 ---
 
 ## Notes from Research
 
-- **OAuth must be Phase 1** — all auth-gated features depend on it; user table reset (with cascade deletes) happens here
+- **OAuth must be Phase 9** — all auth-gated features depend on it; user table reset (with cascade deletes) happens here
 - **Azure Blob CORS** must be configured as a prerequisite for photo upload phase
 - **MLS timezone edge case** — MLS spans multiple timezones; city-to-timezone lookup table needed in sync.service.ts
 - **API-Football league IDs** for non-European leagues need verification against the live API before sync config is updated
