@@ -1,5 +1,4 @@
 import express from 'express';
-import { requireAuth } from '../middleware/auth.middleware';
 import * as authController from '../controllers/auth.controller';
 
 const router = express.Router();
@@ -20,5 +19,15 @@ router.post('/logout', authController.logout);
 // GET /api/auth/me
 // Returns the currently authenticated user's info.
 router.get('/me', authController.getMe);
+
+// GET /api/auth/google
+// Redirects the browser to Google's OAuth consent screen.
+// Optional query param: ?returnTo=/fanbase/team/42
+router.get('/google', authController.googleRedirect);
+
+// GET /api/auth/google/callback
+// Google redirects here after the user approves (or cancels) sign-in.
+// Exchanges the code for a user profile, finds or creates the user, sets cookie.
+router.get('/google/callback', authController.googleCallback);
 
 export default router;

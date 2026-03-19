@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/database';
+import { oauth2Client } from '../lib/google-oauth';
 
 // Helper: set the JWT cookie on the response.
 // httpOnly prevents JavaScript from reading it (XSS protection).
@@ -72,38 +73,6 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// POST /api/auth/set-password (requires requireAuth middleware)
-// Upgrades a Level 2 user to Level 3 by setting a password.
-// req.auth is attached by requireAuth middleware with { userId, level }.
-export const setPassword = async (req: Request, res: Response) => {
-  try {
-    const { password } = req.body;
-
-    // Password must be at least 8 characters
-    if (!password || password.length < 8) {
-      return res.status(400).json({ error: 'Password must be at least 8 characters' });
-    }
-
-    // We use bcryptjs (not bcrypt) — same API, no native compilation required.
-    // Salt rounds of 10 is the standard — high enough to slow brute force,
-    // fast enough that a single hash takes ~100ms.
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await prisma.user.update({
-      where: { id: req.auth!.userId },
-      data: { passwordHash: hashedPassword },
-    });
-
-    // Re-issue the JWT with level 3 to reflect the upgrade
-    setAuthCookie(res, req.auth!.userId, 3);
-
-    res.status(200).json({ message: 'Password set. You are now a full account holder.' });
-  } catch (error) {
-    console.error('Error in setPassword:', error);
-    res.status(500).json({ error: 'Failed to set password' });
-  }
-};
-
 // POST /api/auth/login
 // Full account login with email and password. Returns a Level 3 JWT cookie.
 export const login = async (req: Request, res: Response) => {
@@ -119,7 +88,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Level 2 users have no password — they need to use set-password first
+    // Google-only users have no password — they need to use Google sign-in
     if (!user.passwordHash) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -185,19 +154,158 @@ export const getMe = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    // Determine level dynamically: Level 3 if they have a password, Level 2 if not
-    const level = user.passwordHash ? 3 : 2;
+    // Level 3 if the user has a password OR a linked Google account.
+    // Previously this was `user.passwordHash ? 3 : 2` which incorrectly gave
+    // Google users (no passwordHash) a level of 2.
+    const level = (user.passwordHash || user.googleId) ? 3 : 2;
+
+    // accountType tells the frontend whether to show the password change section.
+    // We expose this as a string flag — we never expose the actual googleId.
+    const accountType = user.googleId ? 'google' : 'email';
 
     res.status(200).json({
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
+        avatarUrl: user.avatarUrl,
+        country: user.country,
+        age: user.age,
+        favoriteClubId: user.favoriteClubId,
+        accountType,
         level,
       },
     });
   } catch (error) {
     console.error('Error in getMe:', error);
     res.status(500).json({ error: 'Failed to get user' });
+  }
+};
+
+// GET /api/auth/google
+// Redirects the browser to Google's OAuth consent screen.
+// Before redirecting, we store the intended destination in a short-lived cookie
+// so we can send the user to the right page after they return from Google.
+export const googleRedirect = (req: Request, res: Response): void => {
+  // Read the returnTo query param — e.g. /fanbase/team/42 if user clicked
+  // "post a tip" while not logged in. Defaults to '/' (homepage).
+  const returnTo = (req.query.returnTo as string) || '/';
+
+  // Store returnTo in an httpOnly cookie that survives the OAuth round-trip.
+  // We use a cookie (not the OAuth state param) because the state param
+  // appears in the browser's address bar history — a cookie is more private.
+  res.cookie('oauth_return_to', returnTo, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 10 * 60 * 1000, // 10 minutes — only needs to last through the Google flow
+  });
+
+  // Generate the Google consent screen URL.
+  // access_type 'online' means we only want an access token, not a refresh token.
+  // We only need profile data once during sign-in — we don't need ongoing access.
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'online',
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ],
+  });
+
+  res.redirect(authUrl);
+};
+
+// GET /api/auth/google/callback
+// Google calls this URL after the user approves (or cancels) the sign-in.
+// We exchange the authorization code for an access token, fetch the user's
+// Google profile, then find or create a user in our database.
+export const googleCallback = async (req: Request, res: Response): Promise<void> => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+  try {
+    const code = req.query.code as string;
+
+    // If code is missing, the user cancelled the Google sign-in flow
+    if (!code) {
+      res.redirect(`${frontendUrl}/login?error=cancelled`);
+      return;
+    }
+
+    // Exchange the one-time authorization code for an access token.
+    // The access token lets us call Google's API to fetch profile data.
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+
+    // Fetch the user's profile from Google's userinfo endpoint.
+    // The profile contains: id, email, name, picture, verified_email
+    const profileResponse = await fetch(
+      'https://www.googleapis.com/oauth2/v2/userinfo',
+      { headers: { Authorization: `Bearer ${tokens.access_token}` } }
+    );
+    const googleProfile = await profileResponse.json() as {
+      id: string;
+      email: string;
+      name: string;
+      picture?: string;
+      verified_email: boolean;
+    };
+
+    // Find an existing user by their Google ID first, then by email.
+    // The email fallback handles the case where a user registered with
+    // email+password and is now signing in with Google for the first time.
+    let user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { googleId: googleProfile.id },
+          { email: googleProfile.email },
+        ],
+      },
+    });
+
+    let isNewUser = false;
+
+    if (!user) {
+      // First-time Google sign-in — create an account automatically.
+      // Google users have no password, so passwordHash is null.
+      user = await prisma.user.create({
+        data: {
+          email: googleProfile.email,
+          name: googleProfile.name,
+          googleId: googleProfile.id,
+          avatarUrl: googleProfile.picture || null,
+          passwordHash: null,
+        },
+      });
+      isNewUser = true;
+    } else if (!user.googleId) {
+      // Existing email+password user signing in with Google for the first time.
+      // Link their Google account to the existing user record.
+      // Only update avatarUrl if they don't already have one.
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          googleId: googleProfile.id,
+          avatarUrl: user.avatarUrl || googleProfile.picture || null,
+        },
+      });
+    }
+
+    // Issue the same JWT cookie used for email+password login.
+    // Google users are always Level 3 — they have a full account.
+    setAuthCookie(res, user.id, 3);
+
+    // Read the returnTo cookie set before the Google redirect.
+    // Clear it immediately — it is single-use.
+    const returnTo = req.cookies?.oauth_return_to || '/';
+    res.clearCookie('oauth_return_to');
+
+    // New users go to the welcome page (shown once).
+    // Returning users go back to where they came from.
+    const destination = isNewUser ? '/welcome' : returnTo;
+    res.redirect(`${frontendUrl}${destination}`);
+
+  } catch (error) {
+    console.error('Google OAuth callback error:', error);
+    res.redirect(`${frontendUrl}/login?error=cancelled`);
   }
 };
