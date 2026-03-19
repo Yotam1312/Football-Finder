@@ -1,6 +1,85 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 
+// POST /api/posts
+// Creates a new post for the authenticated Level 3 user.
+// All four post types are supported: GENERAL_TIP, SEAT_TIP, PUB_RECOMMENDATION, IM_GOING.
+// The authorName and authorEmail are fetched from the database (not trusted from the request body)
+// to ensure the displayed name is always accurate and cannot be spoofed.
+// Returns 201 with the created post object.
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    // The allowed post types — we validate against this list rather than importing the Prisma enum
+    // at runtime, which keeps the validation simple and readable
+    const VALID_POST_TYPES = ['GENERAL_TIP', 'SEAT_TIP', 'PUB_RECOMMENDATION', 'IM_GOING'];
+
+    const {
+      postType,
+      teamId,
+      title,
+      body,
+      seatSection,
+      seatRow,
+      seatNumber,
+      seatRating,
+      pubName,
+      pubAddress,
+      pubDistance,
+      matchId,
+    } = req.body;
+
+    // Validate required fields
+    if (!postType || !VALID_POST_TYPES.includes(postType)) {
+      return res.status(400).json({
+        error: 'postType is required and must be one of: GENERAL_TIP, SEAT_TIP, PUB_RECOMMENDATION, IM_GOING',
+      });
+    }
+
+    if (!teamId) {
+      return res.status(400).json({ error: 'teamId is required' });
+    }
+
+    if (!title || !body) {
+      return res.status(400).json({ error: 'title and body are required' });
+    }
+
+    // Fetch the user from the database to get their real name and email.
+    // We do NOT use the authorName from req.body — it can't be trusted.
+    // req.auth is guaranteed to exist here because requireLevel3 ran before this controller.
+    const user = await prisma.user.findUnique({ where: { id: req.auth!.userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Create the post. Optional type-specific fields are only included if they were provided
+    // in the request body — we use conditional spread to avoid overwriting DB defaults with undefined.
+    const post = await prisma.post.create({
+      data: {
+        teamId,
+        postType,
+        title,
+        body,
+        authorName: user.name,
+        authorEmail: user.email,
+        userId: user.id,
+        ...(seatSection !== undefined && { seatSection }),
+        ...(seatRow !== undefined && { seatRow }),
+        ...(seatNumber !== undefined && { seatNumber }),
+        ...(seatRating !== undefined && { seatRating: Number(seatRating) }),
+        ...(pubName !== undefined && { pubName }),
+        ...(pubAddress !== undefined && { pubAddress }),
+        ...(pubDistance !== undefined && { pubDistance }),
+        ...(matchId !== undefined && { matchId: Number(matchId) }),
+      },
+    });
+
+    return res.status(201).json(post);
+  } catch (error) {
+    console.error('Error creating post:', error);
+    res.status(500).json({ error: 'Failed to create post' });
+  }
+};
+
 // POST /api/posts/:postId/upvote
 // Toggles an upvote on a post for the authenticated user (Level 3 required).
 // Uses a Prisma transaction to keep the upvote row and upvoteCount counter in sync atomically.

@@ -4,6 +4,10 @@ import * as postsController from '../controllers/posts.controller';
 
 const router = express.Router();
 
+// POST / — create a new post (requires full account, Level 3)
+// Must be registered before /:postId/upvote so Express doesn't try to match '/' as a postId param
+router.post('/', requireLevel3, postsController.createPost);
+
 // POST /:postId/upvote — toggle upvote on a post (requires full account, Level 3)
 // Only users with a full account can upvote — email-only users are blocked by requireLevel3
 router.post('/:postId/upvote', requireLevel3, postsController.toggleUpvote);
