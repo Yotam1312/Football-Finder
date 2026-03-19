@@ -116,23 +116,3 @@ export interface AuthUser {
   age?: number | null;
   favoriteClubId?: number | null;
 }
-
-// Input type for POST /api/auth/request-post
-// All post type fields are optional — only used when applicable to the post type
-export interface CreatePostInput {
-  teamId: number;
-  teamName: string;
-  postType: PostType;
-  title: string;
-  body: string;
-  authorName: string;
-  email: string;
-  seatSection?: string;
-  seatRow?: string;
-  seatNumber?: string;
-  seatRating?: number;
-  pubName?: string;
-  pubAddress?: string;
-  pubDistance?: string;
-  matchId?: number;
-}

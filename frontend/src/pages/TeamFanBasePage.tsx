@@ -115,10 +115,11 @@ export const TeamFanBasePage: React.FC = () => {
   };
 
   // Handles clicking the "+ Add Your Tip" button.
-  // Guests see the AuthGateModal directing them to register or log in.
-  // Logged-in users see the CreatePostModal directly.
+  // Level 3 (full account) is required to post. Guests and Level 2 users
+  // (email-only accounts from the old hybrid flow) see the AuthGateModal
+  // directing them to register or log in.
   const handleAddTipClick = () => {
-    if (!user) {
+    if (!user || user.level < 3) {
       setIsAuthGateOpen(true);
     } else {
       setIsModalOpen(true);
