@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 // ProfilePage — shows the logged-in user's profile and allows editing.
@@ -8,12 +8,12 @@ import { useAuth } from '../context/AuthContext';
 // Password change section is shown only for email+password users.
 export const ProfilePage: React.FC = () => {
   const { user, logout, refreshAuth } = useAuth();
-  const navigate = useNavigate();
 
-  // Redirect to login if somehow accessed while not authenticated
+  // Redirect to login if somehow accessed while not authenticated.
+  // Using <Navigate> (not navigate()) so React Router handles this as a render-time
+  // redirect — avoids conflicting navigations when user state clears after delete.
   if (!user) {
-    navigate('/login');
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   // ── Profile edit form state ─────────────────────────────────────────
@@ -104,9 +104,10 @@ export const ProfilePage: React.FC = () => {
       });
 
       if (res.ok) {
-        // Logout clears the local auth state; then redirect to homepage
+        // Logout clears user state → the <Navigate> guard above fires → redirects to /login.
+        // No explicit navigate() call needed — calling it alongside logout() caused a double
+        // navigation that broke AnimatePresence and produced a blank /login page.
         await logout();
-        navigate('/');
       } else {
         setShowDeleteConfirm(false);
         alert('Failed to delete account. Please try again.');
