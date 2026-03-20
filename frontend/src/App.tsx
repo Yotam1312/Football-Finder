@@ -9,6 +9,7 @@ import { TeamFanBasePage } from './pages/TeamFanBasePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { WelcomePage } from './pages/WelcomePage';
+import { ProfilePage } from './pages/ProfilePage';
 import { ContactPage } from './pages/ContactPage';
 import { TransportPage } from './pages/TransportPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/login"    element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/welcome"  element={<WelcomePage />} />
+          <Route path="/profile"  element={<ProfilePage />} />
           {/* Static info pages — Phase 5 polish */}
           <Route path="/contact"   element={<ContactPage />} />
           <Route path="/transport" element={<TransportPage />} />
