@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 09-04-PLAN.md (frontend OAuth UI)
-last_updated: "2026-03-20T10:14:33.395Z"
+stopped_at: Completed 09-05-PLAN.md (navbar dropdown and profile page)
+last_updated: "2026-03-20T10:19:00.768Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 09-oauth-foundation P02 | 45min | 3 tasks | 4 files |
 | Phase 09-oauth-foundation P03 | 33min | 2 tasks | 3 files |
 | Phase 09-oauth-foundation P04 | 4min | 3 tasks | 5 files |
+| Phase 09-oauth-foundation P05 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,9 @@ Recent decisions affecting current work:
 - [Phase 09-oauth-foundation]: changePassword checks passwordHash null before bcrypt to detect Google-only accounts; deleteAccount clears cookie immediately after user deletion
 - [Phase 09-oauth-foundation]: Google OAuth button uses window.location.href (not fetch) — OAuth requires real browser navigation
 - [Phase 09-oauth-foundation]: WelcomePage has no route guard — backend controls who is redirected there via isNewUser flag
+- [Phase 09-oauth-foundation]: Navbar Level 2 branch removed — all authenticated users are Level 3 (Google or email+password)
+- [Phase 09-oauth-foundation]: Upload photo button disabled with tooltip — Azure Blob deferred to Phase 10
+- [Phase 09-oauth-foundation]: Delete account uses two-step inline confirmation UI rather than window.confirm() for consistent UX
 
 ### Pending Todos
 
@@ -90,6 +94,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-20T10:14:33.392Z
-Stopped at: Completed 09-04-PLAN.md (frontend OAuth UI)
+Last session: 2026-03-20T10:19:00.764Z
+Stopped at: Completed 09-05-PLAN.md (navbar dropdown and profile page)
 Resume file: None
