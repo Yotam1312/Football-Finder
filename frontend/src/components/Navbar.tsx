@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Navigation, Users, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Top navigation bar — shown on every page.
-// Shows auth-aware content on the right side based on the current user's level.
+// Shows auth-aware content on the right side based on the current user's login state.
 export const Navbar: React.FC = () => {
   const { user, isLoading, logout } = useAuth();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close the dropdown when the user clicks anywhere outside of it.
+  // This is a common UX pattern for dropdown menus.
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-100">
@@ -47,14 +61,13 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Auth section — rendered based on login state */}
+        {/* Right: Auth section */}
         <div className="flex items-center">
           {isLoading ? (
-            // Placeholder shown briefly while /api/auth/me is in flight
-            // Prevents flickering between guest and logged-in states
+            // Brief loading placeholder — prevents flicker between guest and logged-in states
             <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
           ) : user === null ? (
-            // Guest (Level 1) — show Login and Register buttons
+            // Guest — show Login and Register links
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
@@ -69,28 +82,46 @@ export const Navbar: React.FC = () => {
                 Register
               </Link>
             </div>
-          ) : user.level === 2 ? (
-            // Level 2: email-verified but no password set yet
-            // No logout button — they have no password to log back in with
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-700">Hi, {user.name}</span>
-              <Link
-                to="/set-password"
-                className="text-sm text-green-600 hover:underline min-h-[48px] flex items-center"
-              >
-                Set a password
-              </Link>
-            </div>
           ) : (
-            // Level 3: full account with password
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-700">Hi, {user.name}</span>
+            // Logged in (Level 3) — "Hi, {name}" dropdown
+            // Level 2 is removed; all authenticated users are Level 3
+            <div className="relative" ref={dropdownRef}>
               <button
-                onClick={logout}
-                className="text-sm text-gray-600 hover:text-red-600 transition-colors min-h-[48px] flex items-center"
+                onClick={() => setDropdownOpen(open => !open)}
+                className="text-sm text-gray-700 hover:text-green-600 transition-colors min-h-[48px] flex items-center gap-1"
+                aria-expanded={dropdownOpen}
+                aria-haspopup="true"
               >
-                Log out
+                Hi, {user.name}
+                {/* Small chevron to indicate dropdown */}
+                <svg
+                  className={`w-3 h-3 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Profile Settings
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      setDropdownOpen(false);
+                      await logout();
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors"
+                  >
+                    Log out
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
