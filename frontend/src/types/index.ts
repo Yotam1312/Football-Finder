@@ -103,16 +103,20 @@ export interface Post {
 }
 
 // ─────────────────────────────────────────────
-// AUTH TYPES (Phase 4)
+// AUTH TYPES (Phase 9)
 // ─────────────────────────────────────────────
 
-// The authenticated user returned by GET /api/auth/me
-// level 2 = email-verified only; level 3 = full account with password
+// The authenticated user returned by GET /api/auth/me.
+// Level 2 no longer exists — all authenticated users are Level 3.
+// accountType tells the frontend whether to show password-change options.
 export interface AuthUser {
   id: number;
   name: string;
   email: string;
-  level: 2 | 3;
-  age?: number | null;
-  favoriteClubId?: number | null;
+  level: 3;  // always 3 — Level 2 (email-only) auth is removed in Phase 9
+  age: number | null;
+  country: string | null;       // new — shown and editable on profile page
+  favoriteClubId: number | null;
+  avatarUrl: string | null;     // new — Google photo URL or custom upload (Phase 10)
+  accountType: 'google' | 'email';  // new — controls password section visibility in profile
 }
