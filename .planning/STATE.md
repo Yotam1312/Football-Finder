@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 09-02-PLAN.md (Google OAuth backend flow)
-last_updated: "2026-03-20T09:27:45.046Z"
+stopped_at: Completed 09-03-PLAN.md (profile management API)
+last_updated: "2026-03-20T10:07:11.209Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -48,6 +48,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 09-oauth-foundation P01 | 51min | 2 tasks | 4 files |
 | Phase 09-oauth-foundation P02 | 45min | 3 tasks | 4 files |
+| Phase 09-oauth-foundation P03 | 33min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,8 @@ Recent decisions affecting current work:
 - [Phase 09-oauth-foundation]: VerificationToken table dropped — email-based Level 2 auth flow replaced by Google OAuth in Phase 9; token.helpers.ts replaced with comment stub
 - [Phase 09-oauth-foundation]: Use returnTo cookie (not OAuth state param) for post-login redirect — state param appears in browser history; cookie is private
 - [Phase 09-oauth-foundation]: getMe level derivation: (passwordHash || googleId) ? 3 : 2 — fixes incorrect level 2 for Google-only users
+- [Phase 09-oauth-foundation]: updateProfile uses typed partial updateData object to handle optional fields — prevents accidentally nulling fields not in request body
+- [Phase 09-oauth-foundation]: changePassword checks passwordHash null before bcrypt to detect Google-only accounts; deleteAccount clears cookie immediately after user deletion
 
 ### Pending Todos
 
@@ -84,6 +87,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-20T09:27:45.042Z
-Stopped at: Completed 09-02-PLAN.md (Google OAuth backend flow)
+Last session: 2026-03-20T10:07:11.205Z
+Stopped at: Completed 09-03-PLAN.md (profile management API)
 Resume file: None
