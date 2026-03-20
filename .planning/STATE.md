@@ -4,7 +4,7 @@ milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
 stopped_at: Completed 09-05-PLAN.md (navbar dropdown and profile page)
-last_updated: "2026-03-20T10:19:00.768Z"
+last_updated: "2026-03-20T11:01:59.363Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5

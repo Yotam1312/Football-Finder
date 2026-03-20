@@ -1,8 +1,3 @@
-// Prisma schema for Football Finder
-// All tables are defined upfront to avoid migrations against live data.
-// Tables marked "Phase 3+" won't have data written until later phases,
-// but their structure is locked in from the start.
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,180 +7,148 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─────────────────────────────────────────────
-// MATCH DATA (Phase 1 — actively written by sync job)
-// ─────────────────────────────────────────────
-
 model League {
   id            Int            @id @default(autoincrement())
-  apiFootballId Int            @unique // ID from API-Football — used to identify leagues across sync runs
+  apiFootballId Int            @unique
   name          String
   country       String
   logoUrl       String?
   matches       Match[]
-  standings     TeamStanding[] // Phase 2 — standings for each team in this league
+  standings     TeamStanding[]
 }
 
 model Stadium {
   id             Int     @id @default(autoincrement())
   name           String
-  city           String  // original city name from API (e.g. "München")
-  cityNormalized String  // diacritics removed, lowercased (e.g. "munchen") — used for city search
-  timezone       String  // IANA timezone string (e.g. "Europe/Berlin")
-  googleMapsUrl  String? // filled in manually or Phase 2
+  city           String
+  cityNormalized String
+  timezone       String
+  googleMapsUrl  String?
   matches        Match[]
 
-  // Index on cityNormalized — this is the field users search by in Phase 2
   @@index([cityNormalized])
 }
 
 model Team {
-  id            Int            @id @default(autoincrement())
-  apiFootballId Int            @unique
-  name          String
-  logoUrl       String?
-  homeMatches   Match[]        @relation("HomeTeam")
-  awayMatches   Match[]        @relation("AwayTeam")
-  posts             Post[]         // Phase 3+
-  favoritedBy       UserFavorite[] // Phase 4
-  standings         TeamStanding[] // Phase 2 — league table positions for match detail page
-  usersWithFavorite User[]         @relation("FavoriteClub") // users who picked this team as favorite
+  id                Int            @id @default(autoincrement())
+  apiFootballId     Int            @unique
+  name              String
+  logoUrl           String?
+  awayMatches       Match[]        @relation("AwayTeam")
+  homeMatches       Match[]        @relation("HomeTeam")
+  posts             Post[]
+  standings         TeamStanding[]
+  usersWithFavorite User[]         @relation("FavoriteClub")
+  favoritedBy       UserFavorite[]
 }
 
 model Match {
   id            Int      @id @default(autoincrement())
-  apiFootballId Int      @unique // fixture.id from API-Football — upsert key
+  apiFootballId Int      @unique
   leagueId      Int
   homeTeamId    Int
   awayTeamId    Int
-  stadiumId     Int?     // nullable — API sometimes returns no venue
-  matchDate     DateTime // stored as UTC; derive local time on display using stadium.timezone
-  status        String   @default("NS") // NS=Not Started, 1H, HT, 2H, FT, etc.
-  ticketUrl     String?  // nullable — populated when an affiliate ticket link is available; null hides the Buy Tickets button
+  stadiumId     Int?
+  matchDate     DateTime
+  status        String   @default("NS")
+  ticketUrl     String?
+  awayTeam      Team     @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  homeTeam      Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  league        League   @relation(fields: [leagueId], references: [id])
+  stadium       Stadium? @relation(fields: [stadiumId], references: [id])
 
-  league    League   @relation(fields: [leagueId], references: [id])
-  homeTeam  Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
-  awayTeam  Team     @relation("AwayTeam", fields: [awayTeamId], references: [id])
-  stadium   Stadium? @relation(fields: [stadiumId], references: [id])
-
-  // Index on matchDate — Phase 2 searches filter by date range
   @@index([matchDate])
 }
 
 model TeamStanding {
-  id            Int    @id @default(autoincrement())
-  teamId        Int
-  leagueId      Int
-  season        Int
-  position      Int    // league table position (1 = top)
-  played        Int
-  wins          Int
-  draws         Int
-  losses        Int
-  goalsFor      Int
-  goalsAgainst  Int
-  points        Int
+  id           Int    @id @default(autoincrement())
+  teamId       Int
+  leagueId     Int
+  season       Int
+  position     Int
+  played       Int
+  wins         Int
+  draws        Int
+  losses       Int
+  goalsFor     Int
+  goalsAgainst Int
+  points       Int
+  league       League @relation(fields: [leagueId], references: [id])
+  team         Team   @relation(fields: [teamId], references: [id])
 
-  team   Team   @relation(fields: [teamId], references: [id])
-  league League @relation(fields: [leagueId], references: [id])
-
-  // A team has exactly one standing per league per season
   @@unique([teamId, leagueId, season])
   @@index([teamId])
 }
 
-// ─────────────────────────────────────────────
-// AUTH + USERS (Phase 4 — schema defined now, used later)
-// ─────────────────────────────────────────────
-
 model User {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
   name           String
-  passwordHash   String?  // null for Google-only users; set for email+password users
-  googleId       String?  @unique  // null for email+password users; set after Google sign-in
-  avatarUrl      String?  // Google profile photo URL (Phase 9) or custom upload URL (Phase 10)
-  age            Int?     // optional — collected on registration or profile edit
-  country        String?  // optional — shown and editable on the profile page
-  favoriteClubId Int?     // optional FK to Team
-  createdAt      DateTime @default(now())
-
-  // Posts: SetNull — when user is deleted, posts survive with userId = null (anonymous)
-  posts         Post[]
-  // Upvotes: Cascade — deleted when user is deleted (upvotes have no meaning without a user)
-  upvotes       Upvote[]
-  // Favorites: Cascade — deleted when user is deleted
-  favorites     UserFavorite[]
-  favoriteClub  Team?    @relation("FavoriteClub", fields: [favoriteClubId], references: [id])
-  // Note: tokens relation removed — VerificationToken model is dropped in this migration
+  passwordHash   String?
+  createdAt      DateTime       @default(now())
+  age            Int?
+  favoriteClubId Int?
+  googleId       String?        @unique
+  avatarUrl      String?
+  country        String?
+  posts          Post[]
+  upvotes        Upvote[]
+  favoriteClub   Team?          @relation("FavoriteClub", fields: [favoriteClubId], references: [id])
+  favorites      UserFavorite[]
 }
 
-// ─────────────────────────────────────────────
-// FANBASE POSTS (Phase 3 read, Phase 4 write)
-// ─────────────────────────────────────────────
-
 model Post {
-  id           Int      @id @default(autoincrement())
-  teamId       Int
-  userId       Int?     // null for email-only (Level 2) posts
-  postType     PostType
-  title        String
-  body         String
-  authorName   String   // display name for the post — not tied to User.name
-  authorEmail  String   // used to attribute posts to accounts
-  photoUrl     String?  // Seat Tip posts only — stored in Azure Blob Storage (Phase 4)
-  seatSection  String?  // Seat Tip posts only
-  seatRow      String?
-  seatNumber   String?
-  seatRating   Int?     // 1–5 stars
-  pubName      String?  // Pub Recommendation posts only
-  pubAddress   String?
-  pubDistance  String?  // e.g. "5 min walk"
-  matchId      Int?     // I'm Going posts only — links to a specific Match
-  upvoteCount  Int      @default(0)
-  reported     Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  teamId      Int
+  userId      Int?
+  postType    PostType
+  title       String
+  body        String
+  authorName  String
+  authorEmail String
+  photoUrl    String?
+  seatSection String?
+  seatRow     String?
+  seatNumber  String?
+  seatRating  Int?
+  pubName     String?
+  pubAddress  String?
+  pubDistance String?
+  matchId     Int?
+  upvoteCount Int      @default(0)
+  reported    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  team        Team     @relation(fields: [teamId], references: [id])
+  user        User?    @relation(fields: [userId], references: [id])
+  upvotes     Upvote[]
 
-  team    Team    @relation(fields: [teamId], references: [id])
-  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-  upvotes Upvote[]
-
-  // teamId index — Phase 3 queries fetch all posts for a team
   @@index([teamId])
-  // postType index — tab filtering queries by type
   @@index([postType])
 }
 
 model Upvote {
-  id     Int @id @default(autoincrement())
+  id     Int  @id @default(autoincrement())
   postId Int
   userId Int
+  post   Post @relation(fields: [postId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Prevent duplicate upvotes — one user can upvote a post exactly once
   @@unique([postId, userId])
 }
 
 model UserFavorite {
-  id     Int @id @default(autoincrement())
+  id     Int  @id @default(autoincrement())
   userId Int
   teamId Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  team Team @relation(fields: [teamId], references: [id])
+  team   Team @relation(fields: [teamId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, teamId])
 }
 
-// ─────────────────────────────────────────────
-// ENUMS
-// ─────────────────────────────────────────────
-
 enum PostType {
-  GENERAL_TIP        // General advice about going to a match
-  SEAT_TIP           // Seat-specific tip with optional photo
-  PUB_RECOMMENDATION // Pub or food spot near the stadium
-  IM_GOING           // "I'm attending this match" post
+  GENERAL_TIP
+  SEAT_TIP
+  PUB_RECOMMENDATION
+  IM_GOING
 }
