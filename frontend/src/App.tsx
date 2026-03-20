@@ -8,7 +8,7 @@ import { FanBasePage } from './pages/FanBasePage';
 import { TeamFanBasePage } from './pages/TeamFanBasePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
-import { SetPasswordPage } from './pages/SetPasswordPage';
+import { WelcomePage } from './pages/WelcomePage';
 import { ContactPage } from './pages/ContactPage';
 import { TransportPage } from './pages/TransportPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -31,10 +31,10 @@ export default function App() {
           <Route path="/fanbase/:country/:league"   element={<FanBasePage />} />
           {/* Team FanBase page — /fanbase/team/:teamId is a static prefix "team", beats dynamic :country */}
           <Route path="/fanbase/team/:teamId"       element={<TeamFanBasePage />} />
-          {/* Auth pages — Phase 4 & 5 */}
-          <Route path="/login"        element={<LoginPage />} />
-          <Route path="/register"     element={<RegisterPage />} />
-          <Route path="/set-password" element={<SetPasswordPage />} />
+          {/* Auth pages — Phase 9 */}
+          <Route path="/login"    element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/welcome"  element={<WelcomePage />} />
           {/* Static info pages — Phase 5 polish */}
           <Route path="/contact"   element={<ContactPage />} />
           <Route path="/transport" element={<TransportPage />} />
