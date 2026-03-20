@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 09-03-PLAN.md (profile management API)
-last_updated: "2026-03-20T10:07:11.209Z"
+stopped_at: Completed 09-04-PLAN.md (frontend OAuth UI)
+last_updated: "2026-03-20T10:14:33.395Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -49,6 +49,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 09-oauth-foundation P01 | 51min | 2 tasks | 4 files |
 | Phase 09-oauth-foundation P02 | 45min | 3 tasks | 4 files |
 | Phase 09-oauth-foundation P03 | 33min | 2 tasks | 3 files |
+| Phase 09-oauth-foundation P04 | 4min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - [Phase 09-oauth-foundation]: getMe level derivation: (passwordHash || googleId) ? 3 : 2 — fixes incorrect level 2 for Google-only users
 - [Phase 09-oauth-foundation]: updateProfile uses typed partial updateData object to handle optional fields — prevents accidentally nulling fields not in request body
 - [Phase 09-oauth-foundation]: changePassword checks passwordHash null before bcrypt to detect Google-only accounts; deleteAccount clears cookie immediately after user deletion
+- [Phase 09-oauth-foundation]: Google OAuth button uses window.location.href (not fetch) — OAuth requires real browser navigation
+- [Phase 09-oauth-foundation]: WelcomePage has no route guard — backend controls who is redirected there via isNewUser flag
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-20T10:07:11.205Z
-Stopped at: Completed 09-03-PLAN.md (profile management API)
+Last session: 2026-03-20T10:14:33.392Z
+Stopped at: Completed 09-04-PLAN.md (frontend OAuth UI)
 Resume file: None
