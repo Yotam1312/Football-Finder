@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
 import prisma from '../config/database';
 
 // POST /api/users/favorites/:teamId
@@ -56,5 +57,123 @@ export const getFavorites = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching favorites:', error);
     res.status(500).json({ error: 'Failed to fetch favorites' });
+  }
+};
+
+// PATCH /api/users/me
+// Updates profile fields for the authenticated user.
+// All fields are optional — only the ones provided in the request body are updated.
+// Accepted fields: name, age, country, favoriteClubId, avatarUrl
+export const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = req.auth!.userId;
+    const { name, age, country, favoriteClubId, avatarUrl } = req.body;
+
+    // Build an update object with only the provided fields.
+    // Using a typed partial so we don't accidentally overwrite fields with undefined.
+    const updateData: {
+      name?: string;
+      age?: number | null;
+      country?: string | null;
+      favoriteClubId?: number | null;
+      avatarUrl?: string | null;
+    } = {};
+
+    if (name !== undefined) updateData.name = name;
+    // Parse age to integer if provided; allow explicit null to clear the field
+    if (age !== undefined) updateData.age = age === null ? null : parseInt(age, 10);
+    if (country !== undefined) updateData.country = country || null;
+    if (favoriteClubId !== undefined) {
+      updateData.favoriteClubId = favoriteClubId === null ? null : parseInt(favoriteClubId, 10);
+    }
+    if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl || null;
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    res.status(200).json({
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        avatarUrl: updatedUser.avatarUrl,
+        age: updatedUser.age,
+        country: updatedUser.country,
+        favoriteClubId: updatedUser.favoriteClubId,
+        accountType: updatedUser.googleId ? 'google' : 'email',
+      },
+    });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+};
+
+// PATCH /api/users/me/password
+// Changes the password for an email+password user.
+// Google-only users (no passwordHash) cannot use this endpoint.
+// Requires the user to provide their current password to confirm identity.
+export const changePassword = async (req: Request, res: Response) => {
+  try {
+    const userId = req.auth!.userId;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'currentPassword and newPassword are required' });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'New password must be at least 8 characters' });
+    }
+
+    // Fetch the user to check their current passwordHash
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    // Google-only users have no passwordHash — they cannot change a password
+    if (!user || !user.passwordHash) {
+      return res.status(400).json({ error: 'Password change not available for Google accounts' });
+    }
+
+    // Verify the current password before allowing the change
+    const isValid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isValid) {
+      return res.status(401).json({ error: 'Current password is incorrect' });
+    }
+
+    // Hash and store the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash: hashedPassword },
+    });
+
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ error: 'Failed to change password' });
+  }
+};
+
+// DELETE /api/users/me
+// Permanently deletes the authenticated user's account.
+// The database cascade rules handle related records automatically:
+//   - Upvote rows → deleted (onDelete: Cascade)
+//   - UserFavorite rows → deleted (onDelete: Cascade)
+//   - Post rows → userId set to null (onDelete: SetNull — posts survive as anonymous)
+export const deleteAccount = async (req: Request, res: Response) => {
+  try {
+    const userId = req.auth!.userId;
+
+    await prisma.user.delete({ where: { id: userId } });
+
+    // Clear the auth cookie — the user is now logged out
+    res.clearCookie('token');
+
+    res.status(200).json({ message: 'Account deleted' });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    res.status(500).json({ error: 'Failed to delete account' });
   }
 };

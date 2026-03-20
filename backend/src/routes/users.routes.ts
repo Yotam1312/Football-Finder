@@ -13,4 +13,16 @@ router.post('/favorites/:teamId', requireLevel3, usersController.toggleFavorite)
 // Used on page load to initialize the heart icon state for each team
 router.get('/favorites', requireLevel3, usersController.getFavorites);
 
+// PATCH /me — update profile fields (name, age, country, favoriteClubId, avatarUrl)
+// All fields are optional — only the provided fields are updated.
+router.patch('/me', requireLevel3, usersController.updateProfile);
+
+// PATCH /me/password — change password for email+password users (Level 3 required)
+// Google-only users receive 400 if they call this endpoint.
+router.patch('/me/password', requireLevel3, usersController.changePassword);
+
+// DELETE /me — permanently delete the authenticated user's account
+// Cascades: upvotes and favorites are deleted; posts become anonymous (userId = null)
+router.delete('/me', requireLevel3, usersController.deleteAccount);
+
 export default router;
