@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 09-01-PLAN.md (schema migration + user table reset)
-last_updated: "2026-03-19T20:54:41.654Z"
+stopped_at: Completed 09-02-PLAN.md (Google OAuth backend flow)
+last_updated: "2026-03-20T09:27:45.046Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -47,6 +47,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 09-oauth-foundation P01 | 51min | 2 tasks | 4 files |
+| Phase 09-oauth-foundation P02 | 45min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,8 @@ Recent decisions affecting current work:
 - [v2.0 Roadmap]: POST /api/admin/sync must be locked with API key header before Phase 11 league expansion (sync cost increases from ~18 to ~36+ req/day)
 - [Phase 09-oauth-foundation]: Used prisma migrate deploy (non-interactive) instead of migrate dev — Claude Code shell lacks TTY; authored migration SQL manually
 - [Phase 09-oauth-foundation]: VerificationToken table dropped — email-based Level 2 auth flow replaced by Google OAuth in Phase 9; token.helpers.ts replaced with comment stub
+- [Phase 09-oauth-foundation]: Use returnTo cookie (not OAuth state param) for post-login redirect — state param appears in browser history; cookie is private
+- [Phase 09-oauth-foundation]: getMe level derivation: (passwordHash || googleId) ? 3 : 2 — fixes incorrect level 2 for Google-only users
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-19T20:54:41.651Z
-Stopped at: Completed 09-01-PLAN.md (schema migration + user table reset)
+Last session: 2026-03-20T09:27:45.042Z
+Stopped at: Completed 09-02-PLAN.md (Google OAuth backend flow)
 Resume file: None
