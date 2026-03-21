@@ -109,7 +109,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 9. OAuth Foundation | 5/5 | Complete   | 2026-03-20 | - |
-| 10. Photo Upload | v2.0 | 0/2 | Planning complete | - |
+| 10. Photo Upload | 1/2 | In Progress|  | - |
 | 11. Global League Expansion | v2.0 | 0/TBD | Not started | - |
 | 12. Date Filters | v2.0 | 0/TBD | Not started | - |
 | 13. Mobile Feel | v2.0 | 0/TBD | Not started | - |
