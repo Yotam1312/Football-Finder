@@ -29,6 +29,10 @@ export const ProfilePage: React.FC = () => {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // ── Avatar upload state ──────────────────────────────────────────────
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+
   // ── Delete account state ─────────────────────────────────────────────
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -120,6 +124,56 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  // Handles avatar photo selection — validates the file, uploads to Azure Blob,
+  // then PATCHes the user record with the resulting URL, and refreshes auth context
+  // so the Navbar avatar updates immediately without a page reload.
+  const handleAvatarSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setAvatarError('Only jpg, png, and webp images are allowed.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarError('Photo must be smaller than 5MB.');
+      return;
+    }
+
+    setAvatarUploading(true);
+    setAvatarError(null);
+
+    try {
+      // Step 1: upload the file to Azure Blob Storage
+      const formData = new FormData();
+      formData.append('photo', file);
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      });
+      if (!uploadRes.ok) throw new Error('Upload failed');
+      const { url } = await uploadRes.json();
+
+      // Step 2: save the Blob URL on the user's profile
+      const patchRes = await fetch('/api/users/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ avatarUrl: url }),
+      });
+      if (!patchRes.ok) throw new Error('Profile update failed');
+
+      // Step 3: refresh auth context so the Navbar avatar updates immediately
+      refreshAuth();
+    } catch {
+      setAvatarError('Failed to upload photo. Please try again.');
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
   // ── Render ────────────────────────────────────────────────────────────
 
   return (
@@ -146,16 +200,26 @@ export const ProfilePage: React.FC = () => {
               </div>
             )}
             <div>
-              {/* Upload is deferred to Phase 10 (Azure Blob setup required).
-                  Show the button as disabled with a tooltip so users know it is coming. */}
-              <button
-                disabled
-                title="Custom photo upload coming in a future update"
-                className="text-sm border border-gray-300 text-gray-400 px-3 py-1.5 rounded-md cursor-not-allowed"
-              >
-                Upload photo (coming soon)
-              </button>
-              {user.accountType === 'google' && (
+              {/* A <label> wrapping a hidden <input type="file"> is the standard pattern
+                  for custom file upload buttons — fully accessible via keyboard and screen readers. */}
+              <label className={`inline-block text-sm border border-gray-300 px-3 py-1.5 rounded-md transition-colors ${
+                avatarUploading
+                  ? 'text-gray-400 cursor-not-allowed'
+                  : 'text-gray-700 cursor-pointer hover:bg-gray-50'
+              }`}>
+                {avatarUploading ? 'Uploading...' : 'Upload photo'}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleAvatarSelect}
+                  disabled={avatarUploading}
+                />
+              </label>
+              {avatarError && (
+                <p className="text-sm text-red-600 mt-1">{avatarError}</p>
+              )}
+              {user.accountType === 'google' && !avatarError && (
                 <p className="text-xs text-gray-400 mt-1">
                   Using your Google profile photo
                 </p>

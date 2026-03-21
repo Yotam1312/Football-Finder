@@ -121,6 +121,15 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [upcomingMatches, setUpcomingMatches] = useState<UpcomingMatch[]>([]);
   const [matchesLoading, setMatchesLoading] = useState(false);
 
+  // ── Photo upload state (Seat Tip only) ──
+  // photoPreviewUrl: local object URL shown immediately after file selection (synchronous)
+  // photoUploadedUrl: Azure Blob URL returned after the background upload completes
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(editPost?.photoUrl ?? null);
+  const [photoUploadedUrl, setPhotoUploadedUrl] = useState<string | null>(editPost?.photoUrl ?? null);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+
   // ── Submission state ──
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -150,6 +159,77 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const handleTypeSelect = (type: PostType) => {
     setPostType(type);
     setStep('form');
+  };
+
+  // Called when the user selects a file in the photo input.
+  // Validates the file type and size client-side, shows a local preview immediately,
+  // then uploads to Azure Blob in the background via POST /api/upload.
+  const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Client-side validation before any network call
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setPhotoError('Only jpg, png, and webp images are allowed.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setPhotoError('Photo must be smaller than 5MB.');
+      return;
+    }
+
+    // Revoke the previous object URL to prevent memory leaks before creating a new one.
+    // Object URLs (blob:...) are not cleaned up automatically by the browser.
+    if (photoPreviewUrl && !photoPreviewUrl.startsWith('http')) {
+      URL.revokeObjectURL(photoPreviewUrl);
+    }
+
+    // Show preview immediately from the local File object — no network wait needed
+    setPhotoFile(file);
+    setPhotoPreviewUrl(URL.createObjectURL(file));
+    setPhotoError(null);
+    setPhotoUploadedUrl(null);
+
+    // Upload to Azure Blob in the background
+    setPhotoUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+        // Do NOT set Content-Type — browser sets it with the correct multipart boundary
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setPhotoUploadedUrl(data.url);
+      } else {
+        setPhotoError('Photo upload failed. You can still post without a photo.');
+        setPhotoPreviewUrl(null);
+        setPhotoFile(null);
+      }
+    } catch {
+      setPhotoError('Photo upload failed. You can still post without a photo.');
+      setPhotoPreviewUrl(null);
+      setPhotoFile(null);
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
+
+  // Clears the selected photo from the form — does not delete anything from Azure
+  const handleRemovePhoto = () => {
+    if (photoPreviewUrl && !photoPreviewUrl.startsWith('http')) {
+      URL.revokeObjectURL(photoPreviewUrl);
+    }
+    setPhotoFile(null);
+    setPhotoPreviewUrl(null);
+    setPhotoUploadedUrl(null);
+    setPhotoError(null);
   };
 
   // Client-side validation before calling the API.
@@ -188,6 +268,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           ...(seatRow.trim() && { seatRow: seatRow.trim() }),
           ...(seatNumber.trim() && { seatNumber: seatNumber.trim() }),
           ...(seatRating !== null && { seatRating }),
+          photoUrl: photoUploadedUrl || null,
         }),
         ...(postType === 'PUB_RECOMMENDATION' && {
           pubName: pubName.trim(),
@@ -236,6 +317,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         ...(seatRow.trim() && { seatRow: seatRow.trim() }),
         ...(seatNumber.trim() && { seatNumber: seatNumber.trim() }),
         ...(seatRating !== null && { seatRating }),
+        ...(photoUploadedUrl && { photoUrl: photoUploadedUrl }),
       }),
       ...(postType === 'PUB_RECOMMENDATION' && {
         pubName: pubName.trim(),
@@ -417,6 +499,58 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Rating</label>
                     <StarRating rating={seatRating} onRate={setSeatRating} />
+                  </div>
+
+                  {/* ── Photo upload (optional) ── */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Add a photo (optional)
+                    </label>
+                    {!photoPreviewUrl ? (
+                      // Dashed border drop zone — clicking opens the hidden file input
+                      <label className="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-green-500 hover:bg-green-50 transition-colors min-h-[44px]">
+                        <span className="text-sm text-gray-500">Choose photo</span>
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          className="hidden"
+                          onChange={handlePhotoSelect}
+                        />
+                      </label>
+                    ) : (
+                      // Preview state — shows the selected image with an upload spinner overlay
+                      <div className="relative">
+                        <img
+                          src={photoPreviewUrl}
+                          alt="Photo preview"
+                          className="max-h-32 rounded-lg object-cover w-full"
+                        />
+                        {photoUploading && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/60 rounded-lg">
+                            <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                          </div>
+                        )}
+                        {photoUploading && (
+                          <p className="text-xs text-gray-400 mt-1">Uploading...</p>
+                        )}
+                        {!photoUploading && (
+                          <div className="flex justify-end mt-1">
+                            <button
+                              type="button"
+                              onClick={handleRemovePhoto}
+                              className="text-xs text-red-500 hover:text-red-700 min-h-[44px] px-2"
+                            >
+                              Remove photo
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {photoError && (
+                      <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-2">
+                        {photoError}
+                      </p>
+                    )}
                   </div>
                 </>
               )}
