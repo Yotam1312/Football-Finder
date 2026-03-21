@@ -25,7 +25,7 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 ### Phases
 
 - [x] **Phase 9: OAuth Foundation** — Replace email+password with Google OAuth; user table reset (completed 2026-03-20)
-- [ ] **Phase 10: Photo Upload** — Seat Tip posts accept one photo attachment via Azure Blob
+- [x] **Phase 10: Photo Upload** — Seat Tip posts accept one photo attachment via Azure Blob (completed 2026-03-21)
 - [ ] **Phase 11: Global League Expansion** — South America, MLS, Asia leagues in search and FanBase
 - [ ] **Phase 12: Date Filters** — Quick-select buttons and time-of-day filtering on match search
 - [ ] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
@@ -109,7 +109,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 9. OAuth Foundation | 5/5 | Complete   | 2026-03-20 | - |
-| 10. Photo Upload | 1/2 | In Progress|  | - |
+| 10. Photo Upload | 2/2 | Complete   | 2026-03-21 | - |
 | 11. Global League Expansion | v2.0 | 0/TBD | Not started | - |
 | 12. Date Filters | v2.0 | 0/TBD | Not started | - |
 | 13. Mobile Feel | v2.0 | 0/TBD | Not started | - |

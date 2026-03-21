@@ -11,9 +11,9 @@
 
 ### Photo Upload
 
-- [ ] **PHOTO-01**: User can upload a photo when creating a Seat Tip post (max 5MB, jpg/png/webp)
-- [ ] **PHOTO-02**: Photo preview is shown in the creation form before submission
-- [ ] **PHOTO-03**: Uploaded photo appears on the published Seat Tip post card and detail view
+- [x] **PHOTO-01**: User can upload a photo when creating a Seat Tip post (max 5MB, jpg/png/webp)
+- [x] **PHOTO-02**: Photo preview is shown in the creation form before submission
+- [x] **PHOTO-03**: Uploaded photo appears on the published Seat Tip post card and detail view
 
 ### Date Filters
 
@@ -63,9 +63,9 @@
 | OAUTH-02 | Phase 9 — OAuth Foundation | Complete |
 | OAUTH-03 | Phase 9 — OAuth Foundation | Complete |
 | OAUTH-04 | Phase 9 — OAuth Foundation | Complete |
-| PHOTO-01 | Phase 10 — Photo Upload | Pending |
-| PHOTO-02 | Phase 10 — Photo Upload | Pending |
-| PHOTO-03 | Phase 10 — Photo Upload | Pending |
+| PHOTO-01 | Phase 10 — Photo Upload | Complete |
+| PHOTO-02 | Phase 10 — Photo Upload | Complete |
+| PHOTO-03 | Phase 10 — Photo Upload | Complete |
 | LEAGUE-01 | Phase 11 — Global League Expansion | Pending |
 | LEAGUE-02 | Phase 11 — Global League Expansion | Pending |
 | LEAGUE-03 | Phase 11 — Global League Expansion | Pending |
