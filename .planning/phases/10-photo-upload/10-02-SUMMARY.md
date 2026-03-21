@@ -29,7 +29,7 @@ decisions:
 metrics:
   duration: "2 min"
   completed_date: "2026-03-21"
-  tasks_completed: 2
+  tasks_completed: 3
   tasks_total: 3
   files_modified: 4
 ---
@@ -44,7 +44,7 @@ Photo upload UX wired end-to-end: upload-on-select with local preview in CreateP
 |---|------|--------|--------|
 | 1 | Create ImageLightbox and add photo to SeatTipCard | 7545524 | done |
 | 2 | Add photo upload to CreatePostModal and ProfilePage | 979650f | done |
-| 3 | Verify photo upload flow end-to-end | — | awaiting human verification |
+| 3 | Verify photo upload flow end-to-end | — | approved (all 17 steps passed) |
 
 ## What Was Built
 
@@ -84,7 +84,7 @@ None — plan executed exactly as written.
 
 - `npx tsc --noEmit`: exits 0 (no errors)
 - `npx jest --no-coverage`: 86/86 tests pass
-- Human end-to-end verification: pending (Task 3 checkpoint)
+- Human end-to-end verification: passed (all 17 steps approved 2026-03-21)
 
 ## Self-Check
 
