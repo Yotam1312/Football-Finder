@@ -279,4 +279,40 @@ describe('POST /api/posts', () => {
     expect(res.body).toHaveProperty('postType', 'GENERAL_TIP');
     expect(res.body).toHaveProperty('authorName', 'John Fan');
   });
+
+  it('persists photoUrl when creating a SEAT_TIP post', async () => {
+    const cookie = makeAuthCookie(1, 3);
+
+    // Mock: user lookup returns a Level 3 user
+    (mockPrisma.user.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: 1, email: 'test@test.com', name: 'Test', level: 3,
+    });
+
+    const photoUrl = 'https://teststorage.blob.core.windows.net/container/posts/abc.jpg';
+
+    // Mock: post.create returns the post with photoUrl included
+    (mockPrisma.post.create as jest.Mock).mockResolvedValueOnce({
+      id: 99, teamId: 1, postType: 'SEAT_TIP', title: 'Great seat',
+      body: 'Amazing view', authorName: 'Test', photoUrl, userId: 1,
+      createdAt: new Date(), updatedAt: new Date(),
+    });
+
+    const res = await request(app)
+      .post('/api/posts')
+      .set('Cookie', cookie)
+      .send({
+        teamId: 1, teamName: 'Arsenal', postType: 'SEAT_TIP',
+        title: 'Great seat', body: 'Amazing view', authorName: 'Test',
+        photoUrl,
+      });
+
+    expect(res.status).toBe(201);
+    expect(res.body.post?.photoUrl ?? res.body.photoUrl).toBe(photoUrl);
+    // Verify prisma.post.create was called with the photoUrl
+    expect(mockPrisma.post.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ photoUrl }),
+      })
+    );
+  });
 });

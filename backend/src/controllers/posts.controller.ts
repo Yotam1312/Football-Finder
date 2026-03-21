@@ -26,6 +26,7 @@ export const createPost = async (req: Request, res: Response) => {
       pubAddress,
       pubDistance,
       matchId,
+      photoUrl,
     } = req.body;
 
     // Validate required fields
@@ -70,6 +71,8 @@ export const createPost = async (req: Request, res: Response) => {
         ...(pubAddress !== undefined && { pubAddress }),
         ...(pubDistance !== undefined && { pubDistance }),
         ...(matchId !== undefined && { matchId: Number(matchId) }),
+        // photoUrl is an optional Azure Blob URL set when the user attaches a photo
+        photoUrl: photoUrl || null,
       },
     });
 
