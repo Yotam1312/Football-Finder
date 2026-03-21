@@ -62,7 +62,11 @@ Plans:
   2. Before submitting, the user sees a thumbnail preview of the selected photo inside the creation form
   3. After the post is published, the photo appears on the Seat Tip post card in the FanBase feed
   4. Tapping or clicking the photo on a published post shows the full-size image
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Backend upload endpoint (multer + Azure Blob SDK, POST /api/upload, unit tests)
+- [ ] 10-02-PLAN.md — Frontend photo UX (CreatePostModal photo input + preview, SeatTipCard photo display + lightbox, ProfilePage avatar upload)
 
 ### Phase 11: Global League Expansion
 **Goal**: Users can discover matches in South American, MLS, and Asian cities with the same experience they get for European cities today
@@ -105,7 +109,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 9. OAuth Foundation | 5/5 | Complete   | 2026-03-20 | - |
-| 10. Photo Upload | v2.0 | 0/TBD | Not started | - |
+| 10. Photo Upload | v2.0 | 0/2 | Planning complete | - |
 | 11. Global League Expansion | v2.0 | 0/TBD | Not started | - |
 | 12. Date Filters | v2.0 | 0/TBD | Not started | - |
 | 13. Mobile Feel | v2.0 | 0/TBD | Not started | - |
