@@ -158,7 +158,14 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 md:pb-0" style={{ backgroundColor: '#FAFAFA' }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen pb-20 md:pb-0"
+      style={{ backgroundColor: '#FAFAFA' }}
+    >
       {/* Hero section — gradient background for a richer, more premium feel */}
       <section
         className="text-white py-24 px-4"
@@ -326,6 +333,6 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 };

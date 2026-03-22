@@ -107,7 +107,14 @@ export const ResultsPage: React.FC = () => {
   const pageMatches = filteredMatches.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div className="min-h-screen pb-20 md:pb-0" style={{ backgroundColor: '#FAFAFA' }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen pb-20 md:pb-0"
+      style={{ backgroundColor: '#FAFAFA' }}
+    >
       {/* Sticky search summary bar at top */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -247,6 +254,6 @@ export const ResultsPage: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };

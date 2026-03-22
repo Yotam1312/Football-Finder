@@ -129,7 +129,13 @@ export const TeamFanBasePage: React.FC = () => {
   // Error state — team not found or network error
   if (teamError) {
     return (
-      <div className="flex items-center justify-center min-h-screen pb-20 md:pb-0">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        className="flex items-center justify-center min-h-screen pb-20 md:pb-0"
+      >
         <div className="text-center">
           <p className="text-2xl text-gray-400 mb-2">🏟️</p>
           <h1 className="text-xl font-semibold text-gray-700 mb-2">Team not found</h1>
@@ -138,15 +144,16 @@ export const TeamFanBasePage: React.FC = () => {
             ← Back to FanBase Hub
           </Link>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
       className="min-h-screen bg-gray-50 pb-20 md:pb-0"
     >
       <div className="max-w-3xl mx-auto px-4 py-8">

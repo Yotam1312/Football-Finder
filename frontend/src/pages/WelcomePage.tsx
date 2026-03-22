@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 // WelcomePage — shown once to new users after their first Google sign-in.
@@ -9,7 +10,13 @@ export const WelcomePage: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen bg-gray-50 flex items-center justify-center px-4"
+    >
       <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md text-center">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-3xl">⚽</span>
@@ -41,6 +48,6 @@ export const WelcomePage: React.FC = () => {
           You can update your profile at any time from the navbar menu.
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };

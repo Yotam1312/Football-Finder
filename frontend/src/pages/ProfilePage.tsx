@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 // ProfilePage — shows the logged-in user's profile and allows editing.
@@ -177,7 +178,13 @@ export const ProfilePage: React.FC = () => {
   // ── Render ────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pb-0">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen bg-gray-50 pb-20 md:pb-0"
+    >
       <div className="max-w-2xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Profile Settings</h1>
 
@@ -403,6 +410,6 @@ export const ProfilePage: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 // LoginPage — allows users to sign in with email + password or via Google OAuth.
@@ -58,7 +59,13 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen bg-gray-50 flex items-center justify-center px-4"
+    >
       <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Log in</h1>
 
@@ -140,6 +147,6 @@ export const LoginPage: React.FC = () => {
           <Link to="/register" className="text-green-600 hover:underline">Register</Link>
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
