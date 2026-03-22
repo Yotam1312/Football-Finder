@@ -39,7 +39,7 @@ export const TeamGrid: React.FC<TeamGridProps> = ({ teams, isLoading }) => {
           <span className="text-sm font-medium text-center text-gray-700 leading-snug">
             {team.name}
           </span>
-          {/* Post count badge (FAN-05) */}
+          {/* Post count badge */}
           {team._count.posts > 0 ? (
             <span className="text-xs bg-green-100 text-green-700 font-medium px-2 py-0.5 rounded-full">
               {team._count.posts} {team._count.posts === 1 ? 'post' : 'posts'}

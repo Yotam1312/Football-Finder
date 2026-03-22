@@ -54,29 +54,56 @@ export const FanBasePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 py-8">
-        {/* Page header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-1">FanBase</h1>
-          <p className="text-gray-500">Browse community tips, seat guides, and pub recommendations by team.</p>
-        </div>
 
-        {/* Breadcrumb */}
-        <FanBaseBreadcrumb
-          country={country}
-          leagueName={activeLeague?.name}
-        />
+      {/* Hero banner — gradient green matching the homepage style */}
+      <section
+        className="text-white py-16 px-4"
+        style={{ background: 'linear-gradient(160deg, #14532d 0%, #166534 40%, #15803d 100%)' }}
+      >
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="text-5xl font-extrabold tracking-tight mb-3"
+          >
+            FanBase
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15, duration: 0.45 }}
+            className="text-green-200 text-lg font-light mb-8"
+          >
+            Community tips, seat guides, and pub recommendations from fans worldwide.
+          </motion.p>
 
-        {/* Live team search — always visible at the top */}
-        <div className="mb-10">
-          <p className="text-sm text-gray-500 mb-2">Search directly for a team:</p>
-          <TeamSearchInput />
+          {/* Search bar lives in the hero so it's the first thing users see */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.45 }}
+          >
+            <TeamSearchInput />
+          </motion.div>
         </div>
+      </section>
+
+      {/* Page body */}
+      <div className="max-w-5xl mx-auto px-4 py-10">
+
+        {/* Breadcrumb — only meaningful once a country is selected */}
+        {country && (
+          <FanBaseBreadcrumb
+            country={country}
+            leagueName={activeLeague?.name}
+          />
+        )}
 
         {/* Step 1: Country selection */}
         <motion.section {...stepAnimation}>
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">
-            {country ? '1. Country' : '1. Select a country'}
+          <h2 className="text-xl font-bold text-gray-800 mb-6">
+            {country ? '1. Country' : 'Select a country'}
           </h2>
           <CountryGrid onSelect={() => {/* navigation handled inside CountryGrid */}} />
         </motion.section>
@@ -85,10 +112,10 @@ export const FanBasePage: React.FC = () => {
         {country && (
           <motion.section
             ref={leagueRef as React.RefObject<HTMLElement>}
-            className="mt-10 scroll-mt-8"
+            className="mt-12 scroll-mt-8"
             {...stepAnimation}
           >
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            <h2 className="text-xl font-bold text-gray-800 mb-6">
               {leagueParam ? '2. League' : `2. Select a league in ${countryName}`}
             </h2>
             <LeagueList
@@ -104,10 +131,10 @@ export const FanBasePage: React.FC = () => {
         {country && leagueParam && (
           <motion.section
             ref={teamRef as React.RefObject<HTMLElement>}
-            className="mt-10 scroll-mt-8"
+            className="mt-12 scroll-mt-8"
             {...stepAnimation}
           >
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            <h2 className="text-xl font-bold text-gray-800 mb-6">
               3. Select a team
             </h2>
             <TeamGrid

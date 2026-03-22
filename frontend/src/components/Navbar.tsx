@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Navigation, Users, Phone } from 'lucide-react';
+import { Navigation, Users, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Top navigation bar — shown on every page.
@@ -23,14 +23,37 @@ export const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-100">
+    // sticky + top-0 + z-50 keeps the navbar pinned to the top as the user scrolls
+    <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-        {/* Left: Logo with green pin icon + brand name */}
-        <Link to="/" className="flex items-center gap-2 min-h-[48px]">
-          <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-            <MapPin className="w-4 h-4 text-white" />
+        {/* Left: Logo — inline SVG (map pin with football) + stacked brand text */}
+        <Link to="/" className="flex items-center gap-2.5 min-h-[48px]">
+          {/* Map-pin shape with a football (soccer ball) inside, matching the brand logo */}
+          <svg width="34" height="42" viewBox="0 0 34 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Pin / teardrop body */}
+            <path
+              d="M17 1C9.268 1 3 7.268 3 15C3 25.75 17 41 17 41C17 41 31 25.75 31 15C31 7.268 24.732 1 17 1Z"
+              fill="#16a34a"
+              stroke="#1e3a5f"
+              strokeWidth="1.5"
+            />
+            {/* White circle — football background */}
+            <circle cx="17" cy="15" r="9.5" fill="white" stroke="#1e3a5f" strokeWidth="1.2" />
+            {/* Central pentagon (dark spot) */}
+            <circle cx="17" cy="15" r="3.2" fill="#1e3a5f" />
+            {/* Seam lines radiating from center spot — gives football texture */}
+            <line x1="17" y1="11.8" x2="14.2" y2="8.8"  stroke="#1e3a5f" strokeWidth="1" strokeLinecap="round" />
+            <line x1="17" y1="11.8" x2="19.8" y2="8.8"  stroke="#1e3a5f" strokeWidth="1" strokeLinecap="round" />
+            <line x1="13.5" y1="17" x2="10"   y2="16.5" stroke="#1e3a5f" strokeWidth="1" strokeLinecap="round" />
+            <line x1="20.5" y1="17" x2="24"   y2="16.5" stroke="#1e3a5f" strokeWidth="1" strokeLinecap="round" />
+            <line x1="14.5" y1="20" x2="13.2" y2="23.5" stroke="#1e3a5f" strokeWidth="1" strokeLinecap="round" />
+            <line x1="19.5" y1="20" x2="20.8" y2="23.5" stroke="#1e3a5f" strokeWidth="1" strokeLinecap="round" />
+          </svg>
+          {/* "Football" on top line, "Finder" below — matches the stacked layout of the original */}
+          <div className="leading-tight">
+            <span className="block text-[15px] font-bold text-[#1e3a5f] tracking-tight">Football</span>
+            <span className="block text-[15px] font-bold text-[#1e3a5f] tracking-tight">Finder</span>
           </div>
-          <span className="text-xl font-bold text-green-600">Football Finder</span>
         </Link>
 
         {/* Center: Nav links with icons — flex-1 + justify-center keeps them truly centered

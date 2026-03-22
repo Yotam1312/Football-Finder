@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Returns a YYYY-MM-DD date string for today + offsetDays in the browser's local time.
 // We use local time because the user thinks in terms of their local calendar.
@@ -66,6 +66,16 @@ export const HomePage: React.FC = () => {
   const [city, setCity] = useState('');
   const [from, setFrom] = useState('');
   const [to,   setTo]   = useState('');
+
+  // Testimonials carousel — auto-advances every 3 seconds
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveTestimonial(prev => (prev + 1) % TESTIMONIALS.length);
+    }, 3000);
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(timer);
+  }, []);
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationError,   setLocationError]   = useState('');
 
@@ -149,24 +159,35 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
-      {/* Hero section — green background per BRIEF.md */}
-      <section className="bg-green-700 text-white py-20 px-4">
+      {/* Hero section — gradient background for a richer, more premium feel */}
+      <section
+        className="text-white py-24 px-4"
+        style={{ background: 'linear-gradient(160deg, #14532d 0%, #166534 40%, #15803d 100%)' }}
+      >
         <div className="max-w-2xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl font-bold mb-4"
+            className="text-6xl font-extrabold mb-5 leading-tight tracking-tight"
           >
-            Find Football Matches,<br />Anywhere, Anytime
+            {/* White first line, bright green second line with a soft glow */}
+            <span className="text-white drop-shadow-md">Find Football Matches</span>
+            <br />
+            <span
+              className="text-green-300"
+              style={{ textShadow: '0 0 40px rgba(134,239,172,0.4)' }}
+            >
+              Anywhere, Anytime
+            </span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-green-100 text-lg mb-10"
+            className="text-green-100 text-lg font-light leading-relaxed mb-12 max-w-lg mx-auto"
           >
-            Search upcoming fixtures across Europe's top leagues.
+            Discover upcoming football matches in any city. Perfect for travelers and locals who love the beautiful game.
           </motion.p>
 
           {/* Search form — city → start date → end date, stacked vertically */}
@@ -257,28 +278,50 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials section */}
+      {/* Testimonials carousel — one review shown at a time, auto-rotates every 3s */}
       <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-10">
+        <div className="max-w-xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-10">
             Travellers love Football Finder
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
+
+          {/* AnimatePresence + mode="wait" fades out the old card before fading in the new one */}
+          <div className="relative min-h-[160px]">
+            <AnimatePresence mode="wait">
               <motion.div
-                key={t.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                key={activeTestimonial}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.4 }}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                className="bg-white rounded-xl shadow-sm border border-gray-100 p-8"
               >
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">"{t.text}"</p>
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                  "{TESTIMONIALS[activeTestimonial].text}"
+                </p>
                 <div>
-                  <p className="font-semibold text-gray-800 text-sm">{t.name}</p>
-                  <p className="text-gray-400 text-xs">{t.location}</p>
+                  <p className="font-semibold text-gray-800 text-sm">
+                    {TESTIMONIALS[activeTestimonial].name}
+                  </p>
+                  <p className="text-gray-400 text-xs">
+                    {TESTIMONIALS[activeTestimonial].location}
+                  </p>
                 </div>
               </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Dot indicators — click to jump to a specific review */}
+          <div className="flex justify-center gap-2 mt-6">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveTestimonial(i)}
+                className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                  i === activeTestimonial ? 'bg-green-600' : 'bg-gray-300'
+                }`}
+                aria-label={`Show review ${i + 1}`}
+              />
             ))}
           </div>
         </div>

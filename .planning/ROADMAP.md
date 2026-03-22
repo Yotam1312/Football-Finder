@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0** — Foundation → Match Discovery → FanBase Browse → Auth & Posting → Polish & Launch (8 phases, 24 plans, 32/32 requirements) — *Completed 2026-03-19* — [Archive](.planning/milestones/v1.0-ROADMAP.md)
-- [ ] **v2.0 — Global & Real-Time** — OAuth → Photo Upload → Date Filters → Mobile Feel → Global Leagues (5 phases, 14 requirements)
+- [ ] **v2.0 — Global & Real-Time** — OAuth → Photo Upload → Date Filters → UI Improvements → Mobile Feel → Global Leagues (6 phases, 14 requirements)
 
 ---
 
@@ -18,7 +18,7 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 
 ---
 
-## v2.0 — Global & Real-Time (Phases 9-13)
+## v2.0 — Global & Real-Time (Phases 9-14)
 
 **Milestone Goal:** Expand Football Finder from a European discovery tool into a global platform — replacing email+password with Google OAuth, adding photo uploads for Seat Tip posts, adding date filters and mobile-app-like experience, and extending match coverage to South America, MLS, and Asia.
 
@@ -27,8 +27,9 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 - [x] **Phase 9: OAuth Foundation** — Replace email+password with Google OAuth; user table reset (completed 2026-03-20)
 - [x] **Phase 10: Photo Upload** — Seat Tip posts accept one photo attachment via Azure Blob (completed 2026-03-21)
 - [x] **Phase 11: Date Filters** — Quick-select buttons and time-of-day filtering on match search (completed 2026-03-22)
-- [ ] **Phase 12: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
-- [ ] **Phase 13: Global League Expansion** — South America, MLS, Asia leagues in search and FanBase
+- [ ] **Phase 12: UI Improvements** — Sticky navbar, new logo, flag images, rotating testimonials, updated hero text
+- [ ] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
+- [ ] **Phase 14: Global League Expansion** — South America, MLS, Asia leagues in search and FanBase
 
 ---
 
@@ -82,9 +83,24 @@ Plans:
 - [ ] 11-01-PLAN.md — Quick-select date chips on HomePage (Today / Tomorrow / This Weekend above date inputs)
 - [ ] 11-02-PLAN.md — Time-of-day filter chips on ResultsPage (Morning / Afternoon / Evening / Night, client-side filtering)
 
-### Phase 12: Mobile Feel
-**Goal**: Mobile users experience Football Finder as an app-like product with thumb-friendly navigation and smooth transitions between pages
+### Phase 12: UI Improvements
+**Goal**: Polish the visual identity and UX — sticky navbar, new logo, real flag images in FanBase, rotating testimonials on the homepage, and updated hero subtitle
 **Depends on**: Phase 11
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+**Success Criteria** (what must be TRUE):
+  1. The navbar stays visible at the top of the screen even as the user scrolls down any page
+  2. The navbar shows the new Football Finder logo image instead of the MapPin icon
+  3. The FanBase country grid shows real flag images (not emoji) for all countries
+  4. The homepage testimonials cycle through automatically every 3 seconds
+  5. The homepage hero subtitle reads "Discover upcoming football matches in any city. Perfect for travelers and locals who love the beautiful game."
+**Plans**: 1 plan
+
+Plans:
+- [ ] 12-01-PLAN.md — UI improvements (sticky navbar, logo, flags, rotating testimonials, hero text)
+
+### Phase 13: Mobile Feel
+**Goal**: Mobile users experience Football Finder as an app-like product with thumb-friendly navigation and smooth transitions between pages
+**Depends on**: Phase 12
 **Requirements**: MOBILE-01, MOBILE-02
 **Success Criteria** (what must be TRUE):
   1. On a mobile device (phone-sized viewport), a fixed navigation bar appears at the bottom of the screen with tabs for the main sections (Search, FanBase, Profile) — the bar is absent on desktop
@@ -92,9 +108,9 @@ Plans:
   3. Navigating between any two pages shows a smooth animated transition — pages slide or fade rather than cutting instantly
 **Plans**: TBD
 
-### Phase 13: Global League Expansion
+### Phase 14: Global League Expansion
 **Goal**: Users can discover matches in South American, MLS, and Asian cities with the same experience they get for European cities today
-**Depends on**: Phase 12
+**Depends on**: Phase 13
 **Requirements**: LEAGUE-01, LEAGUE-02, LEAGUE-03, LEAGUE-04
 **Success Criteria** (what must be TRUE):
   1. A user searching "São Paulo" or "Buenos Aires" with a date range sees Brazilian Série A and Argentine Primera División fixtures
@@ -108,12 +124,13 @@ Plans:
 
 ## Progress
 
-**Execution Order:** 9 → 10 → 11 → 12 → 13
+**Execution Order:** 9 → 10 → 11 → 12 → 13 → 14
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 9. OAuth Foundation | v2.0 | 5/5 | Complete | 2026-03-20 |
 | 10. Photo Upload | v2.0 | 2/2 | Complete | 2026-03-21 |
-| 11. Date Filters | 2/2 | Complete    | 2026-03-22 | - |
-| 12. Mobile Feel | v2.0 | 0/TBD | Not started | - |
-| 13. Global League Expansion | v2.0 | 0/TBD | Not started | - |
+| 11. Date Filters | v2.0 | 2/2 | Complete | 2026-03-22 |
+| 12. UI Improvements | v2.0 | 0/1 | Not started | - |
+| 13. Mobile Feel | v2.0 | 0/TBD | Not started | - |
+| 14. Global League Expansion | v2.0 | 0/TBD | Not started | - |
