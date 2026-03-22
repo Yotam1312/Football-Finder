@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0** — Foundation → Match Discovery → FanBase Browse → Auth & Posting → Polish & Launch (8 phases, 24 plans, 32/32 requirements) — *Completed 2026-03-19* — [Archive](.planning/milestones/v1.0-ROADMAP.md)
-- [ ] **v2.0 — Global & Real-Time** — OAuth → Photo Upload → Global Leagues → Date Filters → Mobile Feel (5 phases, 14 requirements)
+- [ ] **v2.0 — Global & Real-Time** — OAuth → Photo Upload → Date Filters → Mobile Feel → Global Leagues (5 phases, 14 requirements)
 
 ---
 
@@ -20,15 +20,15 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 
 ## v2.0 — Global & Real-Time (Phases 9-13)
 
-**Milestone Goal:** Expand Football Finder from a European discovery tool into a global platform — replacing email+password with Google OAuth, adding photo uploads for Seat Tip posts, extending match coverage to South America, MLS, and Asia, and making the mobile experience feel app-like.
+**Milestone Goal:** Expand Football Finder from a European discovery tool into a global platform — replacing email+password with Google OAuth, adding photo uploads for Seat Tip posts, adding date filters and mobile-app-like experience, and extending match coverage to South America, MLS, and Asia.
 
 ### Phases
 
 - [x] **Phase 9: OAuth Foundation** — Replace email+password with Google OAuth; user table reset (completed 2026-03-20)
 - [x] **Phase 10: Photo Upload** — Seat Tip posts accept one photo attachment via Azure Blob (completed 2026-03-21)
-- [ ] **Phase 11: Global League Expansion** — South America, MLS, Asia leagues in search and FanBase
-- [ ] **Phase 12: Date Filters** — Quick-select buttons and time-of-day filtering on match search
-- [ ] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
+- [ ] **Phase 11: Date Filters** — Quick-select buttons and time-of-day filtering on match search
+- [ ] **Phase 12: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
+- [ ] **Phase 13: Global League Expansion** — South America, MLS, Asia leagues in search and FanBase
 
 ---
 
@@ -68,19 +68,7 @@ Plans:
 - [ ] 10-01-PLAN.md — Backend upload endpoint (multer + Azure Blob SDK, POST /api/upload, unit tests)
 - [ ] 10-02-PLAN.md — Frontend photo UX (CreatePostModal photo input + preview, SeatTipCard photo display + lightbox, ProfilePage avatar upload)
 
-### Phase 11: Global League Expansion
-**Goal**: Users can discover matches in South American, MLS, and Asian cities with the same experience they get for European cities today
-**Depends on**: Phase 9
-**Requirements**: LEAGUE-01, LEAGUE-02, LEAGUE-03, LEAGUE-04
-**Success Criteria** (what must be TRUE):
-  1. A user searching "São Paulo" or "Buenos Aires" with a date range sees Brazilian Série A and Argentine Primera División fixtures
-  2. A user searching "Los Angeles" or "Toronto" sees MLS fixtures with correct local kickoff times (not UTC, not a single wrong timezone for all MLS games)
-  3. A user searching "Tokyo" sees J-League fixtures
-  4. A user navigating FanBase (Country → League → Team) finds teams from all newly added leagues — the FanBase pages for those teams exist and show posts
-  5. The admin sync endpoint requires an API key header — it cannot be triggered anonymously
-**Plans**: TBD
-
-### Phase 12: Date Filters
+### Phase 11: Date Filters
 **Goal**: Users can narrow match search results by specific day or time of day without typing dates manually
 **Depends on**: Phase 9
 **Requirements**: SEARCH-01, SEARCH-02
@@ -88,16 +76,32 @@ Plans:
   1. A user on the homepage can click "Today", "Tomorrow", or "This Weekend" to populate the date fields instantly without typing
   2. On the results page, a user can select one or more time-of-day chips (Morning / Afternoon / Evening / Night) to filter the visible match list — only matches in the selected time windows appear
   3. Removing all time-of-day chip selections restores the full result list for the chosen date range
-**Plans**: TBD
+**Plans**: 2 plans
 
-### Phase 13: Mobile Feel
+Plans:
+- [ ] 11-01-PLAN.md — Quick-select date chips on HomePage (Today / Tomorrow / This Weekend above date inputs)
+- [ ] 11-02-PLAN.md — Time-of-day filter chips on ResultsPage (Morning / Afternoon / Evening / Night, client-side filtering)
+
+### Phase 12: Mobile Feel
 **Goal**: Mobile users experience Football Finder as an app-like product with thumb-friendly navigation and smooth transitions between pages
-**Depends on**: Phase 12
+**Depends on**: Phase 11
 **Requirements**: MOBILE-01, MOBILE-02
 **Success Criteria** (what must be TRUE):
   1. On a mobile device (phone-sized viewport), a fixed navigation bar appears at the bottom of the screen with tabs for the main sections (Search, FanBase, Profile) — the bar is absent on desktop
   2. The bottom bar respects the iPhone safe area (no content obscured by the home indicator)
   3. Navigating between any two pages shows a smooth animated transition — pages slide or fade rather than cutting instantly
+**Plans**: TBD
+
+### Phase 13: Global League Expansion
+**Goal**: Users can discover matches in South American, MLS, and Asian cities with the same experience they get for European cities today
+**Depends on**: Phase 12
+**Requirements**: LEAGUE-01, LEAGUE-02, LEAGUE-03, LEAGUE-04
+**Success Criteria** (what must be TRUE):
+  1. A user searching "São Paulo" or "Buenos Aires" with a date range sees Brazilian Série A and Argentine Primera División fixtures
+  2. A user searching "Los Angeles" or "Toronto" sees MLS fixtures with correct local kickoff times (not UTC, not a single wrong timezone for all MLS games)
+  3. A user searching "Tokyo" sees J-League fixtures
+  4. A user navigating FanBase (Country → League → Team) finds teams from all newly added leagues — the FanBase pages for those teams exist and show posts
+  5. The admin sync endpoint requires an API key header — it cannot be triggered anonymously
 **Plans**: TBD
 
 ---
@@ -108,8 +112,8 @@ Plans:
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 9. OAuth Foundation | 5/5 | Complete   | 2026-03-20 | - |
-| 10. Photo Upload | 2/2 | Complete   | 2026-03-21 | - |
-| 11. Global League Expansion | v2.0 | 0/TBD | Not started | - |
-| 12. Date Filters | v2.0 | 0/TBD | Not started | - |
-| 13. Mobile Feel | v2.0 | 0/TBD | Not started | - |
+| 9. OAuth Foundation | v2.0 | 5/5 | Complete | 2026-03-20 |
+| 10. Photo Upload | v2.0 | 2/2 | Complete | 2026-03-21 |
+| 11. Date Filters | v2.0 | 0/2 | Not started | - |
+| 12. Mobile Feel | v2.0 | 0/TBD | Not started | - |
+| 13. Global League Expansion | v2.0 | 0/TBD | Not started | - |
