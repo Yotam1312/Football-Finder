@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 11-01-PLAN.md
-last_updated: "2026-03-22T15:24:00.444Z"
+stopped_at: Completed 11-02-PLAN.md (awaiting human verify checkpoint)
+last_updated: "2026-03-22T15:26:54.274Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
   percent: 0
 ---
 
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 10-photo-upload P01 | 4min | 3 tasks | 8 files |
 | Phase 10-photo-upload P02 | 2min | 2 tasks | 4 files |
 | Phase 11-date-filters P01 | 1 | 1 tasks | 1 files |
+| Phase 11-date-filters P02 | 2min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 - [Phase 10-photo-upload]: @types/multer installed as devDependency — multer v2.1.1 does not ship its own TypeScript types; @types/multer resolves req.file type errors
 - [Phase 11-date-filters]: Active chip highlight derived from from/to values — no extra useState needed; manual edits auto-clear highlights
 - [Phase 11-date-filters]: getDateString uses local time (not UTC toISOString) to match user's calendar timezone
+- [Phase 11-date-filters]: Use Set<TimeBucketId> for activeChips — O(1) toggle and membership, React detects new Set reference
+- [Phase 11-date-filters]: Pagination derived from filteredMatches not matches — page count and slice both use filtered array
+- [Phase 11-date-filters]: Page resets to 1 on chip toggle — prevents landing on empty page after filter narrows results
 
 ### Pending Todos
 
@@ -100,6 +104,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-22T15:24:00.441Z
-Stopped at: Completed 11-01-PLAN.md
+Last session: 2026-03-22T15:26:54.271Z
+Stopped at: Completed 11-02-PLAN.md (awaiting human verify checkpoint)
 Resume file: None
