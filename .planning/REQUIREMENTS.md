@@ -30,7 +30,7 @@
 ### Mobile Feel
 
 - [x] **MOBILE-01**: Mobile users see a fixed bottom navigation bar for main sections (Search, FanBase, Profile)
-- [ ] **MOBILE-02**: Navigating between pages shows smooth animated transitions
+- [x] **MOBILE-02**: Navigating between pages shows smooth animated transitions
 
 ---
 
@@ -73,7 +73,7 @@
 | SEARCH-01 | Phase 12 — Date Filters | Complete |
 | SEARCH-02 | Phase 12 — Date Filters | Complete |
 | MOBILE-01 | Phase 13 — Mobile Feel | Complete |
-| MOBILE-02 | Phase 13 — Mobile Feel | Pending |
+| MOBILE-02 | Phase 13 — Mobile Feel | Complete |
 
 **Total: 14/14 requirements mapped. Coverage: 100%.**
 

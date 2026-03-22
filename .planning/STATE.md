@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 13-01-PLAN.md
-last_updated: "2026-03-22T21:16:59.146Z"
+stopped_at: Completed 13-02-PLAN.md
+last_updated: "2026-03-22T21:21:36.700Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
-  completed_plans: 11
+  completed_plans: 12
   percent: 100
 ---
 
@@ -72,6 +72,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 11-date-filters P01 | 1 | 1 tasks | 1 files |
 | Phase 11-date-filters P02 | 2min | 1 tasks | 1 files |
 | Phase 13-mobile-feel P01 | 8min | 2 tasks | 11 files |
+| Phase 13-mobile-feel P02 | 3min | 1 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,7 @@ Recent decisions affecting current work:
 - [Phase 13-mobile-feel]: Profile tab sends guests to /login — avoids a dead end on the profile page
 - [Phase 13-mobile-feel]: BottomNav rendered outside AnimatePresence — bar is stable during page transitions
 - [Phase 13-mobile-feel]: pb-20 md:pb-0 on page wrappers — clears 56px nav bar on mobile, no wasted space on desktop
+- [Phase 13-mobile-feel]: Replaced slide-in entrance animations with pure opacity fade on Category A pages — page transitions should be clean fades not slides for consistent app feel
 
 ### Pending Todos
 
@@ -124,6 +126,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-22T21:16:59.141Z
-Stopped at: Completed 13-01-PLAN.md
+Last session: 2026-03-22T21:21:36.696Z
+Stopped at: Completed 13-02-PLAN.md
 Resume file: None

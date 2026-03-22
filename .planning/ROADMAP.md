@@ -28,7 +28,7 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 - [x] **Phase 10: Photo Upload** — Seat Tip posts accept one photo attachment via Azure Blob (completed 2026-03-21)
 - [x] **Phase 11: Date Filters** — Quick-select buttons and time-of-day filtering on match search (completed 2026-03-22)
 - [x] **Phase 12: UI Improvements** — Sticky navbar, new logo, flag images, rotating testimonials, updated hero text (completed 2026-03-22)
-- [ ] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
+- [x] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience (completed 2026-03-22)
 
 ---
 
@@ -124,4 +124,4 @@ Plans:
 | 10. Photo Upload | v2.0 | 2/2 | Complete | 2026-03-21 |
 | 11. Date Filters | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 12. UI Improvements | v2.0 | 1/1 | Complete | 2026-03-22 |
-| 13. Mobile Feel | 1/2 | In Progress|  | - |
+| 13. Mobile Feel | 2/2 | Complete   | 2026-03-22 | - |
