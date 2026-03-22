@@ -114,6 +114,6 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 9. OAuth Foundation | v2.0 | 5/5 | Complete | 2026-03-20 |
 | 10. Photo Upload | v2.0 | 2/2 | Complete | 2026-03-21 |
-| 11. Date Filters | 2/2 | Complete   | 2026-03-22 | - |
+| 11. Date Filters | 2/2 | Complete    | 2026-03-22 | - |
 | 12. Mobile Feel | v2.0 | 0/TBD | Not started | - |
 | 13. Global League Expansion | v2.0 | 0/TBD | Not started | - |
