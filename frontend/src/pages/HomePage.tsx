@@ -2,6 +2,41 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
+// Returns a YYYY-MM-DD date string for today + offsetDays in the browser's local time.
+// We use local time because the user thinks in terms of their local calendar.
+// Example: getDateString(0) → '2026-03-22', getDateString(1) → '2026-03-23'
+function getDateString(offsetDays: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  // toISOString() gives UTC — we need local date, so build it manually
+  const year  = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day   = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Returns [fromDate, toDate] for "This Weekend" based on today's day of week.
+// Rules (per product decision):
+//   Mon–Fri → coming Saturday to coming Sunday
+//   Saturday → today (Sat) to tomorrow (Sun)
+//   Sunday → today (Sun) to today (Sun)   [it's the last day of the weekend]
+function getWeekendDates(): [string, string] {
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+
+  if (dayOfWeek === 6) {
+    // Saturday: show Sat → Sun
+    return [getDateString(0), getDateString(1)];
+  } else if (dayOfWeek === 0) {
+    // Sunday: only today left in the weekend
+    return [getDateString(0), getDateString(0)];
+  } else {
+    // Mon–Fri: jump to the coming Saturday
+    const daysUntilSat = 6 - dayOfWeek;
+    return [getDateString(daysUntilSat), getDateString(daysUntilSat + 1)];
+  }
+}
+
 // Three hardcoded testimonials — swap for real ones before public launch (Phase 5)
 const TESTIMONIALS = [
   {
@@ -33,6 +68,38 @@ export const HomePage: React.FC = () => {
   const [to,   setTo]   = useState('');
   const [locationLoading, setLocationLoading] = useState(false);
   const [locationError,   setLocationError]   = useState('');
+
+  // Derive which quick-select chip is active by comparing the current from/to values
+  // against what each preset would set. No extra state needed — derived purely from from/to.
+  // This means manually editing the date inputs automatically clears the highlight.
+  const todayStr     = getDateString(0);
+  const tomorrowStr  = getDateString(1);
+  const [weekendFrom, weekendTo] = getWeekendDates();
+
+  const activeChip: 'today' | 'tomorrow' | 'weekend' | null =
+    from === todayStr    && to === todayStr    ? 'today'    :
+    from === tomorrowStr && to === tomorrowStr ? 'tomorrow' :
+    from === weekendFrom && to === weekendTo   ? 'weekend'  :
+    null;
+
+  // Each chip knows what to set from/to to when clicked
+  const quickSelectChips = [
+    {
+      id: 'today'    as const,
+      label: 'Today',
+      onClick: () => { setFrom(todayStr);    setTo(todayStr); },
+    },
+    {
+      id: 'tomorrow' as const,
+      label: 'Tomorrow',
+      onClick: () => { setFrom(tomorrowStr); setTo(tomorrowStr); },
+    },
+    {
+      id: 'weekend'  as const,
+      label: 'This Weekend',
+      onClick: () => { setFrom(weekendFrom); setTo(weekendTo); },
+    },
+  ];
 
   // Navigate to /results with search params in the URL.
   // The results page reads these params — no state is passed directly.
@@ -123,6 +190,25 @@ export const HomePage: React.FC = () => {
               {locationError && (
                 <p className="text-red-500 text-xs mt-1">{locationError}</p>
               )}
+            </div>
+
+            {/* Quick-select date chips — one click fills From/To without typing */}
+            <div className="flex flex-wrap gap-2">
+              {quickSelectChips.map((chip) => (
+                <button
+                  key={chip.id}
+                  type="button"
+                  onClick={chip.onClick}
+                  className={
+                    // Active chip gets a solid green background; inactive chips are outlined
+                    activeChip === chip.id
+                      ? 'px-4 py-1.5 rounded-full text-sm font-medium bg-green-600 text-white border border-green-600 transition-colors'
+                      : 'px-4 py-1.5 rounded-full text-sm font-medium bg-white text-green-700 border border-green-400 hover:bg-green-50 transition-colors'
+                  }
+                >
+                  {chip.label}
+                </button>
+              ))}
             </div>
 
             {/* grid-cols-1 on mobile so date inputs don't get too narrow */}
