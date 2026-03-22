@@ -158,7 +158,7 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen pb-20 md:pb-0" style={{ backgroundColor: '#FAFAFA' }}>
       {/* Hero section — gradient background for a richer, more premium feel */}
       <section
         className="text-white py-24 px-4"

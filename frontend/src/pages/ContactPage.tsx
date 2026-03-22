@@ -45,7 +45,7 @@ export const ContactPage: React.FC = () => {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen bg-gray-50"
+      className="min-h-screen bg-gray-50 pb-20 md:pb-0"
     >
       <div className="max-w-5xl mx-auto px-4 py-12">
         {/* Page header */}

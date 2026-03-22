@@ -14,7 +14,7 @@ export const MatchDetailPage: React.FC = () => {
   // Loading skeleton — pulsing placeholders while the API call is in-flight
   if (isLoading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
+      <div className="min-h-screen pb-20 md:pb-0" style={{ backgroundColor: '#FAFAFA' }}>
         <div className="max-w-2xl mx-auto px-4 py-8 space-y-4 animate-pulse">
           <div className="h-6 bg-gray-200 rounded w-24 mb-6" />
           <div className="bg-gray-100 rounded-xl p-8 h-48" />
@@ -33,7 +33,7 @@ export const MatchDetailPage: React.FC = () => {
   // Error state — shown for 404 (match not found) or network errors
   if (isError || !match) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center pb-20 md:pb-0">
         <div className="text-center">
           <p className="text-gray-500 text-lg mb-4">Match not found.</p>
           <button
@@ -62,7 +62,7 @@ export const MatchDetailPage: React.FC = () => {
   const season = Math.min(new Date().getFullYear() - 1, 2024);
 
   return (
-    <div className="min-h-screen pb-16" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen pb-20 md:pb-0" style={{ backgroundColor: '#FAFAFA' }}>
       <div className="max-w-2xl mx-auto px-4 py-8">
 
         {/* Back button — returns to the results page */}
