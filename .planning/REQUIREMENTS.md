@@ -17,7 +17,7 @@
 
 ### Date Filters
 
-- [ ] **SEARCH-01**: User can use quick-select buttons (Today, Tomorrow, This Weekend) on the homepage instead of typing dates manually
+- [x] **SEARCH-01**: User can use quick-select buttons (Today, Tomorrow, This Weekend) on the homepage instead of typing dates manually
 - [ ] **SEARCH-02**: User can filter match results by time of day (Morning / Afternoon / Evening / Night)
 
 ### Global League Coverage
@@ -70,7 +70,7 @@
 | LEAGUE-02 | Phase 11 — Global League Expansion | Pending |
 | LEAGUE-03 | Phase 11 — Global League Expansion | Pending |
 | LEAGUE-04 | Phase 11 — Global League Expansion | Pending |
-| SEARCH-01 | Phase 12 — Date Filters | Pending |
+| SEARCH-01 | Phase 12 — Date Filters | Complete |
 | SEARCH-02 | Phase 12 — Date Filters | Pending |
 | MOBILE-01 | Phase 13 — Mobile Feel | Pending |
 | MOBILE-02 | Phase 13 — Mobile Feel | Pending |

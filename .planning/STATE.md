@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
-stopped_at: Completed 10-02-PLAN.md (all tasks complete, human verification approved)
-last_updated: "2026-03-21T19:30:06.824Z"
+stopped_at: Completed 11-01-PLAN.md
+last_updated: "2026-03-22T15:24:00.444Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 9
+  completed_plans: 8
   percent: 0
 ---
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 09-oauth-foundation P05 | 2min | 2 tasks | 3 files |
 | Phase 10-photo-upload P01 | 4min | 3 tasks | 8 files |
 | Phase 10-photo-upload P02 | 2min | 2 tasks | 4 files |
+| Phase 11-date-filters P01 | 1 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - [Phase 09-oauth-foundation]: Upload photo button disabled with tooltip — Azure Blob deferred to Phase 10
 - [Phase 09-oauth-foundation]: Delete account uses two-step inline confirmation UI rather than window.confirm() for consistent UX
 - [Phase 10-photo-upload]: @types/multer installed as devDependency — multer v2.1.1 does not ship its own TypeScript types; @types/multer resolves req.file type errors
+- [Phase 11-date-filters]: Active chip highlight derived from from/to values — no extra useState needed; manual edits auto-clear highlights
+- [Phase 11-date-filters]: getDateString uses local time (not UTC toISOString) to match user's calendar timezone
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-21T19:24:49Z
-Stopped at: Completed 10-02-PLAN.md (all tasks complete, human verification approved)
+Last session: 2026-03-22T15:24:00.441Z
+Stopped at: Completed 11-01-PLAN.md
 Resume file: None
