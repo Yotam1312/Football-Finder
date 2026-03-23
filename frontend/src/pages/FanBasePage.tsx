@@ -53,7 +53,13 @@ export const FanBasePage: React.FC = () => {
   }, [leagueParam]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen bg-gray-50 pb-20 md:pb-0"
+    >
 
       {/* Hero banner — gradient green matching the homepage style */}
       <section
@@ -144,6 +150,6 @@ export const FanBasePage: React.FC = () => {
           </motion.section>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };

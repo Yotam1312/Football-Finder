@@ -7,10 +7,11 @@ import { motion } from 'framer-motion';
 export const NotFoundPage: React.FC = () => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeInOut' }}
+      className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 pb-20 md:pb-0"
     >
       <div className="text-center max-w-md">
         <p className="text-8xl font-bold text-green-600 mb-4">404</p>

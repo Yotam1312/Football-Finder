@@ -201,6 +201,20 @@ export const googleRedirect = (req: Request, res: Response): void => {
     maxAge: 10 * 60 * 1000, // 10 minutes — only needs to last through the Google flow
   });
 
+  // Build the callback URL dynamically from the incoming request host.
+  // This means localhost on PC and 192.168.68.117 on mobile both work automatically,
+  // as long as both are registered in Google Cloud Console as allowed redirect URIs.
+  const callbackUrl = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+
+  // Store the callback URL in a cookie so googleCallback can use the exact same
+  // URL when exchanging the code — Google requires them to match precisely.
+  res.cookie('oauth_callback_url', callbackUrl, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 10 * 60 * 1000,
+  });
+
   // Generate the Google consent screen URL.
   // access_type 'online' means we only want an access token, not a refresh token.
   // We only need profile data once during sign-in — we don't need ongoing access.
@@ -210,6 +224,7 @@ export const googleRedirect = (req: Request, res: Response): void => {
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile',
     ],
+    redirect_uri: callbackUrl,
   });
 
   res.redirect(authUrl);
@@ -232,8 +247,11 @@ export const googleCallback = async (req: Request, res: Response): Promise<void>
     }
 
     // Exchange the one-time authorization code for an access token.
-    // The access token lets us call Google's API to fetch profile data.
-    const { tokens } = await oauth2Client.getToken(code);
+    // We must pass the same redirect_uri used in googleRedirect — Google validates they match.
+    const callbackUrl = req.cookies?.oauth_callback_url ||
+      `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+
+    const { tokens } = await oauth2Client.getToken({ code, redirect_uri: callbackUrl });
     oauth2Client.setCredentials(tokens);
 
     // Fetch the user's profile from Google's userinfo endpoint.

@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Global & Real-Time
 status: planning
+stopped_at: Completed 13-02-PLAN.md
+last_updated: "2026-03-22T21:24:11.441Z"
+last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
+progress:
+  total_phases: 5
+  completed_phases: 4
+  total_plans: 11
+  completed_plans: 12
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.0
+milestone_name: — Global & Real-Time
+status: planning
 stopped_at: Completed 11-02-PLAN.md (human verification approved — Phase 11 complete)
 last_updated: "2026-03-22T18:16:11.037Z"
 last_activity: 2026-03-19 — v2.0 roadmap defined; 5 phases, 14 requirements mapped
 progress:
-  total_phases: 6
+  [██████████] 100%
   completed_phases: 3
   total_plans: 9
   completed_plans: 9
@@ -55,6 +71,8 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 10-photo-upload P02 | 2min | 2 tasks | 4 files |
 | Phase 11-date-filters P01 | 1 | 1 tasks | 1 files |
 | Phase 11-date-filters P02 | 2min | 1 tasks | 1 files |
+| Phase 13-mobile-feel P01 | 8min | 2 tasks | 11 files |
+| Phase 13-mobile-feel P02 | 3min | 1 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -85,6 +103,10 @@ Recent decisions affecting current work:
 - [Phase 11-date-filters]: Use Set<TimeBucketId> for activeChips — O(1) toggle and membership, React detects new Set reference
 - [Phase 11-date-filters]: Pagination derived from filteredMatches not matches — page count and slice both use filtered array
 - [Phase 11-date-filters]: Page resets to 1 on chip toggle — prevents landing on empty page after filter narrows results
+- [Phase 13-mobile-feel]: Profile tab sends guests to /login — avoids a dead end on the profile page
+- [Phase 13-mobile-feel]: BottomNav rendered outside AnimatePresence — bar is stable during page transitions
+- [Phase 13-mobile-feel]: pb-20 md:pb-0 on page wrappers — clears 56px nav bar on mobile, no wasted space on desktop
+- [Phase 13-mobile-feel]: Replaced slide-in entrance animations with pure opacity fade on Category A pages — page transitions should be clean fades not slides for consistent app feel
 
 ### Pending Todos
 
@@ -104,6 +126,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-03-22T18:11:42.906Z
-Stopped at: Completed 11-02-PLAN.md (human verification approved — Phase 11 complete)
+Last session: 2026-03-22T21:21:36.696Z
+Stopped at: Completed 13-02-PLAN.md
 Resume file: None

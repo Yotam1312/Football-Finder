@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0** — Foundation → Match Discovery → FanBase Browse → Auth & Posting → Polish & Launch (8 phases, 24 plans, 32/32 requirements) — *Completed 2026-03-19* — [Archive](.planning/milestones/v1.0-ROADMAP.md)
-- [ ] **v2.0 — Global & Real-Time** — OAuth → Photo Upload → Date Filters → UI Improvements → Mobile Feel → Global Leagues (6 phases, 14 requirements)
+- [ ] **v2.0 — Global & Real-Time** — OAuth → Photo Upload → Date Filters → UI Improvements → Mobile Feel (5 phases)
 
 ---
 
@@ -18,7 +18,7 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 
 ---
 
-## v2.0 — Global & Real-Time (Phases 9-14)
+## v2.0 — Global & Real-Time (Phases 9-13)
 
 **Milestone Goal:** Expand Football Finder from a European discovery tool into a global platform — replacing email+password with Google OAuth, adding photo uploads for Seat Tip posts, adding date filters and mobile-app-like experience, and extending match coverage to South America, MLS, and Asia.
 
@@ -27,9 +27,8 @@ See: [.planning/milestones/v1.0-ROADMAP.md](.planning/milestones/v1.0-ROADMAP.md
 - [x] **Phase 9: OAuth Foundation** — Replace email+password with Google OAuth; user table reset (completed 2026-03-20)
 - [x] **Phase 10: Photo Upload** — Seat Tip posts accept one photo attachment via Azure Blob (completed 2026-03-21)
 - [x] **Phase 11: Date Filters** — Quick-select buttons and time-of-day filtering on match search (completed 2026-03-22)
-- [ ] **Phase 12: UI Improvements** — Sticky navbar, new logo, flag images, rotating testimonials, updated hero text
-- [ ] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience
-- [ ] **Phase 14: Global League Expansion** — South America, MLS, Asia leagues in search and FanBase
+- [x] **Phase 12: UI Improvements** — Sticky navbar, new logo, flag images, rotating testimonials, updated hero text (completed 2026-03-22)
+- [x] **Phase 13: Mobile Feel** — Bottom nav bar and smooth page transitions for app-like experience (completed 2026-03-22)
 
 ---
 
@@ -96,7 +95,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 12-01-PLAN.md — UI improvements (sticky navbar, logo, flags, rotating testimonials, hero text)
+- [x] 12-01-PLAN.md — UI improvements (sticky navbar, logo, flags, rotating testimonials, hero text)
 
 ### Phase 13: Mobile Feel
 **Goal**: Mobile users experience Football Finder as an app-like product with thumb-friendly navigation and smooth transitions between pages
@@ -106,31 +105,23 @@ Plans:
   1. On a mobile device (phone-sized viewport), a fixed navigation bar appears at the bottom of the screen with tabs for the main sections (Search, FanBase, Profile) — the bar is absent on desktop
   2. The bottom bar respects the iPhone safe area (no content obscured by the home indicator)
   3. Navigating between any two pages shows a smooth animated transition — pages slide or fade rather than cutting instantly
-**Plans**: TBD
+**Plans**: 2 plans
 
-### Phase 14: Global League Expansion
-**Goal**: Users can discover matches in South American, MLS, and Asian cities with the same experience they get for European cities today
-**Depends on**: Phase 13
-**Requirements**: LEAGUE-01, LEAGUE-02, LEAGUE-03, LEAGUE-04
-**Success Criteria** (what must be TRUE):
-  1. A user searching "São Paulo" or "Buenos Aires" with a date range sees Brazilian Série A and Argentine Primera División fixtures
-  2. A user searching "Los Angeles" or "Toronto" sees MLS fixtures with correct local kickoff times (not UTC, not a single wrong timezone for all MLS games)
-  3. A user searching "Tokyo" sees J-League fixtures
-  4. A user navigating FanBase (Country → League → Team) finds teams from all newly added leagues — the FanBase pages for those teams exist and show posts
-  5. The admin sync endpoint requires an API key header — it cannot be triggered anonymously
-**Plans**: TBD
+Plans:
+- [ ] 13-01-PLAN.md — Bottom navigation bar (BottomNav component, App.tsx integration, page bottom padding)
+- [ ] 13-02-PLAN.md — Fade page transitions (motion.div wrappers with exit variants on all 12 pages)
+
 
 ---
 
 ## Progress
 
-**Execution Order:** 9 → 10 → 11 → 12 → 13 → 14
+**Execution Order:** 9 → 10 → 11 → 12 → 13
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 9. OAuth Foundation | v2.0 | 5/5 | Complete | 2026-03-20 |
 | 10. Photo Upload | v2.0 | 2/2 | Complete | 2026-03-21 |
 | 11. Date Filters | v2.0 | 2/2 | Complete | 2026-03-22 |
-| 12. UI Improvements | v2.0 | 0/1 | Not started | - |
-| 13. Mobile Feel | v2.0 | 0/TBD | Not started | - |
-| 14. Global League Expansion | v2.0 | 0/TBD | Not started | - |
+| 12. UI Improvements | v2.0 | 1/1 | Complete | 2026-03-22 |
+| 13. Mobile Feel | 2/2 | Complete    | 2026-03-22 | - |
