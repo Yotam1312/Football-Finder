@@ -124,4 +124,4 @@ Plans:
 | 10. Photo Upload | v2.0 | 2/2 | Complete | 2026-03-21 |
 | 11. Date Filters | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 12. UI Improvements | v2.0 | 1/1 | Complete | 2026-03-22 |
-| 13. Mobile Feel | 2/2 | Complete   | 2026-03-22 | - |
+| 13. Mobile Feel | 2/2 | Complete    | 2026-03-22 | - |

@@ -56,9 +56,9 @@ export const Navbar: React.FC = () => {
           </div>
         </Link>
 
-        {/* Center: Nav links with icons — flex-1 + justify-center keeps them truly centered
-            regardless of how wide the auth section on the right is */}
-        <div className="flex-1 flex items-center justify-center">
+        {/* Center: Nav links with icons — hidden on mobile (BottomNav handles navigation there)
+            flex-1 + justify-center keeps them truly centered on desktop */}
+        <div className="flex-1 hidden md:flex items-center justify-center">
           <div className="flex items-center gap-12">
             <Link
               to="/transport"
@@ -84,8 +84,8 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Auth section */}
-        <div className="flex items-center">
+        {/* Right: Auth section — hidden on mobile (use Profile tab in BottomNav instead) */}
+        <div className="hidden md:flex items-center">
           {isLoading ? (
             // Brief loading placeholder — prevents flicker between guest and logged-in states
             <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />

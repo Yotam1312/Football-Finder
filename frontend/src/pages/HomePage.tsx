@@ -163,12 +163,12 @@ export const HomePage: React.FC = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="min-h-screen pb-20 md:pb-0"
+      className="min-h-screen pb-20 md:pb-0 overflow-x-hidden"
       style={{ backgroundColor: '#FAFAFA' }}
     >
       {/* Hero section — gradient background for a richer, more premium feel */}
       <section
-        className="text-white py-24 px-4"
+        className="text-white py-10 md:py-24 px-4"
         style={{ background: 'linear-gradient(160deg, #14532d 0%, #166534 40%, #15803d 100%)' }}
       >
         <div className="max-w-2xl mx-auto text-center">
@@ -203,7 +203,7 @@ export const HomePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl p-6 shadow-xl text-left space-y-4"
+            className="bg-white rounded-2xl p-4 md:p-6 shadow-xl text-left space-y-4 overflow-hidden"
           >
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
@@ -212,7 +212,7 @@ export const HomePage: React.FC = () => {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="e.g. London, Munich, Madrid"
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full max-w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
               {locationError && (
@@ -239,25 +239,29 @@ export const HomePage: React.FC = () => {
               ))}
             </div>
 
-            {/* grid-cols-1 on mobile so date inputs don't get too narrow */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+            {/* flex-col on mobile (stacked), flex-row on sm+ (side by side) */}
+            {/* box-sizing: border-box inline style is required — iOS Safari ignores Tailwind's
+                preflight reset for date inputs, causing them to overflow their container */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1 min-w-0">
                 <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
                 <input
                   type="date"
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  style={{ boxSizing: 'border-box', WebkitAppearance: 'none', appearance: 'none' }}
                   required
                 />
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
                 <input
                   type="date"
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  style={{ boxSizing: 'border-box', WebkitAppearance: 'none', appearance: 'none' }}
                   required
                 />
               </div>

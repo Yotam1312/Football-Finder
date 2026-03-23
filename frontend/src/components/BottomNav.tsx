@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Users, User } from 'lucide-react';
+import { Search, Users, User, Navigation, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Pages where the bottom nav should not appear.
@@ -17,10 +17,22 @@ const tabs = [
     matchPrefixes: ['/', '/results', '/match'],
   },
   {
+    label: 'Transport',
+    icon: Navigation,
+    path: '/transport',
+    matchPrefixes: ['/transport'],
+  },
+  {
     label: 'FanBase',
     icon: Users,
     path: '/fanbase',
     matchPrefixes: ['/fanbase'],
+  },
+  {
+    label: 'Contact',
+    icon: Phone,
+    path: '/contact',
+    matchPrefixes: ['/contact'],
   },
   {
     label: 'Profile',
@@ -69,6 +81,13 @@ export const BottomNav: React.FC = () => {
           // Profile tab: redirect guests to /login instead of /profile
           const destination = tab.path === '/profile' && user === null ? '/login' : tab.path;
 
+          // For the Profile tab, show the user's first name when logged in
+          // so they always know which account they're using while browsing
+          const label =
+            tab.path === '/profile' && user !== null
+              ? user.name.split(' ')[0]
+              : tab.label;
+
           return (
             <Link
               key={tab.label}
@@ -79,7 +98,7 @@ export const BottomNav: React.FC = () => {
               }`}
             >
               <tab.icon className="w-5 h-5" />
-              <span className="text-xs">{tab.label}</span>
+              <span className="text-xs truncate max-w-[56px]">{label}</span>
             </Link>
           );
         })}
