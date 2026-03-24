@@ -16,7 +16,7 @@
 
 ### Transportation — Generic Guide
 
-- [ ] **TRANS-01**: `/transportation-guide` page is redesigned with rich content sections: hero, quick tips (4 cards: Plan Ahead / Arrive Early / Payment Ready / Download Apps), public transport types (metro/bus/tram/shuttles), ride services (taxi/Uber/car rental), walking & cycling, long-distance travel (train/bus/flights), payment methods, helpful apps with links, safety tips, budget tiers (3), and FAQs
+- [x] **TRANS-01**: `/transportation-guide` page is redesigned with rich content sections: hero, quick tips (4 cards: Plan Ahead / Arrive Early / Payment Ready / Download Apps), public transport types (metro/bus/tram/shuttles), ride services (taxi/Uber/car rental), walking & cycling, long-distance travel (train/bus/flights), payment methods, helpful apps with links, safety tips, budget tiers (3), and FAQs
 
 ### Transportation — Stadium Component
 
@@ -63,7 +63,7 @@
 | SEC-01 | Phase 14 | Complete |
 | MATCH-01 | Phase 14 | Complete |
 | MATCH-02 | Phase 14 | Complete |
-| TRANS-01 | Phase 16 | Pending |
+| TRANS-01 | Phase 16 | Complete |
 | TRANS-02 | Phase 15 | Complete |
 | TRANS-03 | Phase 17 | Pending |
 | TRANS-04 | Phase 17 | Pending |

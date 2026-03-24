@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: — Transport & Polish
 status: completed
+stopped_at: Completed 16-01-PLAN.md (transportation guide redesign)
+last_updated: "2026-03-24T16:44:23.568Z"
+last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
+progress:
+  total_phases: 5
+  completed_phases: 3
+  total_plans: 4
+  completed_plans: 4
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.1
+milestone_name: — Transport & Polish
+status: completed
 stopped_at: Phase 15 Plan 01 complete (transport DB schema migration). Phase 15 done.
 last_updated: "2026-03-24T16:15:07.020Z"
 last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
 progress:
-  total_phases: 5
+  [██████████] 100%
   completed_phases: 2
   total_plans: 3
   completed_plans: 3
@@ -63,6 +79,7 @@ Progress: [##________] 20%
 
 *Updated after each plan completion*
 | Phase 15-transport-db-schema P01 | 5 | 2 tasks | 2 files |
+| Phase 16-transportation-guide-redesign P01 | 8 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -81,6 +98,9 @@ Recent v2.1 decisions:
 - [14-02] CTA card uses (ticketUrl || mapsUrl) single guard — never renders empty card
 - [Phase 15-01]: transportType stored as String? not enum — Phase 18 enforces Metro/Bus/Train/Taxi/Walking/Other at application layer
 - [Phase 15-01]: Batched TRANS-02 (Stadium fields) and TRANS-05 (PostType + Post fields) into single prisma migrate dev — one migration file 20260324161018_phase15_transport_schema
+- [Phase 16-01]: Lyft replaced with Bolt throughout — more relevant for European football audience
+- [Phase 16-01]: Bus icon replaced with Train for Long Distance section to avoid visual ambiguity with Public Transit
+- [Phase 16-01]: FAQ accordion: only one item open at a time (useState<number | null>(null)) — cleaner mobile UX
 
 ### Pending Todos
 
@@ -94,6 +114,6 @@ Recent v2.1 decisions:
 
 ## Session Continuity
 
-Last session: 2026-03-24T16:12:33.559Z
-Stopped at: Phase 15 Plan 01 complete (transport DB schema migration). Phase 15 done.
+Last session: 2026-03-24T16:44:23.563Z
+Stopped at: Completed 16-01-PLAN.md (transportation guide redesign)
 Resume: `/gsd:execute-phase 15` (Phase 15: Transport Data — DB migrations next)

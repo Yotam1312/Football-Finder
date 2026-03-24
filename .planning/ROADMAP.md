@@ -36,7 +36,7 @@ See: [.planning/milestones/v2.0-ROADMAP.md](.planning/milestones/v2.0-ROADMAP.md
 
 - [x] **Phase 14: Security & Match Polish** - Lock down admin endpoint + visual polish on match detail page (completed 2026-03-24)
 - [x] **Phase 15: Transport DB Schema** - Prisma migrations for stadium transport fields and GETTING_THERE post type (completed 2026-03-24)
-- [ ] **Phase 16: Transportation Guide Redesign** - Full frontend redesign of the `/transportation-guide` page
+- [x] **Phase 16: Transportation Guide Redesign** - Full frontend redesign of the `/transportation-guide` page (completed 2026-03-24)
 - [ ] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data
 - [ ] **Phase 18: Getting There FanBase Tab** - Community transport tips tab and post creation in FanBase
 
@@ -76,7 +76,9 @@ Plans:
   1. The page has a hero section, four quick-tip cards (Plan Ahead / Arrive Early / Payment Ready / Download Apps), and sections for metro/bus/tram, ride services, walking/cycling, and long-distance travel
   2. The page shows a payment methods section, a helpful apps section with links, a safety tips section, budget tier breakdowns, and FAQs
   3. All content sections render correctly on both mobile and desktop without layout issues
-**Plans**: TBD
+**Plans:** 1/1 plans complete
+Plans:
+- [ ] 16-01-PLAN.md — Hero, quick-tips, Walking & Cycling, Payment Methods, Safety Tips, Helpful Apps links, FAQ accordion (TRANS-01)
 
 ### Phase 17: Stadium Transport Component
 **Goal**: Users viewing a match detail page can see transport options for the specific stadium without leaving the page
@@ -112,6 +114,6 @@ Plans:
 | 13. Mobile Feel | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 14. Security & Match Polish | 2/2 | Complete    | 2026-03-24 | - |
 | 15. Transport DB Schema | 1/1 | Complete    | 2026-03-24 | - |
-| 16. Transportation Guide Redesign | v2.1 | 0/? | Not started | - |
+| 16. Transportation Guide Redesign | 1/1 | Complete   | 2026-03-24 | - |
 | 17. Stadium Transport Component | v2.1 | 0/? | Not started | - |
 | 18. Getting There FanBase Tab | v2.1 | 0/? | Not started | - |
