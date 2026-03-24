@@ -4,7 +4,7 @@ milestone: v2.1
 milestone_name: — Transport & Polish
 status: completed
 stopped_at: Completed 16-01-PLAN.md (transportation guide redesign)
-last_updated: "2026-03-24T16:44:23.568Z"
+last_updated: "2026-03-24T16:46:58.929Z"
 last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
 progress:
   total_phases: 5

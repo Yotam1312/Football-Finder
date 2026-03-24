@@ -88,7 +88,9 @@ Plans:
   1. Match detail page shows a "Getting to [Stadium Name]" section that lists nearby metro, train, and bus lines from the DB when data exists
   2. The section displays walking time from center, a travel tip, parking info, and a Navigate button that opens Google Maps
   3. When no transport data exists for a stadium the section shows a graceful empty state with the Navigate button and a "Check local transport apps" message instead of a broken or blank area
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 17-01-PLAN.md — Stadium interface type extension + "Getting to [Stadium]" section in MatchDetailPage (TRANS-03, TRANS-04)
 
 ### Phase 18: Getting There FanBase Tab
 **Goal**: Fans can read and contribute community transport tips for any team's stadium directly within FanBase
@@ -114,6 +116,6 @@ Plans:
 | 13. Mobile Feel | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 14. Security & Match Polish | 2/2 | Complete    | 2026-03-24 | - |
 | 15. Transport DB Schema | 1/1 | Complete    | 2026-03-24 | - |
-| 16. Transportation Guide Redesign | 1/1 | Complete   | 2026-03-24 | - |
-| 17. Stadium Transport Component | v2.1 | 0/? | Not started | - |
+| 16. Transportation Guide Redesign | 1/1 | Complete    | 2026-03-24 | - |
+| 17. Stadium Transport Component | v2.1 | 0/1 | In progress | - |
 | 18. Getting There FanBase Tab | v2.1 | 0/? | Not started | - |
