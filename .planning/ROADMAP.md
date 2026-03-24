@@ -35,7 +35,7 @@ See: [.planning/milestones/v2.0-ROADMAP.md](.planning/milestones/v2.0-ROADMAP.md
 ### Phases
 
 - [x] **Phase 14: Security & Match Polish** - Lock down admin endpoint + visual polish on match detail page (completed 2026-03-24)
-- [ ] **Phase 15: Transport DB Schema** - Prisma migrations for stadium transport fields and GETTING_THERE post type
+- [x] **Phase 15: Transport DB Schema** - Prisma migrations for stadium transport fields and GETTING_THERE post type (completed 2026-03-24)
 - [ ] **Phase 16: Transportation Guide Redesign** - Full frontend redesign of the `/transportation-guide` page
 - [ ] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data
 - [ ] **Phase 18: Getting There FanBase Tab** - Community transport tips tab and post creation in FanBase
@@ -64,7 +64,7 @@ Plans:
   1. Prisma migration runs cleanly and adds transport fields to the Stadium table (`nearbyMetros`, `nearbyTrains`, `nearbyBuses`, `walkingTimeFromCenter`, `publicTransportInfo`, `parkingInfo`)
   2. Prisma migration adds `GETTING_THERE` to the `PostType` enum and optional fields (`transportType`, `travelCost`, `travelTime`) to the `FanbasePost` table
   3. Existing stadium records and FanBase posts are unaffected by the migration
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 15-01-PLAN.md — Prisma schema migration for Stadium transport fields and GETTING_THERE post type (TRANS-02, TRANS-05)
 
@@ -111,7 +111,7 @@ Plans:
 | 12. UI Improvements | v2.0 | 1/1 | Complete | 2026-03-22 |
 | 13. Mobile Feel | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 14. Security & Match Polish | 2/2 | Complete    | 2026-03-24 | - |
-| 15. Transport DB Schema | v2.1 | 0/1 | Not started | - |
+| 15. Transport DB Schema | 1/1 | Complete   | 2026-03-24 | - |
 | 16. Transportation Guide Redesign | v2.1 | 0/? | Not started | - |
 | 17. Stadium Transport Component | v2.1 | 0/? | Not started | - |
 | 18. Getting There FanBase Tab | v2.1 | 0/? | Not started | - |
