@@ -10,27 +10,31 @@ A traveler or local types a city and date range and instantly sees every footbal
 
 ## Current State
 
-**Version:** v2.0 — *Shipped 2026-03-24*
+**Version:** v2.1 — *Shipped 2026-03-24*
 
 ### What's Live
 
 - Match discovery: city + date range search with quick-select chips (Today / Tomorrow / This Weekend) and time-of-day filters
-- Full match detail pages: team stats, ticket links, Google Maps navigation
-- FanBase: Country → League → Team navigation, team post pages, 4 post types
+- Full match detail pages: polished hero layout (team crests, time pill), ticket/nav CTA card, "Getting to [Stadium]" transport section
+- "Getting to [Stadium]": lists nearby metro/train/bus lines, walking time, parking info, and Navigate button; graceful empty state when no data
+- FanBase: Country → League → Team navigation, team post pages, 5 post types (General / Seat Tip / Pub Rec / I'm Going / Getting There)
+- Getting There FanBase tab: community transport tips per stadium, post creation with transport type dropdown
 - Seat Tip posts: accept one photo (jpg/png/webp, max 5MB) via Azure Blob with in-form preview and lightbox
 - Auth: Google OAuth (primary) + email+password — all Level 3 features (create, upvote, edit/delete, favorites)
 - User profiles: avatar (Google photo or upload), name/age/country edit, password change, account delete
+- `POST /api/admin/sync` protected with `x-admin-api-key` header auth
+- Transportation guide: full redesign with hero, quick-tips, all transport mode sections, FAQ accordion
 - Sticky navbar with Football Finder SVG logo; real country flag images (flagcdn.com) in FanBase
 - Mobile feel: fixed bottom nav bar (Search / FanBase / Profile), 200ms fade page transitions on all pages
-- iPhone safe-area respected on bottom nav; desktop nav hidden on mobile (BottomNav shows instead)
-- Static pages: transportation guide, contact form, 404
+- Static pages: transportation guide (redesigned), contact form, 404
 
 ### Known Tech Debt
 
 - `token.helpers.ts` — orphaned file from v1, still present
-- `POST /api/admin/sync` — unprotected dev endpoint, lock down before public traffic
 - `GOOGLE_CALLBACK_URL` env var in `google-oauth.ts` is set but unused at runtime (dynamic URL wins)
 - Stale comment in `frontend/src/types/index.ts:90` — "Phase 4 feature" label on photoUrl
+- `transportType` not validated at backend layer — UI-only enforcement (Metro/Bus/Train/Taxi/Walking/Other)
+- Migration arrays lack `NOT NULL DEFAULT '{}'` — fixed with null guards (`?? []`) in MatchDetailPage.tsx
 - Global league expansion (South America, MLS, Asia) — deferred to v3.0
 
 ## Requirements
@@ -54,17 +58,15 @@ A traveler or local types a city and date range and instantly sees every footbal
 - ✓ Time-of-day filter chips on results page (Morning / Afternoon / Evening / Night) — v2.0
 - ✓ Sticky navbar, new SVG logo, real flag images, auto-rotating testimonials — v2.0
 - ✓ Mobile bottom nav bar and smooth page transitions — v2.0
+- ✓ Admin sync endpoint protected with API key auth — v2.1
+- ✓ Match detail page polished (hero layout, CTA card) — v2.1
+- ✓ Transportation guide fully redesigned with rich sections and FAQ — v2.1
+- ✓ "Getting to [Stadium]" transport component on match detail (DB-backed, graceful empty state) — v2.1
+- ✓ "Getting There" FanBase tab with community transport tips and post creation — v2.1
 
-## Current Milestone: v2.1 — Transport & Polish
+## Next Milestone
 
-**Goal:** Harden the admin endpoint, polish the match detail UI, and build a 3-part transportation system (generic guide redesign, stadium-specific component, community tips tab).
-
-**Target features:**
-- Lock down `POST /api/admin/sync` with API key auth
-- Match detail page visual polish (crests, score area, ticket/nav section)
-- `/transportation-guide` page full redesign (rich sections, icons, content)
-- "Getting to [Stadium]" component on match detail (DB-backed per-stadium transport data)
-- "Getting There" tab in FanBase team pages (community transport tips, new post type)
+*Define with `/gsd:new-milestone` — candidate areas: global league expansion (v3.0), live scores, social features*
 
 ### Active (next milestone)
 
