@@ -111,7 +111,7 @@ Plans:
 | 12. UI Improvements | v2.0 | 1/1 | Complete | 2026-03-22 |
 | 13. Mobile Feel | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 14. Security & Match Polish | 2/2 | Complete    | 2026-03-24 | - |
-| 15. Transport DB Schema | 1/1 | Complete   | 2026-03-24 | - |
+| 15. Transport DB Schema | 1/1 | Complete    | 2026-03-24 | - |
 | 16. Transportation Guide Redesign | v2.1 | 0/? | Not started | - |
 | 17. Stadium Transport Component | v2.1 | 0/? | Not started | - |
 | 18. Getting There FanBase Tab | v2.1 | 0/? | Not started | - |

@@ -55,11 +55,18 @@ A traveler or local types a city and date range and instantly sees every footbal
 - ✓ Sticky navbar, new SVG logo, real flag images, auto-rotating testimonials — v2.0
 - ✓ Mobile bottom nav bar and smooth page transitions — v2.0
 
-### Active (next milestone)
+## Current Milestone: v2.1 — Transport & Polish
 
-- [ ] Global league coverage: South American, MLS, and Asian matches discoverable by city search
-- [ ] FanBase navigation includes teams from newly added leagues
-- [ ] Live scores: real-time polling during active matches on cards and detail pages
+**Goal:** Harden the admin endpoint, polish the match detail UI, and build a 3-part transportation system (generic guide redesign, stadium-specific component, community tips tab).
+
+**Target features:**
+- Lock down `POST /api/admin/sync` with API key auth
+- Match detail page visual polish (crests, score area, ticket/nav section)
+- `/transportation-guide` page full redesign (rich sections, icons, content)
+- "Getting to [Stadium]" component on match detail (DB-backed per-stadium transport data)
+- "Getting There" tab in FanBase team pages (community transport tips, new post type)
+
+### Active (next milestone)
 
 ### Out of Scope
 
@@ -105,4 +112,4 @@ A traveler or local types a city and date range and instantly sees every footbal
 | Defer global league expansion to v3 | API rate limits and timezone complexity underestimated; MLS multi-tz needs careful sync.service work | — Pending v3 |
 
 ---
-*Last updated: 2026-03-24 — v2.0 milestone completed*
+*Last updated: 2026-03-24 — v2.1 milestone started*

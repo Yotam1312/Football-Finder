@@ -4,7 +4,7 @@ milestone: v2.1
 milestone_name: — Transport & Polish
 status: completed
 stopped_at: Phase 15 Plan 01 complete (transport DB schema migration). Phase 15 done.
-last_updated: "2026-03-24T16:12:33.562Z"
+last_updated: "2026-03-24T16:15:07.020Z"
 last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
 progress:
   total_phases: 5
