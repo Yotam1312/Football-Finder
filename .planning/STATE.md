@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.0
-milestone_name: Global & Real-Time
-status: complete
-stopped_at: v2.0 milestone archived 2026-03-24
-last_updated: "2026-03-24T00:00:00Z"
-last_activity: 2026-03-24 — v2.0 milestone completed and archived
+milestone: v2.1
+milestone_name: Transport & Polish
+status: in-progress
+stopped_at: phase-14 plan-02 complete
+last_updated: "2026-03-24T16:00:00Z"
+last_activity: 2026-03-24 — phase 14 plan 02 complete (MATCH-01/02 match detail polish)
 progress:
   total_phases: 5
-  completed_phases: 5
-  total_plans: 12
-  completed_plans: 12
-  percent: 100
+  completed_phases: 0
+  total_plans: 10
+  completed_plans: 2
+  percent: 20
 ---
 
 # Project State
@@ -21,15 +21,31 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** A traveler or local types a city and date range and instantly sees every football match happening there — no Googling, no scattered sites.
-**Current focus:** Planning v3.0 milestone
+**Current focus:** v2.1 — Transport & Polish — Phase 14
 
 ## Current Position
 
-Phase: v2.0 complete — all 5 phases (9-13) shipped
-Status: Milestone archived. Ready for `/gsd:new-milestone`
-Last activity: 2026-03-24 — v2.0 archived (OAuth, Photo Upload, Date Filters, UI Polish, Mobile Feel)
+Phase: 14 of 18 (Security & Match Polish)
+Plan: 2 of 2 complete
+Status: Phase 14 complete — ready for Phase 15
+Last activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
 
-Progress: [██████████] 100%
+Progress: [##________] 20%
+
+## Performance Metrics
+
+**Velocity:**
+- Total plans completed: 2 (v2.1)
+- Average duration: 6.5 min (v2.1)
+- Total execution time: 13 min
+
+**By Phase:**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| 14 (Security & Match Polish) | 2 | 13 min | 6.5 min |
+
+*Updated after each plan completion*
 
 ## Accumulated Context
 
@@ -37,20 +53,28 @@ Progress: [██████████] 100%
 
 All v2.0 decisions logged in PROJECT.md Key Decisions table.
 
+Recent v2.1 decisions:
+- Phase 15 batches both DB migrations (TRANS-02 stadium fields + TRANS-05 post type) into one Prisma session
+- Phase 16 (guide redesign) placed before Phase 17/18 to keep frontend-only work together before DB-dependent components
+- TRANS-01 has no DB dependency — can be done in parallel with Phase 15 if needed
+- [14-01] Used x-admin-api-key header (not Authorization Bearer) for admin key auth — cleaner for cron/script callers
+- [14-01] Middleware returns 401 when ADMIN_API_KEY env var is unset — prevents unprotected access in misconfigured envs
+- [14-02] Hero pill shows time large + date small (replaces VS badge) — answers who+when at a glance
+- [14-02] 3-column info grid removed; date/time moved to hero, venue gets full-width tile with MapPin icon
+- [14-02] CTA card uses (ticketUrl || mapsUrl) single guard — never renders empty card
+
 ### Pending Todos
 
-- Start v3.0 milestone: `/gsd:new-milestone`
-- v3.0 priority: Global league expansion (LEAGUE-01 through LEAGUE-04 deferred from v2.0)
-- Pre-flight for league expansion: upgrade API-Football plan, verify league IDs, build MLS timezone lookup table
-- Lock down `POST /api/admin/sync` before adding new leagues (sync request budget increases)
+- Lock down `POST /api/admin/sync` before v2.1 ships (unprotected dev endpoint) — addressed in Phase 14
+- Add transport data to stadium records (CSV/SQL ready per user) — out of code scope, user-managed
+- Pre-flight for global league expansion (v3.0): upgrade API-Football plan, verify league IDs, MLS timezone table
 
 ### Blockers/Concerns
 
-- API-Football free plan capped at seasons 2022-2024 — need paid plan upgrade before global league expansion
-- `POST /api/admin/sync` unprotected — must add API key header protection before v3.0 league sync ships
+- API-Football free plan capped at seasons 2022-2024 — need paid plan before v3.0 league work (not blocking v2.1)
 
 ## Session Continuity
 
 Last session: 2026-03-24
-Stopped at: v2.0 milestone complete
-Resume: `/gsd:new-milestone` to start v3.0
+Stopped at: Phase 14 Plan 02 complete (MATCH-01/02 match detail polish). Phase 14 fully done.
+Resume: `/gsd:execute-phase 15` (Phase 15: Transport Data — DB migrations next)

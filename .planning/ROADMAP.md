@@ -34,7 +34,7 @@ See: [.planning/milestones/v2.0-ROADMAP.md](.planning/milestones/v2.0-ROADMAP.md
 
 ### Phases
 
-- [ ] **Phase 14: Security & Match Polish** - Lock down admin endpoint + visual polish on match detail page
+- [x] **Phase 14: Security & Match Polish** - Lock down admin endpoint + visual polish on match detail page (completed 2026-03-24)
 - [ ] **Phase 15: Transport DB Schema** - Prisma migrations for stadium transport fields and GETTING_THERE post type
 - [ ] **Phase 16: Transportation Guide Redesign** - Full frontend redesign of the `/transportation-guide` page
 - [ ] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data
@@ -51,7 +51,7 @@ See: [.planning/milestones/v2.0-ROADMAP.md](.planning/milestones/v2.0-ROADMAP.md
   2. Calling `POST /api/admin/sync` with the correct API key header succeeds as before
   3. Match detail page displays team crests prominently with clear score/date area and improved visual hierarchy
   4. Ticket links and Navigate to Stadium section has a clean call-to-action treatment that draws the eye
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 14-01-PLAN.md — Admin sync endpoint API key protection (SEC-01)
 - [ ] 14-02-PLAN.md — Match detail page hero restructure and CTA card polish (MATCH-01, MATCH-02)
@@ -108,7 +108,7 @@ Plans:
 | 11. Date Filters | v2.0 | 2/2 | Complete | 2026-03-22 |
 | 12. UI Improvements | v2.0 | 1/1 | Complete | 2026-03-22 |
 | 13. Mobile Feel | v2.0 | 2/2 | Complete | 2026-03-22 |
-| 14. Security & Match Polish | v2.1 | 0/2 | Planned | - |
+| 14. Security & Match Polish | 2/2 | Complete   | 2026-03-24 | - |
 | 15. Transport DB Schema | v2.1 | 0/? | Not started | - |
 | 16. Transportation Guide Redesign | v2.1 | 0/? | Not started | - |
 | 17. Stadium Transport Component | v2.1 | 0/? | Not started | - |
