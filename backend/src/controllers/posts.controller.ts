@@ -11,7 +11,7 @@ export const createPost = async (req: Request, res: Response) => {
   try {
     // The allowed post types — we validate against this list rather than importing the Prisma enum
     // at runtime, which keeps the validation simple and readable
-    const VALID_POST_TYPES = ['GENERAL_TIP', 'SEAT_TIP', 'PUB_RECOMMENDATION', 'IM_GOING'];
+    const VALID_POST_TYPES = ['GENERAL_TIP', 'SEAT_TIP', 'PUB_RECOMMENDATION', 'IM_GOING', 'GETTING_THERE'];
 
     const {
       postType,
@@ -26,13 +26,16 @@ export const createPost = async (req: Request, res: Response) => {
       pubAddress,
       pubDistance,
       matchId,
+      transportType,
+      travelCost,
+      travelTime,
       photoUrl,
     } = req.body;
 
     // Validate required fields
     if (!postType || !VALID_POST_TYPES.includes(postType)) {
       return res.status(400).json({
-        error: 'postType is required and must be one of: GENERAL_TIP, SEAT_TIP, PUB_RECOMMENDATION, IM_GOING',
+        error: 'postType is required and must be one of: GENERAL_TIP, SEAT_TIP, PUB_RECOMMENDATION, IM_GOING, GETTING_THERE',
       });
     }
 
@@ -71,6 +74,10 @@ export const createPost = async (req: Request, res: Response) => {
         ...(pubAddress !== undefined && { pubAddress }),
         ...(pubDistance !== undefined && { pubDistance }),
         ...(matchId !== undefined && { matchId: Number(matchId) }),
+        // GETTING_THERE transport fields — only set when the post type is GETTING_THERE
+        ...(transportType !== undefined && { transportType }),
+        ...(travelCost !== undefined && { travelCost }),
+        ...(travelTime !== undefined && { travelTime }),
         // photoUrl is an optional Azure Blob URL set when the user attaches a photo
         photoUrl: photoUrl || null,
       },
@@ -182,6 +189,10 @@ export const editPost = async (req: Request, res: Response) => {
         ...(body.pubName !== undefined && { pubName: body.pubName }),
         ...(body.pubAddress !== undefined && { pubAddress: body.pubAddress }),
         ...(body.pubDistance !== undefined && { pubDistance: body.pubDistance }),
+        // GETTING_THERE transport fields — only updated when present in the request body
+        ...(body.transportType !== undefined && { transportType: body.transportType }),
+        ...(body.travelCost !== undefined && { travelCost: body.travelCost }),
+        ...(body.travelTime !== undefined && { travelTime: body.travelTime }),
       },
     });
 

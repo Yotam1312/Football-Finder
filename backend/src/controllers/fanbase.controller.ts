@@ -4,7 +4,7 @@ import prisma from '../config/database';
 
 // Valid PostType values — must match the Prisma enum exactly.
 // We list them explicitly so we can validate user input without importing Prisma internals at runtime.
-const VALID_POST_TYPES = ['GENERAL_TIP', 'SEAT_TIP', 'PUB_RECOMMENDATION', 'IM_GOING'];
+const VALID_POST_TYPES = ['GENERAL_TIP', 'SEAT_TIP', 'PUB_RECOMMENDATION', 'IM_GOING', 'GETTING_THERE'];
 
 // How many posts to return per page
 const PAGE_SIZE = 10;

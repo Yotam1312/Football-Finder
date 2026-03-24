@@ -37,7 +37,7 @@ See: [.planning/milestones/v2.0-ROADMAP.md](.planning/milestones/v2.0-ROADMAP.md
 - [x] **Phase 14: Security & Match Polish** - Lock down admin endpoint + visual polish on match detail page (completed 2026-03-24)
 - [x] **Phase 15: Transport DB Schema** - Prisma migrations for stadium transport fields and GETTING_THERE post type (completed 2026-03-24)
 - [x] **Phase 16: Transportation Guide Redesign** - Full frontend redesign of the `/transportation-guide` page (completed 2026-03-24)
-- [x] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data (completed 2026-03-24)
+- [x] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data (completed 2026-03-24)
 - [ ] **Phase 18: Getting There FanBase Tab** - Community transport tips tab and post creation in FanBase
 
 ## Phase Details
@@ -100,7 +100,10 @@ Plans:
   1. FanBase team pages have a "Getting There" tab that lists community transport posts for that team's stadium, ordered by upvotes
   2. An authenticated user can open the post creation flow and select "Getting There" as the post type
   3. The Getting There post form has fields for title, transport type dropdown (Metro / Bus / Train / Taxi / Walking / Other), optional cost, optional travel time, and description — and the submitted post appears in the Getting There tab
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 18-01-PLAN.md — Backend + types + GettingThereCard building blocks (TRANS-06, TRANS-07)
+- [ ] 18-02-PLAN.md — Tab integration, modal fields, pre-selection, PostCard wiring (TRANS-06, TRANS-07)
 
 ---
 
@@ -118,4 +121,4 @@ Plans:
 | 15. Transport DB Schema | 1/1 | Complete    | 2026-03-24 | - |
 | 16. Transportation Guide Redesign | 1/1 | Complete    | 2026-03-24 | - |
 | 17. Stadium Transport Component | 1/1 | Complete   | 2026-03-24 | - |
-| 18. Getting There FanBase Tab | v2.1 | 0/? | Not started | - |
+| 18. Getting There FanBase Tab | v2.1 | 0/2 | Not started | - |

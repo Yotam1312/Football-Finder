@@ -82,7 +82,7 @@ export interface TeamSearchResult {
 }
 
 // PostType matches the Prisma enum in schema.prisma
-export type PostType = 'GENERAL_TIP' | 'SEAT_TIP' | 'PUB_RECOMMENDATION' | 'IM_GOING';
+export type PostType = 'GENERAL_TIP' | 'SEAT_TIP' | 'PUB_RECOMMENDATION' | 'IM_GOING' | 'GETTING_THERE';
 
 // A FanBase post — matches the Post table in schema.prisma.
 // Optional fields are null for post types that don't use them
@@ -103,6 +103,9 @@ export interface Post {
   pubAddress: string | null;     // PUB_RECOMMENDATION only
   pubDistance: string | null;    // PUB_RECOMMENDATION only (e.g. "5 min walk")
   matchId: number | null;        // IM_GOING only — links to a specific Match
+  transportType: string | null;  // GETTING_THERE only — Metro/Bus/Train/Taxi/Walking/Other
+  travelCost: string | null;     // GETTING_THERE only — free text e.g. "€2.50" or "Free"
+  travelTime: string | null;     // GETTING_THERE only — stored as string e.g. "15" (minutes)
   upvoteCount: number;           // read-only in Phase 3
   createdAt: string;             // ISO string from API — use formatRelativeTime() to display
   userId: number | null;         // null for email-only (Level 2) posts; set for Level 3 accounts
