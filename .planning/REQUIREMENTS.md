@@ -21,8 +21,8 @@
 ### Transportation — Stadium Component
 
 - [x] **TRANS-02**: Stadium table gains transport fields: `nearbyMetros` (array), `nearbyTrains` (array), `nearbyBuses` (array), `walkingTimeFromCenter` (text), `publicTransportInfo` (text), `parkingInfo` (text)
-- [ ] **TRANS-03**: Match detail page shows "Getting to [Stadium Name]" section — displays nearby metro/train/bus lines, travel tip, walking time from center, parking info, and Navigate button that opens Google Maps
-- [ ] **TRANS-04**: Stadium transport section shows graceful empty state (Navigate button + "Check local transport apps" message) when no transport data exists for that stadium
+- [x] **TRANS-03**: Match detail page shows "Getting to [Stadium Name]" section — displays nearby metro/train/bus lines, travel tip, walking time from center, parking info, and Navigate button that opens Google Maps
+- [x] **TRANS-04**: Stadium transport section shows graceful empty state (Navigate button + "Check local transport apps" message) when no transport data exists for that stadium
 
 ### Transportation — Community Tips
 
@@ -65,8 +65,8 @@
 | MATCH-02 | Phase 14 | Complete |
 | TRANS-01 | Phase 16 | Complete |
 | TRANS-02 | Phase 15 | Complete |
-| TRANS-03 | Phase 17 | Pending |
-| TRANS-04 | Phase 17 | Pending |
+| TRANS-03 | Phase 17 | Complete |
+| TRANS-04 | Phase 17 | Complete |
 | TRANS-05 | Phase 15 | Complete |
 | TRANS-06 | Phase 18 | Pending |
 | TRANS-07 | Phase 18 | Pending |
