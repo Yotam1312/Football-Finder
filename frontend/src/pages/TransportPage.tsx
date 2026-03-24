@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   MapPin,
@@ -9,6 +9,11 @@ import {
   Car,
   Navigation,
   ExternalLink,
+  Footprints,
+  Shield,
+  ChevronDown,
+  Wallet,
+  Train,
 } from 'lucide-react';
 
 // ─── Quick Info Cards ────────────────────────────────────────────────────────
@@ -16,27 +21,27 @@ import {
 const INFO_CARDS = [
   {
     icon: MapPin,
-    title: 'Stadium Locations',
+    title: 'Plan Ahead',
     description:
-      'Most stadiums are located either in city centers or dedicated sports complexes. Check the exact address and nearby landmarks before traveling.',
+      'Research your route before match day. Check stadium addresses, nearby landmarks, and transport connections. A little preparation goes a long way.',
   },
   {
     icon: Clock,
-    title: 'Arrival Timing',
+    title: 'Arrive Early',
     description:
-      'Arrive 1-2 hours before kickoff for international matches, 30-60 minutes for local games. Factor in security checks and crowd gathering.',
+      'Arrive 1-2 hours before kickoff for international matches, 30-60 minutes for local games. Factor in security checks and crowds.',
   },
   {
     icon: CreditCard,
-    title: 'Payment Methods',
+    title: 'Payment Ready',
     description:
-      'Carry both cash and cards. Some transit systems only accept exact change or transit cards, while others accept contactless payments.',
+      'Carry both cash and cards. Some transit systems only accept exact change or transit cards, while others accept contactless.',
   },
   {
     icon: Smartphone,
-    title: 'Mobile Apps',
+    title: 'Download Apps',
     description:
-      "Download local transit apps, map applications with offline access, and the stadium's official app for parking and entry information.",
+      "Get local transit apps, offline maps, and the stadium official app before you travel. Don't rely on match-day Wi-Fi.",
   },
 ];
 
@@ -94,7 +99,7 @@ const TRANSPORT_SECTIONS: TransportSectionData[] = [
         tip: 'Book in advance for popular matches',
       },
       {
-        title: 'Uber/Lyft',
+        title: 'Uber/Bolt',
         price: '$10-40 + surge pricing',
         description: 'Convenient app-based rides with multiple vehicle options',
         tip: 'Expect surge pricing during major games',
@@ -108,8 +113,33 @@ const TRANSPORT_SECTIONS: TransportSectionData[] = [
     ],
   },
   {
+    title: 'Walking & Cycling',
+    icon: Footprints,
+    iconBg: 'bg-orange-500',
+    options: [
+      {
+        title: 'On Foot',
+        price: 'Free',
+        description: 'Many city-center stadiums are walkable from train stations and hotels',
+        tip: 'Use Google Maps walking directions — allow extra time on match days for crowds',
+      },
+      {
+        title: 'Bike Rental',
+        price: '$5-15 per day',
+        description: 'City bike-share schemes are available in most European football cities',
+        tip: 'Lock up well away from the stadium — bike parking near grounds fills fast',
+      },
+      {
+        title: 'Cycling Apps',
+        price: 'Free to download',
+        description: 'Apps like Lime, Tier, and local bike-share apps offer dockless rentals',
+        tip: 'Check the app coverage map — not all areas around stadiums are in the service zone',
+      },
+    ],
+  },
+  {
     title: 'Long Distance',
-    icon: Bus,
+    icon: Train,
     iconBg: 'bg-purple-500',
     options: [
       {
@@ -134,11 +164,12 @@ const TRANSPORT_SECTIONS: TransportSectionData[] = [
   },
 ];
 
-// ─── Helpful Resources ────────────────────────────────────────────────────────
+// ─── Helpful Apps ─────────────────────────────────────────────────────────────
 
 interface ResourceItem {
   name: string;
   action: string;
+  href: string;
 }
 
 interface ResourceColumn {
@@ -150,26 +181,67 @@ const RESOURCE_COLUMNS: ResourceColumn[] = [
   {
     category: 'Navigation Apps',
     items: [
-      { name: 'Google Maps', action: 'Open' },
-      { name: 'Apple Maps', action: 'Open' },
-      { name: 'Citymapper', action: 'Open' },
+      { name: 'Google Maps', action: 'Open', href: 'https://maps.google.com' },
+      { name: 'Apple Maps', action: 'Open', href: 'https://maps.apple.com' },
+      { name: 'Citymapper', action: 'Open', href: 'https://citymapper.com' },
     ],
   },
   {
     category: 'Ride Services',
     items: [
-      { name: 'Uber', action: 'Download' },
-      { name: 'Lyft', action: 'Download' },
-      { name: 'Local Taxi Apps', action: 'Search' },
+      { name: 'Uber', action: 'Download', href: 'https://www.uber.com' },
+      { name: 'Bolt', action: 'Download', href: 'https://bolt.eu' },
+      { name: 'Local Taxi Apps', action: 'Search', href: 'https://www.google.com/search?q=local+taxi+app' },
     ],
   },
   {
     category: 'Travel Planning',
     items: [
-      { name: 'Rome2Rio', action: 'Open' },
-      { name: 'Trainline', action: 'Open' },
-      { name: 'Skyscanner', action: 'Open' },
+      { name: 'Rome2Rio', action: 'Open', href: 'https://www.rome2rio.com' },
+      { name: 'Trainline', action: 'Open', href: 'https://www.thetrainline.com' },
+      { name: 'Skyscanner', action: 'Open', href: 'https://www.skyscanner.com' },
     ],
+  },
+];
+
+// ─── Payment Tips ─────────────────────────────────────────────────────────────
+
+const PAYMENT_TIPS = [
+  { icon: '💵', title: 'Cash', detail: 'Always carry local currency in small denominations. Street vendors, parking attendants, and some older transit systems only accept cash.' },
+  { icon: '💳', title: 'Cards & Contactless', detail: 'Visa and Mastercard are widely accepted. Contactless (tap-to-pay) works on most modern transit networks in Western Europe.' },
+  { icon: '🎫', title: 'Transit Cards', detail: 'Cities like London (Oyster), Paris (Navigo), and Amsterdam (OV-chipkaart) have reloadable transit cards. Buy one on arrival for cheaper fares.' },
+  { icon: '💱', title: 'Currency Tips', detail: 'Avoid airport currency exchanges — rates are poor. Use ATMs or your bank card abroad. Notify your bank before travelling to prevent blocks.' },
+];
+
+// ─── Safety Tips ──────────────────────────────────────────────────────────────
+
+const SAFETY_TIPS = [
+  'Keep your phone charged — download an offline map in case you lose signal near the stadium.',
+  'Stay with your group at night, especially in unfamiliar cities after late kickoffs.',
+  'Use official taxi ranks outside the stadium — avoid unmarked cars.',
+  'Share your travel plan with someone at home so they know your route.',
+  'Watch your belongings on crowded public transport — pickpockets target match-day crowds.',
+  'Ask stadium stewards for directions if you get lost — they know the area best.',
+];
+
+// ─── FAQ Items ────────────────────────────────────────────────────────────────
+
+const FAQ_ITEMS = [
+  {
+    question: 'Is public transport safe on match days?',
+    answer: 'Yes, public transport is generally very safe on match days. Cities with major football clubs run extra services and increase staff and security presence. Stick to well-lit, busy routes and you will be fine.',
+  },
+  {
+    question: 'How early should I arrive at the stadium?',
+    answer: 'For international or high-profile matches, aim to arrive 1.5-2 hours early. For regular league games, 45-60 minutes is usually enough. This gives you time for security checks, finding your seat, and soaking up the atmosphere.',
+  },
+  {
+    question: 'Do I need cash or can I use cards?',
+    answer: 'It depends on the city. Western European stadiums and transit systems mostly accept contactless cards. In Eastern Europe and South America, cash is still common for local transport. Carry both to be safe.',
+  },
+  {
+    question: 'What if I miss the last train or bus after the match?',
+    answer: 'Most cities extend public transport for major matches, but always check schedules beforehand. Have a backup plan: save a local taxi number, keep a ride-hailing app installed, or book a hotel within walking distance of the stadium.',
   },
 ];
 
@@ -219,20 +291,50 @@ const TransportSectionPanel: React.FC<{ section: TransportSectionData }> = ({ se
   );
 };
 
-// A single resource row: name left, button right
+// A single resource row: name left, real external link button right
 const ResourceRow: React.FC<{ item: ResourceItem }> = ({ item }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
     <span className="text-sm text-gray-700">{item.name}</span>
-    <button className="flex items-center gap-1.5 border border-gray-200 rounded px-3 py-1 text-sm text-gray-600 hover:border-green-400 hover:text-green-600 transition-colors">
+    <a
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-1.5 border border-gray-200 rounded px-3 py-1 text-sm text-gray-600 hover:border-green-400 hover:text-green-600 transition-colors"
+    >
       <ExternalLink className="w-3.5 h-3.5" />
       {item.action}
+    </a>
+  </div>
+);
+
+// FAQ accordion item — expands/collapses on click, shows ChevronDown rotated when open
+const FaqItem: React.FC<{ item: typeof FAQ_ITEMS[number]; isOpen: boolean; onToggle: () => void }> = ({
+  item,
+  isOpen,
+  onToggle,
+}) => (
+  <div className="border-b border-gray-100 last:border-0">
+    <button
+      onClick={onToggle}
+      className="w-full flex items-center justify-between py-4 text-left"
+    >
+      <span className="font-medium text-gray-800 pr-4">{item.question}</span>
+      <ChevronDown
+        className={`w-5 h-5 text-gray-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+      />
     </button>
+    {isOpen && (
+      <p className="text-sm text-gray-600 pb-4 leading-relaxed">{item.answer}</p>
+    )}
   </div>
 );
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export const TransportPage: React.FC = () => {
+  // Track which FAQ item is open — null means all closed, a number means that index is open
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -243,12 +345,12 @@ export const TransportPage: React.FC = () => {
     >
       <div className="max-w-5xl mx-auto px-4 py-10">
 
-        {/* Page header — centered */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-gray-800 mb-3">Transportation &amp; Navigation</h1>
-          <p className="text-gray-500 text-base leading-relaxed">
+        {/* Hero section — green gradient with white text */}
+        <div className="bg-gradient-to-br from-green-800 to-green-600 rounded-2xl p-8 md:p-12 mb-8 text-white text-center">
+          <div className="text-5xl mb-4">🚦</div>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3">Transportation & Navigation</h1>
+          <p className="text-green-100 text-base leading-relaxed max-w-2xl mx-auto">
             Everything you need to know about getting to football stadiums around the world.
-            <br />
             Make your match day journey as smooth as the beautiful game itself.
           </p>
         </div>
@@ -270,17 +372,56 @@ export const TransportPage: React.FC = () => {
           })}
         </div>
 
-        {/* Transport sections: Public Transit, Ride Services, Long Distance */}
+        {/* Transport sections: Public Transit, Ride Services, Walking & Cycling, Long Distance */}
         {TRANSPORT_SECTIONS.map((section) => (
           <TransportSectionPanel key={section.title} section={section} />
         ))}
 
-        {/* Helpful Resources panel */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          {/* Header: standalone green Navigation icon + title (no background box) */}
+        {/* Payment Methods */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+              <Wallet className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800">Payment Methods</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {PAYMENT_TIPS.map((tip) => (
+              <div key={tip.title} className="flex gap-3 p-3 rounded-lg bg-gray-50">
+                <span className="text-2xl shrink-0">{tip.icon}</span>
+                <div>
+                  <h3 className="font-semibold text-gray-800 text-sm mb-1">{tip.title}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">{tip.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Safety Tips */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800">Safety Tips</h2>
+          </div>
+          <div className="space-y-3">
+            {SAFETY_TIPS.map((tip, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <Shield className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                <p className="text-sm text-gray-600">{tip}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Helpful Apps panel */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
+          {/* Header: standalone green Navigation icon + title */}
           <div className="flex items-center gap-2 mb-6">
             <Navigation className="w-5 h-5 text-green-500" />
-            <h2 className="text-lg font-semibold text-gray-800">Helpful Resources</h2>
+            <h2 className="text-lg font-semibold text-gray-800">Helpful Apps</h2>
           </div>
 
           {/* 3-column resource grid — stacks to 1 col on small screens */}
@@ -294,6 +435,24 @@ export const TransportPage: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* FAQs — accordion, one open at a time */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mt-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">?</span>
+            </div>
+            <h2 className="text-lg font-semibold text-gray-800">Frequently Asked Questions</h2>
+          </div>
+          {FAQ_ITEMS.map((item, i) => (
+            <FaqItem
+              key={i}
+              item={item}
+              isOpen={openFaq === i}
+              onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+            />
+          ))}
         </div>
 
       </div>
