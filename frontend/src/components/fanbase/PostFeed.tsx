@@ -7,20 +7,22 @@ import { SkeletonCard } from '../SkeletonCard';
 
 // Tab configuration — single source of truth so no magic strings are scattered around.
 const TABS = [
-  { slug: 'all',         label: 'All' },
-  { slug: 'seat-tips',   label: 'Seat Tips' },
-  { slug: 'pubs-food',   label: 'Pubs & Food' },
-  { slug: 'local-crowd', label: 'Local Crowd' },
-  { slug: 'im-going',    label: "I'm Going" },
+  { slug: 'all',           label: 'All' },
+  { slug: 'seat-tips',     label: 'Seat Tips' },
+  { slug: 'pubs-food',     label: 'Pubs & Food' },
+  { slug: 'local-crowd',   label: 'Local Crowd' },
+  { slug: 'getting-there', label: 'Getting There' },
+  { slug: 'im-going',      label: "I'm Going" },
 ];
 
 // Encouraging per-tab empty state messages — each is specific to what that tab shows.
 const EMPTY_MESSAGES: Record<string, string> = {
-  'all':         'No community posts yet for this team. Check back soon!',
-  'seat-tips':   'No seat tips yet. Be the first to share where to sit!',
-  'pubs-food':   'No pub recommendations yet. Know a good spot near the ground?',
-  'local-crowd': 'No local tips yet. Be the first to share match-day advice!',
-  'im-going':    "Nobody's announced they're going yet. Are you?",
+  'all':           'No community posts yet for this team. Check back soon!',
+  'seat-tips':     'No seat tips yet. Be the first to share where to sit!',
+  'pubs-food':     'No pub recommendations yet. Know a good spot near the ground?',
+  'local-crowd':   'No local tips yet. Be the first to share match-day advice!',
+  'getting-there': 'No transport tips yet. Know a good way to get here?',
+  'im-going':      "Nobody's announced they're going yet. Are you?",
 };
 
 // Number of posts per page — must match the backend PAGE_SIZE constant

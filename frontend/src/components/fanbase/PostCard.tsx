@@ -4,6 +4,7 @@ import { SeatTipCard } from './SeatTipCard';
 import { PubRecCard } from './PubRecCard';
 import { GeneralTipCard } from './GeneralTipCard';
 import { ImGoingCard } from './ImGoingCard';
+import { GettingThereCard } from './GettingThereCard';
 
 interface PostCardProps {
   post: Post;
@@ -30,6 +31,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, teamId, postType, page
       return <PubRecCard post={post} {...actionProps} />;
     case 'IM_GOING':
       return <ImGoingCard post={post} {...actionProps} />;
+    case 'GETTING_THERE':
+      return <GettingThereCard post={post} {...actionProps} />;
     case 'GENERAL_TIP':
     default:
       return <GeneralTipCard post={post} {...actionProps} />;
