@@ -27,8 +27,8 @@
 ### Transportation — Community Tips
 
 - [x] **TRANS-05**: `FanbasePost` table gains `GETTING_THERE` post type with optional fields: `transportType` (enum), `travelCost` (text), `travelTime` (text)
-- [ ] **TRANS-06**: FanBase team page has a "Getting There" tab listing community transport tip posts for that team's stadium, ordered by upvotes
-- [ ] **TRANS-07**: Authenticated user can create a "Getting There" post with title, transport type (dropdown: Metro / Bus / Train / Taxi / Walking / Other), optional cost, optional travel time, and description
+- [x] **TRANS-06**: FanBase team page has a "Getting There" tab listing community transport tip posts for that team's stadium, ordered by upvotes
+- [x] **TRANS-07**: Authenticated user can create a "Getting There" post with title, transport type (dropdown: Metro / Bus / Train / Taxi / Walking / Other), optional cost, optional travel time, and description
 
 ## Future Requirements
 
@@ -68,8 +68,8 @@
 | TRANS-03 | Phase 17 | Complete |
 | TRANS-04 | Phase 17 | Complete |
 | TRANS-05 | Phase 15 | Complete |
-| TRANS-06 | Phase 18 | Pending |
-| TRANS-07 | Phase 18 | Pending |
+| TRANS-06 | Phase 18 | Complete |
+| TRANS-07 | Phase 18 | Complete |
 
 **Coverage:**
 - v2.1 requirements: 10 total

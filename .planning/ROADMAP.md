@@ -100,7 +100,7 @@ Plans:
   1. FanBase team pages have a "Getting There" tab that lists community transport posts for that team's stadium, ordered by upvotes
   2. An authenticated user can open the post creation flow and select "Getting There" as the post type
   3. The Getting There post form has fields for title, transport type dropdown (Metro / Bus / Train / Taxi / Walking / Other), optional cost, optional travel time, and description — and the submitted post appears in the Getting There tab
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 18-01-PLAN.md — Backend + types + GettingThereCard building blocks (TRANS-06, TRANS-07)
 - [ ] 18-02-PLAN.md — Tab integration, modal fields, pre-selection, PostCard wiring (TRANS-06, TRANS-07)
@@ -121,4 +121,4 @@ Plans:
 | 15. Transport DB Schema | 1/1 | Complete    | 2026-03-24 | - |
 | 16. Transportation Guide Redesign | 1/1 | Complete    | 2026-03-24 | - |
 | 17. Stadium Transport Component | 1/1 | Complete   | 2026-03-24 | - |
-| 18. Getting There FanBase Tab | v2.1 | 0/2 | Not started | - |
+| 18. Getting There FanBase Tab | 1/2 | In Progress|  | - |

@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Transport & Polish
 status: in_progress
-stopped_at: Completed 17-01-PLAN.md (stadium transport component)
-last_updated: "2026-03-24T17:30:00.000Z"
-last_activity: 2026-03-24 — plan 17-01 complete, TRANS-03/04 done (stadium transport section in MatchDetailPage)
+stopped_at: Completed 18-01-PLAN.md (GETTING_THERE post type and GettingThereCard)
+last_updated: "2026-03-24T18:00:00.000Z"
+last_activity: 2026-03-24 — plan 18-01 complete, TRANS-06/07 done (GETTING_THERE post type, transport fields, GettingThereCard)
 progress:
   total_phases: 5
   completed_phases: 4
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 
 ## Current Position
 
-Phase: 17 of 18 (Stadium Transport Component)
-Plan: 1 of 1 complete
-Status: Phase 17 complete — ready for Phase 18
-Last activity: 2026-03-24 — plan 17-01 complete, TRANS-03/04 done (stadium transport section in MatchDetailPage)
+Phase: 18 of 18 (Getting There Fanbase Tab)
+Plan: 1 of 2 complete
+Status: Phase 18 in progress — plan 18-01 done, plan 18-02 pending
+Last activity: 2026-03-24 — plan 18-01 complete, TRANS-06/07 done (GETTING_THERE post type, transport fields, GettingThereCard)
 
-Progress: [##########] 100% (v2.1 phases 14-17 done)
+Progress: [##########] 100% (v2.1 phases 14-18 in progress)
 
 ## Performance Metrics
 
@@ -46,6 +46,7 @@ Progress: [##########] 100% (v2.1 phases 14-17 done)
 | 15 (Transport DB Schema) | 1 | 5 min | 5 min |
 | 16 (Transportation Guide Redesign) | 1 | 8 min | 8 min |
 | 17 (Stadium Transport Component) | 1 | ~15 min | 15 min |
+| 18 (Getting There Fanbase Tab) | 1/2 | 2 min | 2 min |
 
 *Updated after each plan completion*
 
@@ -74,6 +75,8 @@ Recent v2.1 decisions:
 - [Phase 17-01]: CircleParking used for parking icon (not ParkingCircle — that name does not exist in lucide-react@0.577.0)
 - [Phase 17-01]: hasTransportLines gated on line arrays only — walkingTime/parkingInfo alone does not count as filled state
 - [Phase 17-01]: Post-checkpoint design: pills per mode group, side-by-side info tiles, no row icons
+- [Phase 18-01]: GETTING_THERE transport fields use conditional spread pattern matching existing seat/pub fields
+- [Phase 18-01]: GettingThereCard does not render post.title explicitly — follows SeatTipCard/PubRecCard pattern
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ Recent v2.1 decisions:
 
 ## Session Continuity
 
-Last session: 2026-03-24T17:30:00.000Z
-Stopped at: Completed 17-01-PLAN.md (stadium transport component)
-Resume: Phase 18 (transport data entry / admin tooling) when ready
+Last session: 2026-03-24T18:00:00.000Z
+Stopped at: Completed 18-01-PLAN.md (GETTING_THERE post type and GettingThereCard)
+Resume: Phase 18 plan 18-02 (wire GETTING_THERE tab, modal, and PostCard dispatcher)
