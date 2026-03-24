@@ -1,88 +1,81 @@
-# v2.0 Requirements — Football Finder
+# Requirements: Football Finder — v2.1
 
-## v2.0 Requirements
+**Defined:** 2026-03-24
+**Core Value:** A traveler or local types a city and date range and instantly sees every football match happening there — no Googling, no scattered sites.
 
-### OAuth & Authentication
+## v2.1 Requirements
 
-- [x] **OAUTH-01**: User can sign in to Football Finder with their Google account
-- [x] **OAUTH-02**: First-time Google sign-in automatically creates an account using the user's Google name and email
-- [x] **OAUTH-03**: User's Google profile picture appears as their avatar across the site
-- [x] **OAUTH-04**: All v1 Level 3 features (create posts, upvote, edit/delete posts, favorite teams) work with a Google OAuth session
+### Security
 
-### Photo Upload
+- [x] **SEC-01**: `POST /api/admin/sync` returns 401 unless the request includes a valid API key header — prevents unauthorized data sync triggers
 
-- [x] **PHOTO-01**: User can upload a photo when creating a Seat Tip post (max 5MB, jpg/png/webp)
-- [x] **PHOTO-02**: Photo preview is shown in the creation form before submission
-- [x] **PHOTO-03**: Uploaded photo appears on the published Seat Tip post card and detail view
+### Match Detail UI
 
-### Date Filters
+- [ ] **MATCH-01**: Match detail page has polished visual layout — team crests prominent, score/date area clearly structured, improved spacing and visual hierarchy throughout
+- [ ] **MATCH-02**: Ticket links and Navigate to Stadium section has clean visual treatment with clear call-to-action hierarchy
 
-- [x] **SEARCH-01**: User can use quick-select buttons (Today, Tomorrow, This Weekend) on the homepage instead of typing dates manually
-- [x] **SEARCH-02**: User can filter match results by time of day (Morning / Afternoon / Evening / Night)
+### Transportation — Generic Guide
 
-### Global League Coverage
+- [ ] **TRANS-01**: `/transportation-guide` page is redesigned with rich content sections: hero, quick tips (4 cards: Plan Ahead / Arrive Early / Payment Ready / Download Apps), public transport types (metro/bus/tram/shuttles), ride services (taxi/Uber/car rental), walking & cycling, long-distance travel (train/bus/flights), payment methods, helpful apps with links, safety tips, budget tiers (3), and FAQs
 
-- [ ] **LEAGUE-01**: User can discover South American matches (Brazilian Série A, Argentine Primera División) by searching a South American city
-- [ ] **LEAGUE-02**: User can discover MLS matches by searching a US or Canadian city
-- [ ] **LEAGUE-03**: User can discover Asian matches (J-League minimum) by searching an Asian city
-- [ ] **LEAGUE-04**: FanBase navigation includes teams from all newly added leagues
+### Transportation — Stadium Component
 
-### Mobile Feel
+- [ ] **TRANS-02**: Stadium table gains transport fields: `nearbyMetros` (array), `nearbyTrains` (array), `nearbyBuses` (array), `walkingTimeFromCenter` (text), `publicTransportInfo` (text), `parkingInfo` (text)
+- [ ] **TRANS-03**: Match detail page shows "Getting to [Stadium Name]" section — displays nearby metro/train/bus lines, travel tip, walking time from center, parking info, and Navigate button that opens Google Maps
+- [ ] **TRANS-04**: Stadium transport section shows graceful empty state (Navigate button + "Check local transport apps" message) when no transport data exists for that stadium
 
-- [x] **MOBILE-01**: Mobile users see a fixed bottom navigation bar for main sections (Search, FanBase, Profile)
-- [x] **MOBILE-02**: Navigating between pages shows smooth animated transitions
+### Transportation — Community Tips
 
----
+- [ ] **TRANS-05**: `FanbasePost` table gains `GETTING_THERE` post type with optional fields: `transportType` (enum), `travelCost` (text), `travelTime` (text)
+- [ ] **TRANS-06**: FanBase team page has a "Getting There" tab listing community transport tip posts for that team's stadium, ordered by upvotes
+- [ ] **TRANS-07**: Authenticated user can create a "Getting There" post with title, transport type (dropdown: Metro / Bus / Train / Taxi / Walking / Other), optional cost, optional travel time, and description
 
-## Deferred to Future Milestone
+## Future Requirements
 
-- **Live scores** — real-time match score polling. Requires paid API-Football plan ($10/mo minimum); free plan is 100 req/day which a single 90-min match exhausts at 60s polling. Deferred until API plan upgrade.
-- **Facebook OAuth** — `passport-facebook` library is unmaintained (last published 7 years ago). Deferred until a maintained alternative is available.
-- **Google One Tap** — meaningful UX differentiator for returning users. Can be added on top of standard Google OAuth in v2.1.
-- **Push notifications / email match reminders** — deferred from v1
-- **Advanced league/team filters** — user selected date filters only for v2; league and team filters deferred
-- **AI chatbot** — deferred indefinitely per v1 scope decision
-- **Social graph (follow users, DMs)** — deferred indefinitely per v1 scope decision
+### Global Expansion (v3.0)
+
+- **LEAGUE-01**: South American league matches are discoverable by city search
+- **LEAGUE-02**: MLS matches are discoverable by city search (multi-timezone handling)
+- **LEAGUE-03**: Asian league matches are discoverable by city search
+- **LEAGUE-04**: FanBase navigation includes teams from newly added leagues
+
+### Live Data (v3.0)
+
+- **LIVE-01**: Live scores polled during active matches on search result cards
+- **LIVE-02**: Live scores displayed on match detail page during active match
 
 ## Out of Scope
 
-- **In-app ticket purchasing** — commercial deals and payment processing required
-- **PWA (service workers + offline)** — v2 targets mobile feel only; full PWA adds complexity not justified for v2
-- **Facebook OAuth** — library risk; Google-only for v2
-- **Chinese Super League / Saudi Pro League at launch** — data quality uncertain; add after verifying with API key
-- **Redux / Zustand / Jotai** — no complex client state justifies a state manager
-- **Custom CSS** — Tailwind covers all design needs
-
----
+| Feature | Reason |
+|---------|--------|
+| Dynamic transport data per user's searched city | Too complex for v2.1 — stadium-level data from DB covers the core need |
+| Per-stadium transport data pre-populated | User will add via CSV/SQL separately — out of code scope |
+| Push notifications for match reminders | Not yet prioritized |
+| In-app ticket purchasing | Requires commercial deals and payment processing |
+| PWA / offline mode | v2.0 mobile feel achieved without PWA complexity |
+| Facebook OAuth | `passport-facebook` library unmaintained |
+| Social graph (follow users, DMs) | Deferred indefinitely |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| OAUTH-01 | Phase 9 — OAuth Foundation | Complete |
-| OAUTH-02 | Phase 9 — OAuth Foundation | Complete |
-| OAUTH-03 | Phase 9 — OAuth Foundation | Complete |
-| OAUTH-04 | Phase 9 — OAuth Foundation | Complete |
-| PHOTO-01 | Phase 10 — Photo Upload | Complete |
-| PHOTO-02 | Phase 10 — Photo Upload | Complete |
-| PHOTO-03 | Phase 10 — Photo Upload | Complete |
-| LEAGUE-01 | Phase 11 — Global League Expansion | Pending |
-| LEAGUE-02 | Phase 11 — Global League Expansion | Pending |
-| LEAGUE-03 | Phase 11 — Global League Expansion | Pending |
-| LEAGUE-04 | Phase 11 — Global League Expansion | Pending |
-| SEARCH-01 | Phase 12 — Date Filters | Complete |
-| SEARCH-02 | Phase 12 — Date Filters | Complete |
-| MOBILE-01 | Phase 13 — Mobile Feel | Complete |
-| MOBILE-02 | Phase 13 — Mobile Feel | Complete |
+| SEC-01 | Phase 14 | Complete |
+| MATCH-01 | Phase 14 | Pending |
+| MATCH-02 | Phase 14 | Pending |
+| TRANS-01 | Phase 16 | Pending |
+| TRANS-02 | Phase 15 | Pending |
+| TRANS-03 | Phase 17 | Pending |
+| TRANS-04 | Phase 17 | Pending |
+| TRANS-05 | Phase 15 | Pending |
+| TRANS-06 | Phase 18 | Pending |
+| TRANS-07 | Phase 18 | Pending |
 
-**Total: 14/14 requirements mapped. Coverage: 100%.**
+**Coverage:**
+- v2.1 requirements: 10 total
+- Mapped to phases: 10
+- Unmapped: 0 ✓
 
 ---
-
-## Notes from Research
-
-- **OAuth must be Phase 9** — all auth-gated features depend on it; user table reset (with cascade deletes) happens here
-- **Azure Blob CORS** must be configured as a prerequisite for photo upload phase
-- **MLS timezone edge case** — MLS spans multiple timezones; city-to-timezone lookup table needed in sync.service.ts
-- **API-Football league IDs** for non-European leagues need verification against the live API before sync config is updated
-- **`POST /api/admin/sync` must be locked down** before global league sync ships (rate budget increases with more leagues)
+*Requirements defined: 2026-03-24*
+*Last updated: 2026-03-24 — traceability mapped after roadmap creation*
