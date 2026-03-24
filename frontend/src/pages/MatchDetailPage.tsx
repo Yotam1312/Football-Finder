@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Ticket, MapPin, Train, Bus, Navigation, Footprints, CircleParking } from 'lucide-react';
+import { Ticket, MapPin, Navigation } from 'lucide-react';
 import { useMatchDetail } from '../hooks/useMatchDetail';
 import { TeamLogo } from '../components/TeamLogo';
 import { StatBar } from '../components/StatBar';
@@ -178,76 +178,75 @@ export const MatchDetailPage: React.FC = () => {
               </h2>
 
               {hasTransportLines ? (
-                <div className="space-y-4">
-                  {/* Metro lines */}
+                <div className="space-y-5">
+                  {/* Metro lines — green pills */}
                   {nearbyMetros.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Metro</p>
-                      <div className="space-y-2">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Metro</p>
+                      <div className="flex flex-wrap gap-2">
                         {nearbyMetros.map((line) => (
-                          <div key={line} className="flex items-center gap-2">
-                            <Train className="text-green-600 shrink-0" size={16} />
-                            <span className="text-sm text-gray-700">{line}</span>
-                          </div>
+                          <span key={line} className="bg-green-50 text-green-700 border border-green-200 text-sm font-medium px-3 py-1 rounded-full">
+                            {line}
+                          </span>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Train lines */}
+                  {/* Train lines — blue pills */}
                   {nearbyTrains.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Train</p>
-                      <div className="space-y-2">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Train</p>
+                      <div className="flex flex-wrap gap-2">
                         {nearbyTrains.map((line) => (
-                          <div key={line} className="flex items-center gap-2">
-                            <Train className="text-green-600 shrink-0" size={16} />
-                            <span className="text-sm text-gray-700">{line}</span>
-                          </div>
+                          <span key={line} className="bg-blue-50 text-blue-700 border border-blue-200 text-sm font-medium px-3 py-1 rounded-full">
+                            {line}
+                          </span>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Bus lines */}
+                  {/* Bus lines — amber pills */}
                   {nearbyBuses.length > 0 && (
                     <div>
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Bus</p>
-                      <div className="space-y-2">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Bus</p>
+                      <div className="flex flex-wrap gap-2">
                         {nearbyBuses.map((line) => (
-                          <div key={line} className="flex items-center gap-2">
-                            <Bus className="text-green-600 shrink-0" size={16} />
-                            <span className="text-sm text-gray-700">{line}</span>
-                          </div>
+                          <span key={line} className="bg-amber-50 text-amber-700 border border-amber-200 text-sm font-medium px-3 py-1 rounded-full">
+                            {line}
+                          </span>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Supplementary fields — silently hidden when absent */}
+                  {/* Supplementary fields — bordered info tiles */}
                   {(walkingTimeFromCenter || parkingInfo) && (
-                    <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-50">
+                    <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-100">
                       {walkingTimeFromCenter && (
-                        <div className="flex items-center gap-2">
-                          <Footprints className="text-green-600 shrink-0" size={16} />
-                          <span className="text-sm text-gray-600">{walkingTimeFromCenter}</span>
+                        <div className="bg-gray-50 rounded-lg px-4 py-3">
+                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Walking</p>
+                          <p className="text-sm text-gray-700">{walkingTimeFromCenter}</p>
                         </div>
                       )}
                       {parkingInfo && (
-                        <div className="flex items-center gap-2">
-                          <CircleParking className="text-green-600 shrink-0" size={16} />
-                          <span className="text-sm text-gray-600">{parkingInfo}</span>
+                        <div className="bg-gray-50 rounded-lg px-4 py-3">
+                          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Parking</p>
+                          <p className="text-sm text-gray-700">{parkingInfo}</p>
                         </div>
                       )}
                     </div>
                   )}
 
-                  {/* Travel tip — full-width prose row */}
+                  {/* Travel tip — subtle highlighted block */}
                   {publicTransportInfo && (
-                    <p className="text-sm text-gray-600 italic">{publicTransportInfo}</p>
+                    <div className="bg-green-50 border border-green-100 rounded-lg px-4 py-3">
+                      <p className="text-sm text-green-800">{publicTransportInfo}</p>
+                    </div>
                   )}
 
-                  {/* Get Directions button — secondary outline style, same weight as Navigate to Stadium above */}
+                  {/* Get Directions button */}
                   {mapsUrl && (
                     <a
                       href={mapsUrl}
