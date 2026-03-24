@@ -1,5 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Ticket, MapPin } from 'lucide-react';
 import { useMatchDetail } from '../hooks/useMatchDetail';
 import { TeamLogo } from '../components/TeamLogo';
 import { StatBar } from '../components/StatBar';
@@ -25,11 +26,8 @@ export const MatchDetailPage: React.FC = () => {
         <div className="max-w-2xl mx-auto px-4 py-8 space-y-4 animate-pulse">
           <div className="h-6 bg-gray-200 rounded w-24 mb-6" />
           <div className="bg-gray-100 rounded-xl p-8 h-48" />
-          <div className="grid grid-cols-3 gap-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-20 bg-gray-200 rounded-xl" />
-            ))}
-          </div>
+          {/* Single venue tile placeholder — matches new single-tile layout */}
+          <div className="h-14 bg-gray-200 rounded-xl" />
           <div className="h-12 bg-gray-200 rounded-xl" />
           <div className="h-12 bg-gray-200 rounded-xl" />
         </div>
@@ -93,7 +91,7 @@ export const MatchDetailPage: React.FC = () => {
           &larr; Back to Results
         </button>
 
-        {/* Hero — large team crests, VS badge, league name on green background */}
+        {/* Hero — large team crests, match time+date pill, league name on green background */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,9 +107,12 @@ export const MatchDetailPage: React.FC = () => {
               <span className="font-bold text-lg text-center">{match.homeTeam.name}</span>
             </div>
 
-            {/* VS badge */}
+            {/* Match time + date pill — replaces VS badge per MATCH-01 */}
             <div className="flex flex-col items-center px-4">
-              <span className="bg-white text-green-700 font-black text-xl px-4 py-2 rounded-full">VS</span>
+              <div className="bg-white text-green-700 px-4 py-2 rounded-full text-center">
+                <span className="font-black text-xl block">{matchTime}</span>
+                <span className="text-xs font-medium text-green-600 block">{matchDate}</span>
+              </div>
             </div>
 
             {/* Away team crest and name */}
@@ -122,48 +123,44 @@ export const MatchDetailPage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Three info tiles: date, local time, venue */}
-        {/* 3 columns even on mobile — tiles are short labels so they fit at 375px */}
-        <div className="grid grid-cols-3 gap-2 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
-            <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Date</p>
-            <p className="text-gray-800 font-semibold text-sm">{matchDate}</p>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
-            <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Time</p>
-            <p className="text-gray-800 font-semibold text-sm">{matchTime}</p>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
-            <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Venue</p>
-            <p className="text-gray-800 font-semibold text-sm leading-tight">
-              {match.stadium?.name ?? 'TBC'}
-            </p>
+        {/* Single venue tile — full width since date/time moved to hero (MATCH-01) */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center gap-3 mb-6">
+          <MapPin className="text-green-600 shrink-0" size={18} />
+          <div>
+            <p className="text-xs text-gray-400 uppercase tracking-wide">Venue</p>
+            <p className="text-gray-800 font-semibold text-sm">{match.stadium?.name ?? 'TBC'}</p>
           </div>
         </div>
 
-        {/* Buy Tickets button — hidden when ticketUrl is null (MATCH-04).
-            Opens in a new tab so the user stays on the app. */}
-        {match.ticketUrl && (
-          <a
-            href={match.ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-xl text-center mb-3 transition-colors"
-          >
-            Buy Tickets
-          </a>
-        )}
-
-        {/* Navigate to Stadium button (MATCH-05) — always shown when a stadium exists */}
-        {mapsUrl && (
-          <a
-            href={mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full border border-green-600 text-green-600 hover:bg-green-50 font-semibold py-4 px-6 rounded-xl text-center mb-6 transition-colors"
-          >
-            Navigate to Stadium
-          </a>
+        {/* Match Day Actions card — only renders when at least one action exists (MATCH-02) */}
+        {(match.ticketUrl || mapsUrl) && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
+              Match Day Actions
+            </h2>
+            {match.ticketUrl && (
+              <a
+                href={match.ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-xl text-center mb-3 transition-colors min-h-[48px]"
+              >
+                <Ticket size={18} />
+                Buy Tickets
+              </a>
+            )}
+            {mapsUrl && (
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full border border-green-600 text-green-600 hover:bg-green-50 font-semibold py-3 px-6 rounded-xl text-center transition-colors min-h-[48px]"
+              >
+                <MapPin size={18} />
+                Navigate to Stadium
+              </a>
+            )}
+          </div>
         )}
 
         {/* FanBase links for both teams (MATCH-06).
