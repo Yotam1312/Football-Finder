@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Ticket, MapPin } from 'lucide-react';
+import { Ticket, MapPin, Train, Bus, Navigation, Footprints, CircleParking } from 'lucide-react';
 import { useMatchDetail } from '../hooks/useMatchDetail';
 import { TeamLogo } from '../components/TeamLogo';
 import { StatBar } from '../components/StatBar';
@@ -162,6 +162,126 @@ export const MatchDetailPage: React.FC = () => {
             )}
           </div>
         )}
+
+        {/* Getting to [Stadium] — shows transport options from DB (TRANS-03, TRANS-04).
+            Only renders when match.stadium is set; TBC venues have no transport data. */}
+        {match.stadium && (() => {
+          const { nearbyMetros, nearbyTrains, nearbyBuses, walkingTimeFromCenter, publicTransportInfo, parkingInfo } = match.stadium!;
+
+          // Empty state: only transport line arrays count — walking time or parking alone does not fill the section
+          const hasTransportLines = nearbyMetros.length > 0 || nearbyTrains.length > 0 || nearbyBuses.length > 0;
+
+          return (
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+              <h2 className="text-lg font-bold text-gray-800 mb-4">
+                Getting to {match.stadium!.name}
+              </h2>
+
+              {hasTransportLines ? (
+                <div className="space-y-4">
+                  {/* Metro lines */}
+                  {nearbyMetros.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Metro</p>
+                      <div className="space-y-2">
+                        {nearbyMetros.map((line) => (
+                          <div key={line} className="flex items-center gap-2">
+                            <Train className="text-green-600 shrink-0" size={16} />
+                            <span className="text-sm text-gray-700">{line}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Train lines */}
+                  {nearbyTrains.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Train</p>
+                      <div className="space-y-2">
+                        {nearbyTrains.map((line) => (
+                          <div key={line} className="flex items-center gap-2">
+                            <Train className="text-green-600 shrink-0" size={16} />
+                            <span className="text-sm text-gray-700">{line}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bus lines */}
+                  {nearbyBuses.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Bus</p>
+                      <div className="space-y-2">
+                        {nearbyBuses.map((line) => (
+                          <div key={line} className="flex items-center gap-2">
+                            <Bus className="text-green-600 shrink-0" size={16} />
+                            <span className="text-sm text-gray-700">{line}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Supplementary fields — silently hidden when absent */}
+                  {(walkingTimeFromCenter || parkingInfo) && (
+                    <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-50">
+                      {walkingTimeFromCenter && (
+                        <div className="flex items-center gap-2">
+                          <Footprints className="text-green-600 shrink-0" size={16} />
+                          <span className="text-sm text-gray-600">{walkingTimeFromCenter}</span>
+                        </div>
+                      )}
+                      {parkingInfo && (
+                        <div className="flex items-center gap-2">
+                          <CircleParking className="text-green-600 shrink-0" size={16} />
+                          <span className="text-sm text-gray-600">{parkingInfo}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Travel tip — full-width prose row */}
+                  {publicTransportInfo && (
+                    <p className="text-sm text-gray-600 italic">{publicTransportInfo}</p>
+                  )}
+
+                  {/* Get Directions button — secondary outline style, same weight as Navigate to Stadium above */}
+                  {mapsUrl && (
+                    <a
+                      href={mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full border border-green-600 text-green-600 hover:bg-green-50 font-semibold py-3 px-6 rounded-xl text-center transition-colors min-h-[48px] mt-2"
+                    >
+                      <Navigation size={18} />
+                      Get Directions
+                    </a>
+                  )}
+                </div>
+              ) : (
+                /* TRANS-04: Empty state — no transport lines, but still show Get Directions */
+                <div className="text-center py-2">
+                  <p className="text-sm text-gray-500 mb-4">
+                    No transport details on file. Check local transport apps for routes.
+                  </p>
+                  {mapsUrl && (
+                    <a
+                      href={mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 border border-green-600 text-green-600 hover:bg-green-50 font-semibold py-3 px-6 rounded-xl transition-colors min-h-[48px]"
+                    >
+                      <Navigation size={18} />
+                      Get Directions
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* FanBase links for both teams (MATCH-06).
             /fanbase/team/:teamId is a Phase 3 page — stubbed in App.tsx for now. */}
