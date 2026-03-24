@@ -37,7 +37,7 @@ See: [.planning/milestones/v2.0-ROADMAP.md](.planning/milestones/v2.0-ROADMAP.md
 - [x] **Phase 14: Security & Match Polish** - Lock down admin endpoint + visual polish on match detail page (completed 2026-03-24)
 - [x] **Phase 15: Transport DB Schema** - Prisma migrations for stadium transport fields and GETTING_THERE post type (completed 2026-03-24)
 - [x] **Phase 16: Transportation Guide Redesign** - Full frontend redesign of the `/transportation-guide` page (completed 2026-03-24)
-- [ ] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data
+- [x] **Phase 17: Stadium Transport Component** - "Getting to [Stadium]" section on match detail, powered by DB data (completed 2026-03-24)
 - [ ] **Phase 18: Getting There FanBase Tab** - Community transport tips tab and post creation in FanBase
 
 ## Phase Details
@@ -88,7 +88,7 @@ Plans:
   1. Match detail page shows a "Getting to [Stadium Name]" section that lists nearby metro, train, and bus lines from the DB when data exists
   2. The section displays walking time from center, a travel tip, parking info, and a Navigate button that opens Google Maps
   3. When no transport data exists for a stadium the section shows a graceful empty state with the Navigate button and a "Check local transport apps" message instead of a broken or blank area
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 17-01-PLAN.md — Stadium interface type extension + "Getting to [Stadium]" section in MatchDetailPage (TRANS-03, TRANS-04)
 
@@ -117,5 +117,5 @@ Plans:
 | 14. Security & Match Polish | 2/2 | Complete    | 2026-03-24 | - |
 | 15. Transport DB Schema | 1/1 | Complete    | 2026-03-24 | - |
 | 16. Transportation Guide Redesign | 1/1 | Complete    | 2026-03-24 | - |
-| 17. Stadium Transport Component | v2.1 | 0/1 | In progress | - |
+| 17. Stadium Transport Component | 1/1 | Complete   | 2026-03-24 | - |
 | 18. Getting There FanBase Tab | v2.1 | 0/? | Not started | - |

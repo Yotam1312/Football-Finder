@@ -1,49 +1,17 @@
 ---
 gsd_state_version: 1.0
 milestone: v2.1
-milestone_name: — Transport & Polish
-status: completed
-stopped_at: Completed 16-01-PLAN.md (transportation guide redesign)
-last_updated: "2026-03-24T16:46:58.929Z"
-last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
+milestone_name: Transport & Polish
+status: in_progress
+stopped_at: Completed 17-01-PLAN.md (stadium transport component)
+last_updated: "2026-03-24T17:30:00.000Z"
+last_activity: 2026-03-24 — plan 17-01 complete, TRANS-03/04 done (stadium transport section in MatchDetailPage)
 progress:
   total_phases: 5
-  completed_phases: 3
-  total_plans: 4
-  completed_plans: 4
+  completed_phases: 4
+  total_plans: 5
+  completed_plans: 5
   percent: 100
----
-
----
-gsd_state_version: 1.0
-milestone: v2.1
-milestone_name: — Transport & Polish
-status: completed
-stopped_at: Phase 15 Plan 01 complete (transport DB schema migration). Phase 15 done.
-last_updated: "2026-03-24T16:15:07.020Z"
-last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
-progress:
-  [██████████] 100%
-  completed_phases: 2
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
----
-
----
-gsd_state_version: 1.0
-milestone: v2.1
-milestone_name: — Transport & Polish
-status: completed
-stopped_at: Phase 14 Plan 02 complete (MATCH-01/02 match detail polish). Phase 14 fully done.
-last_updated: "2026-03-24T15:53:10.044Z"
-last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
-progress:
-  [██████████] 100%
-  completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
-  percent: 20
 ---
 
 # Project State
@@ -53,33 +21,33 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** A traveler or local types a city and date range and instantly sees every football match happening there — no Googling, no scattered sites.
-**Current focus:** v2.1 — Transport & Polish — Phase 14
+**Current focus:** v2.1 — Transport & Polish — Phase 17
 
 ## Current Position
 
-Phase: 14 of 18 (Security & Match Polish)
-Plan: 2 of 2 complete
-Status: Phase 14 complete — ready for Phase 15
-Last activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
+Phase: 17 of 18 (Stadium Transport Component)
+Plan: 1 of 1 complete
+Status: Phase 17 complete — ready for Phase 18
+Last activity: 2026-03-24 — plan 17-01 complete, TRANS-03/04 done (stadium transport section in MatchDetailPage)
 
-Progress: [##________] 20%
+Progress: [##########] 100% (v2.1 phases 14-17 done)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2 (v2.1)
-- Average duration: 6.5 min (v2.1)
-- Total execution time: 13 min
+- Total plans completed: 5 (v2.1)
+- Total execution time: ~35 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 14 (Security & Match Polish) | 2 | 13 min | 6.5 min |
+| 15 (Transport DB Schema) | 1 | 5 min | 5 min |
+| 16 (Transportation Guide Redesign) | 1 | 8 min | 8 min |
+| 17 (Stadium Transport Component) | 1 | ~15 min | 15 min |
 
 *Updated after each plan completion*
-| Phase 15-transport-db-schema P01 | 5 | 2 tasks | 2 files |
-| Phase 16-transportation-guide-redesign P01 | 8 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -101,12 +69,17 @@ Recent v2.1 decisions:
 - [Phase 16-01]: Lyft replaced with Bolt throughout — more relevant for European football audience
 - [Phase 16-01]: Bus icon replaced with Train for Long Distance section to avoid visual ambiguity with Public Transit
 - [Phase 16-01]: FAQ accordion: only one item open at a time (useState<number | null>(null)) — cleaner mobile UX
+- [Phase 17-01]: IIFE pattern used for inline JSX destructuring without hoisting a pre-return variable
+- [Phase 17-01]: mapsUrl reused from existing scope at lines 68-70 — not recomputed inside transport block
+- [Phase 17-01]: CircleParking used for parking icon (not ParkingCircle — that name does not exist in lucide-react@0.577.0)
+- [Phase 17-01]: hasTransportLines gated on line arrays only — walkingTime/parkingInfo alone does not count as filled state
+- [Phase 17-01]: Post-checkpoint design: pills per mode group, side-by-side info tiles, no row icons
 
 ### Pending Todos
 
-- Lock down `POST /api/admin/sync` before v2.1 ships (unprotected dev endpoint) — addressed in Phase 14
 - Add transport data to stadium records (CSV/SQL ready per user) — out of code scope, user-managed
 - Pre-flight for global league expansion (v3.0): upgrade API-Football plan, verify league IDs, MLS timezone table
+- Phase 18: enforce Metro/Bus/Train/Taxi/Walking/Other transport type validation at application layer
 
 ### Blockers/Concerns
 
@@ -114,6 +87,6 @@ Recent v2.1 decisions:
 
 ## Session Continuity
 
-Last session: 2026-03-24T16:44:23.563Z
-Stopped at: Completed 16-01-PLAN.md (transportation guide redesign)
-Resume: `/gsd:execute-phase 15` (Phase 15: Transport Data — DB migrations next)
+Last session: 2026-03-24T17:30:00.000Z
+Stopped at: Completed 17-01-PLAN.md (stadium transport component)
+Resume: Phase 18 (transport data entry / admin tooling) when ready

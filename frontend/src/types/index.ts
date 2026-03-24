@@ -21,6 +21,13 @@ export interface Stadium {
   cityNormalized: string;
   timezone: string;        // IANA timezone string, e.g. "Europe/London"
   googleMapsUrl: string | null;
+  // Transport fields — added Phase 17 (data from Phase 15 DB schema)
+  nearbyMetros: string[];
+  nearbyTrains: string[];
+  nearbyBuses: string[];
+  walkingTimeFromCenter: string | null;
+  publicTransportInfo: string | null;
+  parkingInfo: string | null;
 }
 
 export interface TeamStanding {
