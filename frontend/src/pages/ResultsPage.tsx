@@ -116,7 +116,8 @@ export const ResultsPage: React.FC = () => {
       style={{ backgroundColor: '#FAFAFA' }}
     >
       {/* Sticky search summary bar at top */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-3">
+      {/* top-16 positions this bar below the sticky Navbar (Navbar height = py-2 + 48px min-h = ~64px = 4rem = top-16) */}
+      <div className="bg-white border-b border-gray-200 sticky top-16 z-10 px-4 py-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <p className="text-gray-700 font-medium">
             {isLoading

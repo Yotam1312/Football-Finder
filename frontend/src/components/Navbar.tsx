@@ -111,10 +111,18 @@ export const Navbar: React.FC = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(open => !open)}
-                className="text-sm text-gray-700 hover:text-green-600 transition-colors min-h-[48px] flex items-center gap-1"
+                className="text-sm text-gray-700 hover:text-green-600 transition-colors min-h-[48px] flex items-center gap-2"
                 aria-expanded={dropdownOpen}
                 aria-haspopup="true"
               >
+                {/* Show Google profile photo if available, otherwise a simple initial circle */}
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" />
+                ) : (
+                  <span className="w-7 h-7 rounded-full bg-green-100 text-green-700 text-xs font-semibold flex items-center justify-center">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
                 Hi, {user.name}
                 {/* Small chevron to indicate dropdown */}
                 <svg

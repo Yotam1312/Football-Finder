@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Football Finder is a web platform that helps football fans discover matches across European cities by searching a location and date range. Users get a list of all matches happening in that city, can explore full match details, buy tickets, navigate to stadiums, and connect with fan communities through the FanBase feature — all in one place.
+Football Finder is a web platform that helps football fans discover matches across cities worldwide by searching a location and date range. Users get a list of all matches happening in that city, can explore full match details, navigate to stadiums, and connect with fan communities through the FanBase feature — including photo-rich Seat Tips, pub recommendations, and match attendance posts — all in one place.
 
 ## Core Value
 
@@ -10,93 +10,99 @@ A traveler or local types a city and date range and instantly sees every footbal
 
 ## Current State
 
-**Version:** v1.0 — *Shipped 2026-03-19*
+**Version:** v2.0 — *Shipped 2026-03-24*
 
 ### What's Live
 
-- Match discovery: city + date range search across 10 European leagues
+- Match discovery: city + date range search with quick-select chips (Today / Tomorrow / This Weekend) and time-of-day filters
 - Full match detail pages: team stats, ticket links, Google Maps navigation
-- FanBase: Country → League → Team navigation, team post pages, 5 post tabs
-- All 4 post types: General Tip, Seat Tip, Pub Recommendation, I'm Going
-- Auth: register, login, 7-day sessions, upvote/edit/delete/favorites
-- Static pages: transportation guide, contact form, 404 page
-- Mobile responsive (48px touch targets, no horizontal scroll)
-- FanBase seeded: 28 posts across 7 major teams at launch
+- FanBase: Country → League → Team navigation, team post pages, 4 post types
+- Seat Tip posts: accept one photo (jpg/png/webp, max 5MB) via Azure Blob with in-form preview and lightbox
+- Auth: Google OAuth (primary) + email+password — all Level 3 features (create, upvote, edit/delete, favorites)
+- User profiles: avatar (Google photo or upload), name/age/country edit, password change, account delete
+- Sticky navbar with Football Finder SVG logo; real country flag images (flagcdn.com) in FanBase
+- Mobile feel: fixed bottom nav bar (Search / FanBase / Profile), 200ms fade page transitions on all pages
+- iPhone safe-area respected on bottom nav; desktop nav hidden on mobile (BottomNav shows instead)
+- Static pages: transportation guide, contact form, 404
 
 ### Known Tech Debt
 
-- `token.helpers.ts` — orphaned file, remove in v2
+- `token.helpers.ts` — orphaned file from v1, still present
 - `POST /api/admin/sync` — unprotected dev endpoint, lock down before public traffic
-- `CreatePostModal.tsx` line 229 — sends unused `teamName` field
-- Photo upload (POST-08) — deferred to v2; `photoUrl` column exists in schema
+- `GOOGLE_CALLBACK_URL` env var in `google-oauth.ts` is set but unused at runtime (dynamic URL wins)
+- Stale comment in `frontend/src/types/index.ts:90` — "Phase 4 feature" label on photoUrl
+- Global league expansion (South America, MLS, Asia) — deferred to v3.0
 
-## Current Milestone: v2.0 — Global & Real-Time
+## Requirements
 
-**Goal:** Expand Football Finder from a European discovery tool into a global real-time platform with OAuth, live scores, photo uploads, and broader league coverage.
+### Validated
 
-**Target features:**
-- Photo upload for Seat Tip posts (Azure Blob Storage — POST-08 carried from v1)
-- Google + Facebook OAuth (replaces email+password entirely; user table reset)
-- Finer date filters on match search (specific day picker, time of day)
-- Global league coverage: South America, MLS, Asia added to nightly sync
-- Live scores: real-time polling (30-60s) during active matches on cards + detail pages
-- Mobile feel: app-like experience (full-screen, smooth navigation)
+- ✓ User can search matches by city + date range — v1.0
+- ✓ User can view full match details (teams, date/time, venue, stats, tickets, navigation) — v1.0
+- ✓ User can browse FanBase posts for any team without an account — v1.0
+- ✓ User can post to FanBase after authentication — v1.0
+- ✓ User can create a full account to edit/delete posts, upvote, track favorite teams — v1.0
+- ✓ FanBase supports multiple post types: general tips, seat tips (with photos), pub recommendations, "I'm Going" — v1.0 / v2.0
+- ✓ FanBase 3-step navigation: Country → League → Team — v1.0
+- ✓ Navigate to Stadium button opens Google Maps directions — v1.0
+- ✓ Transportation guide page — v1.0
+- ✓ Contact page — v1.0
+- ✓ Google OAuth sign-in (replaces email+password as primary) — v2.0
+- ✓ Photo upload for Seat Tip posts (Azure Blob, 5MB, jpg/png/webp) — v2.0
+- ✓ Photo preview in creation form; photo display on published post — v2.0
+- ✓ Quick-select date chips on homepage (Today / Tomorrow / This Weekend) — v2.0
+- ✓ Time-of-day filter chips on results page (Morning / Afternoon / Evening / Night) — v2.0
+- ✓ Sticky navbar, new SVG logo, real flag images, auto-rotating testimonials — v2.0
+- ✓ Mobile bottom nav bar and smooth page transitions — v2.0
 
----
+### Active (next milestone)
 
-<details>
-<summary>v1.0 Initial Context (archived)</summary>
+- [ ] Global league coverage: South American, MLS, and Asian matches discoverable by city search
+- [ ] FanBase navigation includes teams from newly added leagues
+- [ ] Live scores: real-time polling during active matches on cards and detail pages
 
-## Requirements (v1 — archived)
+### Out of Scope
 
-See: [.planning/milestones/v1.0-REQUIREMENTS.md](.planning/milestones/v1.0-REQUIREMENTS.md)
-
-### Active (at project start)
-
-- [ ] User can search matches by city + date range and see all results
-- [ ] User can view full match details (teams, date/time, venue, stats, tickets, navigation)
-- [ ] User can browse FanBase posts for any team without an account
-- [ ] User can post to FanBase after email verification (no password needed)
-- [ ] User can create a full account to edit/delete posts, upvote, track favorite teams
-- [ ] FanBase supports multiple post types: general tips, seat tips (with photos), pub recommendations, "I'm Going"
-- [ ] FanBase 3-step navigation: Country → League → Team
-- [ ] Match details link to both teams' FanBase pages
-- [ ] Navigate to Stadium button opens Google Maps directions
-- [ ] Transportation guide page with transit options and app links
-- [ ] Contact page with social links and contact form
-
-### Out of Scope (v1)
-
-- Google/Facebook OAuth — deferred to v2
-- Push notifications — deferred to v2
-- AI chatbot — deferred to v2
-- Mobile app (PWA installable) — deferred to v2
-- South America / Asia / MLS coverage — Europe only in v1
-
-</details>
+- In-app ticket purchasing — commercial deals and payment processing required
+- PWA (service workers + offline) — v2 mobile feel achieved without PWA complexity
+- Facebook OAuth — `passport-facebook` library unmaintained; Google-only for now
+- Google One Tap — can layer on top of current OAuth in a minor update
+- Push notifications / email match reminders — not yet prioritized
+- AI chatbot — deferred indefinitely
+- Social graph (follow users, DMs) — deferred indefinitely
+- Redux / Zustand / Jotai — no complex client state justifies a state manager
 
 ## Context
 
 - **Tech stack**: Node.js + Express + TypeScript + PostgreSQL (Azure) for backend; React 18 + TypeScript + Vite + Tailwind CSS for frontend; deployed on Azure (backend/DB) and Vercel (frontend)
-- **Match data**: API-Football (api-football.com) — free tier capped at seasons 2022-2024; upgrade to paid plan to remove cap
+- **Match data**: API-Football (api-football.com) — free tier, seasons 2022-2024; upgrade to paid plan for live scores and wider coverage
+- **Photos**: Azure Blob Storage — `AZURE_STORAGE_CONNECTION_STRING` in backend .env
+- **Auth**: Google OAuth via `google-auth-library`, JWT cookies (7-day), cookie-based sessions; email+password still supported
 - **Student project**: 2nd year CS student — keep code simple, clear, and well-commented. Standard patterns over clever ones.
-- **Geographic scope**: Europe in v1; expanding to South America, MLS, Asia in v2
-- **Design**: Modern, clean, minimalist. Green (#16a34a) primary. Inspired by Airbnb/Booking.com for sports. Framer Motion animations.
+- **Geographic scope**: Europe in v1/v2; expanding to South America, MLS, Asia in v3
 
 ## Constraints
 
 - **Tech stack**: Node.js + Express + TypeScript + PostgreSQL + React + Tailwind — fixed, no deviation
 - **Simplicity**: Code must remain readable and maintainable for a student — no over-engineering
 - **Deployment**: Azure (backend + DB) + Vercel (frontend) — infrastructure already chosen
+- **API cost**: API-Football free tier limits live scores and coverage expansion — upgrade before v3 league work
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| API-Football for match data | Good coverage of European leagues, reasonable pricing, established API | Validated — 3789 fixtures synced |
-| Password account (not hybrid email-verify) | Phase 5 retired hybrid flow — direct register+login simpler and less error-prone | Validated |
-| Seed FanBase manually at launch | Avoids cold-start emptiness; gives real users something to react to | Validated — 28 posts across 7 teams |
-| PostgreSQL on Azure | Consistent with backend deployment, relational data fits match/team/post structure | Validated |
+| API-Football for match data | Good coverage of European leagues, reasonable pricing, established API | ✓ Validated — 3789+ fixtures synced |
+| Password account (not hybrid email-verify) | Phase 5 retired hybrid flow — direct register+login simpler | ✓ Validated |
+| Seed FanBase manually at launch | Avoids cold-start emptiness; gives real users something to react to | ✓ Validated — 28 posts across 7 teams |
+| PostgreSQL on Azure | Consistent with backend deployment, relational data fits structure | ✓ Validated |
+| Google OAuth as primary (replace email+password) | Simpler UX, no password management, higher trust — user table reset was safe at this stage | ✓ Validated — clean migration |
+| Azure Blob for photo storage | Already on Azure stack, cheap blob storage, CORS configurable | ✓ Validated — upload endpoint working |
+| Client-side time-of-day filtering | No backend query complexity, instant UI response, works with existing search API | ✓ Validated |
+| Inline SVG logo instead of image file | No extra network request, scales perfectly, matches brand colors exactly | ✓ Validated |
+| Framer Motion AnimatePresence for page transitions | Simple, declarative, pairs well with React Router, small bundle add | ✓ Validated — 200ms fade clean |
+| BottomNav outside AnimatePresence | Nav bar must not animate on route changes — stable element | ✓ Validated |
+| Defer global league expansion to v3 | API rate limits and timezone complexity underestimated; MLS multi-tz needs careful sync.service work | — Pending v3 |
 
 ---
-*Last updated: 2026-03-19 — v2.0 milestone started*
+*Last updated: 2026-03-24 — v2.0 milestone completed*
