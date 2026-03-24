@@ -17,9 +17,12 @@ interface CreatePostModalProps {
   onClose: () => void;
   // When provided, the modal opens in edit mode — pre-fills all fields and uses PUT
   editPost?: Post;
+  // When provided, the modal skips the type picker and opens directly on the form
+  // with this type pre-selected (used when clicking Add Your Tip from a specific tab)
+  preSelectedType?: PostType;
 }
 
-// The 4 post types users can pick from, with display labels and descriptions
+// The 5 post types users can pick from, with display labels and descriptions
 const POST_TYPES: { type: PostType; label: string; description: string }[] = [
   {
     type: 'GENERAL_TIP',
@@ -40,6 +43,11 @@ const POST_TYPES: { type: PostType; label: string; description: string }[] = [
     type: 'IM_GOING',
     label: "I'm Going",
     description: 'Let fans know you are attending a match',
+  },
+  {
+    type: 'GETTING_THERE',
+    label: 'Getting There',
+    description: 'Share transport tips for getting to the stadium',
   },
 ];
 
@@ -84,18 +92,22 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   teamName,
   onClose,
   editPost,
+  preSelectedType,
 }) => {
   const queryClient = useQueryClient();
   // Get the logged-in user so we can pre-fill the author name
   const { user } = useAuth();
 
-  // In edit mode, skip the type picker and start directly on the form
+  // In edit mode or when a type is pre-selected (tab-specific tip button),
+  // skip the type picker and start directly on the form step
   const [step, setStep] = useState<'type-picker' | 'form'>(
-    editPost ? 'form' : 'type-picker'
+    editPost || preSelectedType ? 'form' : 'type-picker'
   );
 
-  // Pre-select the post type in edit mode
-  const [postType, setPostType] = useState<PostType | null>(editPost?.postType ?? null);
+  // Pre-select the post type from edit mode or the tab's pre-selected type
+  const [postType, setPostType] = useState<PostType | null>(
+    editPost?.postType ?? preSelectedType ?? null
+  );
 
   // ── Common form fields — pre-filled in edit mode ──
   const [title, setTitle] = useState(editPost?.title ?? '');
@@ -120,6 +132,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [matchId, setMatchId] = useState<number | null>(editPost?.matchId ?? null);
   const [upcomingMatches, setUpcomingMatches] = useState<UpcomingMatch[]>([]);
   const [matchesLoading, setMatchesLoading] = useState(false);
+
+  // ── Getting There fields — pre-filled in edit mode ──
+  const [transportType, setTransportType] = useState(editPost?.transportType ?? '');
+  const [travelCost, setTravelCost] = useState(editPost?.travelCost ?? '');
+  const [travelTime, setTravelTime] = useState(editPost?.travelTime ?? '');
 
   // ── Photo upload state (Seat Tip only) ──
   // photoPreviewUrl: local object URL shown immediately after file selection (synchronous)
@@ -276,6 +293,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           ...(pubDistance.trim() && { pubDistance: pubDistance.trim() }),
         }),
         ...(postType === 'IM_GOING' && matchId !== null && { matchId }),
+        ...(postType === 'GETTING_THERE' && {
+          ...(transportType && { transportType }),
+          ...(travelCost.trim() && { travelCost: travelCost.trim() }),
+          ...(travelTime.trim() && { travelTime: travelTime.trim() }),
+        }),
       };
 
       try {
@@ -325,6 +347,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         ...(pubDistance.trim() && { pubDistance: pubDistance.trim() }),
       }),
       ...(postType === 'IM_GOING' && matchId !== null && { matchId }),
+      ...(postType === 'GETTING_THERE' && {
+        ...(transportType && { transportType }),
+        ...(travelCost.trim() && { travelCost: travelCost.trim() }),
+        ...(travelTime.trim() && { travelTime: travelTime.trim() }),
+      }),
     };
 
     try {
@@ -632,6 +659,61 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                     </p>
                   )}
                 </div>
+              )}
+
+              {/* ── Getting There extra fields ── */}
+              {postType === 'GETTING_THERE' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Transport Type
+                    </label>
+                    <select
+                      value={transportType}
+                      onChange={(e) => setTransportType(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
+                    >
+                      <option value="">Select transport type</option>
+                      <option value="Metro">Metro</option>
+                      <option value="Bus">Bus</option>
+                      <option value="Train">Train</option>
+                      <option value="Taxi">Taxi</option>
+                      <option value="Walking">Walking</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Cost (optional)
+                      </label>
+                      <input
+                        type="text"
+                        value={travelCost}
+                        onChange={(e) => setTravelCost(e.target.value)}
+                        maxLength={50}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
+                        placeholder='e.g. "€2.50" or "Free"'
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Travel time (optional)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          value={travelTime}
+                          onChange={(e) => setTravelTime(e.target.value)}
+                          min={0}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-green-500"
+                          placeholder="e.g. 15"
+                        />
+                        <span className="text-sm text-gray-500 whitespace-nowrap">min</span>
+                      </div>
+                    </div>
+                  </div>
+                </>
               )}
 
               {/* Author name — always shown at the bottom */}

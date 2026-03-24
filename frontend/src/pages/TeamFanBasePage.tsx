@@ -8,16 +8,17 @@ import { PostFeed } from '../components/fanbase/PostFeed';
 import { CreatePostModal } from '../components/fanbase/CreatePostModal';
 import { AuthGateModal } from '../components/fanbase/AuthGateModal';
 import { useAuth } from '../context/AuthContext';
-import type { Post } from '../types';
+import type { Post, PostType } from '../types';
 
 // Maps URL tab slugs to PostType enum values used by the API's ?type= filter.
 // 'all' maps to undefined so the API returns posts of every type (no filter applied).
 const TAB_TO_POST_TYPE: Record<string, string | undefined> = {
-  'all':         undefined,
-  'seat-tips':   'SEAT_TIP',
-  'pubs-food':   'PUB_RECOMMENDATION',
-  'local-crowd': 'GENERAL_TIP',
-  'im-going':    'IM_GOING',
+  'all':           undefined,
+  'seat-tips':     'SEAT_TIP',
+  'pubs-food':     'PUB_RECOMMENDATION',
+  'local-crowd':   'GENERAL_TIP',
+  'getting-there': 'GETTING_THERE',
+  'im-going':      'IM_GOING',
 };
 
 // Team FanBase page — the destination users reach from the hub or search.
@@ -49,6 +50,10 @@ export const TeamFanBasePage: React.FC = () => {
 
   // Look up the PostType filter for the active tab (undefined for 'all' = no filter)
   const postType = TAB_TO_POST_TYPE[activeTab];
+
+  // When a specific typed tab is active, pre-select that type in the create modal.
+  // This lets users skip the type picker when they click Add Your Tip from a typed tab.
+  const preSelectedType = TAB_TO_POST_TYPE[activeTab] as PostType | undefined;
 
   const { data: teamData, isLoading: teamLoading, isError: teamError } = useFanbaseTeam(teamId);
   const { data: postsData, isLoading: postsLoading } = useFanbasePosts(teamId, postType, page);
@@ -232,6 +237,7 @@ export const TeamFanBasePage: React.FC = () => {
           teamName={team.name}
           onClose={handleModalClose}
           editPost={editPost ?? undefined}
+          preSelectedType={editPost ? undefined : preSelectedType}
         />
       )}
 
