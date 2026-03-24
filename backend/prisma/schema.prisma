@@ -26,6 +26,14 @@ model Stadium {
   googleMapsUrl  String?
   matches        Match[]
 
+  // Transport fields (Phase 15) — populated per-stadium by admin via CSV/SQL
+  nearbyMetros          String[]   // e.g. ["Line 1 - Stade de France", "RER D"]
+  nearbyTrains          String[]   // e.g. ["RER B - Paris Nord"]
+  nearbyBuses           String[]   // e.g. ["Bus 154", "Bus 255"]
+  walkingTimeFromCenter String?    // e.g. "25 min walk from Gare du Nord"
+  publicTransportInfo   String?    // Free-text general transport tip
+  parkingInfo           String?    // Free-text parking notes
+
   @@index([cityNormalized])
 }
 
@@ -122,6 +130,11 @@ model Post {
   user        User?    @relation(fields: [userId], references: [id])
   upvotes     Upvote[]
 
+  // Transport tip fields (Phase 15) — only populated when postType = GETTING_THERE
+  transportType String?   // "Metro" | "Bus" | "Train" | "Taxi" | "Walking" | "Other"
+  travelCost    String?   // e.g. "€1.90 per trip"
+  travelTime    String?   // e.g. "20 min from city centre"
+
   @@index([teamId])
   @@index([postType])
 }
@@ -151,4 +164,5 @@ enum PostType {
   SEAT_TIP
   PUB_RECOMMENDATION
   IM_GOING
+  GETTING_THERE   // Added in Phase 15 for community transport tips
 }

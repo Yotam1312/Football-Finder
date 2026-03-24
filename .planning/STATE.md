@@ -1,15 +1,31 @@
 ---
 gsd_state_version: 1.0
 milestone: v2.1
-milestone_name: Transport & Polish
-status: in-progress
-stopped_at: phase-14 plan-02 complete
-last_updated: "2026-03-24T16:00:00Z"
-last_activity: 2026-03-24 — phase 14 plan 02 complete (MATCH-01/02 match detail polish)
+milestone_name: — Transport & Polish
+status: completed
+stopped_at: Phase 15 Plan 01 complete (transport DB schema migration). Phase 15 done.
+last_updated: "2026-03-24T16:15:07.020Z"
+last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
 progress:
   total_phases: 5
-  completed_phases: 0
-  total_plans: 10
+  completed_phases: 2
+  total_plans: 3
+  completed_plans: 3
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v2.1
+milestone_name: — Transport & Polish
+status: completed
+stopped_at: Phase 14 Plan 02 complete (MATCH-01/02 match detail polish). Phase 14 fully done.
+last_updated: "2026-03-24T15:53:10.044Z"
+last_activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
+progress:
+  [██████████] 100%
+  completed_phases: 1
+  total_plans: 2
   completed_plans: 2
   percent: 20
 ---
@@ -46,6 +62,7 @@ Progress: [##________] 20%
 | 14 (Security & Match Polish) | 2 | 13 min | 6.5 min |
 
 *Updated after each plan completion*
+| Phase 15-transport-db-schema P01 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -62,6 +79,8 @@ Recent v2.1 decisions:
 - [14-02] Hero pill shows time large + date small (replaces VS badge) — answers who+when at a glance
 - [14-02] 3-column info grid removed; date/time moved to hero, venue gets full-width tile with MapPin icon
 - [14-02] CTA card uses (ticketUrl || mapsUrl) single guard — never renders empty card
+- [Phase 15-01]: transportType stored as String? not enum — Phase 18 enforces Metro/Bus/Train/Taxi/Walking/Other at application layer
+- [Phase 15-01]: Batched TRANS-02 (Stadium fields) and TRANS-05 (PostType + Post fields) into single prisma migrate dev — one migration file 20260324161018_phase15_transport_schema
 
 ### Pending Todos
 
@@ -75,6 +94,6 @@ Recent v2.1 decisions:
 
 ## Session Continuity
 
-Last session: 2026-03-24
-Stopped at: Phase 14 Plan 02 complete (MATCH-01/02 match detail polish). Phase 14 fully done.
+Last session: 2026-03-24T16:12:33.559Z
+Stopped at: Phase 15 Plan 01 complete (transport DB schema migration). Phase 15 done.
 Resume: `/gsd:execute-phase 15` (Phase 15: Transport Data — DB migrations next)
