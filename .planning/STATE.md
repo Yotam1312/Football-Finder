@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Transport & Polish
 status: in-progress
-stopped_at: phase-14 plan-01 complete
-last_updated: "2026-03-24T15:38:00Z"
-last_activity: 2026-03-24 — phase 14 plan 01 complete (SEC-01 admin sync locked down)
+stopped_at: phase-14 plan-02 complete
+last_updated: "2026-03-24T16:00:00Z"
+last_activity: 2026-03-24 — phase 14 plan 02 complete (MATCH-01/02 match detail polish)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 10
-  completed_plans: 1
-  percent: 10
+  completed_plans: 2
+  percent: 20
 ---
 
 # Project State
@@ -26,24 +26,24 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 14 of 18 (Security & Match Polish)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-03-24 — plan 14-01 complete, SEC-01 done (admin sync auth)
+Plan: 2 of 2 complete
+Status: Phase 14 complete — ready for Phase 15
+Last activity: 2026-03-24 — plan 14-02 complete, MATCH-01/02 done (match detail page polish)
 
-Progress: [#_________] 10%
+Progress: [##________] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1 (v2.1)
-- Average duration: 3 min (v2.1)
-- Total execution time: 3 min
+- Total plans completed: 2 (v2.1)
+- Average duration: 6.5 min (v2.1)
+- Total execution time: 13 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 14 (Security & Match Polish) | 1 | 3 min | 3 min |
+| 14 (Security & Match Polish) | 2 | 13 min | 6.5 min |
 
 *Updated after each plan completion*
 
@@ -59,6 +59,9 @@ Recent v2.1 decisions:
 - TRANS-01 has no DB dependency — can be done in parallel with Phase 15 if needed
 - [14-01] Used x-admin-api-key header (not Authorization Bearer) for admin key auth — cleaner for cron/script callers
 - [14-01] Middleware returns 401 when ADMIN_API_KEY env var is unset — prevents unprotected access in misconfigured envs
+- [14-02] Hero pill shows time large + date small (replaces VS badge) — answers who+when at a glance
+- [14-02] 3-column info grid removed; date/time moved to hero, venue gets full-width tile with MapPin icon
+- [14-02] CTA card uses (ticketUrl || mapsUrl) single guard — never renders empty card
 
 ### Pending Todos
 
@@ -73,5 +76,5 @@ Recent v2.1 decisions:
 ## Session Continuity
 
 Last session: 2026-03-24
-Stopped at: Phase 14 Plan 01 complete (SEC-01 admin sync auth).
-Resume: `/gsd:execute-phase 14` (plan 14-02 next)
+Stopped at: Phase 14 Plan 02 complete (MATCH-01/02 match detail polish). Phase 14 fully done.
+Resume: `/gsd:execute-phase 15` (Phase 15: Transport Data — DB migrations next)

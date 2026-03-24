@@ -11,8 +11,8 @@
 
 ### Match Detail UI
 
-- [ ] **MATCH-01**: Match detail page has polished visual layout — team crests prominent, score/date area clearly structured, improved spacing and visual hierarchy throughout
-- [ ] **MATCH-02**: Ticket links and Navigate to Stadium section has clean visual treatment with clear call-to-action hierarchy
+- [x] **MATCH-01**: Match detail page has polished visual layout — team crests prominent, score/date area clearly structured, improved spacing and visual hierarchy throughout
+- [x] **MATCH-02**: Ticket links and Navigate to Stadium section has clean visual treatment with clear call-to-action hierarchy
 
 ### Transportation — Generic Guide
 
@@ -61,8 +61,8 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SEC-01 | Phase 14 | Complete |
-| MATCH-01 | Phase 14 | Pending |
-| MATCH-02 | Phase 14 | Pending |
+| MATCH-01 | Phase 14 | Complete |
+| MATCH-02 | Phase 14 | Complete |
 | TRANS-01 | Phase 16 | Pending |
 | TRANS-02 | Phase 15 | Pending |
 | TRANS-03 | Phase 17 | Pending |
