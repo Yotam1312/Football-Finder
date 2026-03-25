@@ -77,10 +77,11 @@ Plans:
   2. User can tap through Country → League → Team in the hub browse and arrive at a stadium page
   3. The navbar link and bottom-nav link both go to `/stadiums` — the old `/transportation-guide` link is gone from both
   4. The hub renders correctly on mobile (bottom-nav visible, content scrollable)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 20-01: TBD
+- [ ] 20-01-PLAN.md — Types + backend stadiumId fix + nav updates + transport retirement + route wiring
+- [ ] 20-02-PLAN.md — Search components + hub page with browse flow
 
 #### Phase 21: Stadium Detail Page
 **Goal**: A stadium's dedicated page shows its identity, an embedded map, transport details, and the top community posts from FanBase
@@ -135,6 +136,6 @@ Plans:
 | 17. Stadium Transport Component | v2.1 | — | Complete | 2026-03-24 |
 | 18. Getting There FanBase | v2.1 | — | Complete | 2026-03-24 |
 | 19. DB + Backend | 2/2 | Complete    | 2026-03-25 | - |
-| 20. Stadium Guide Hub | v2.2 | 0/TBD | Not started | - |
+| 20. Stadium Guide Hub | v2.2 | 0/2 | Not started | - |
 | 21. Stadium Detail Page | v2.2 | 0/TBD | Not started | - |
 | 22. Cross-Links | v2.2 | 0/TBD | Not started | - |
