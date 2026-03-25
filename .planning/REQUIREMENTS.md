@@ -17,8 +17,8 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 
 ### Discovery
 
-- [ ] **STAD-01**: User can search for a stadium by typing a team or stadium name from the Stadium Guide hub and see matching results
-- [ ] **STAD-02**: User can browse to a stadium via Country → League → Team navigation from the Stadium Guide hub
+- [x] **STAD-01**: User can search for a stadium by typing a team or stadium name from the Stadium Guide hub and see matching results
+- [x] **STAD-02**: User can browse to a stadium via Country → League → Team navigation from the Stadium Guide hub
 - [ ] **STAD-03**: User can reach a stadium's page from the match detail page via a "Stadium Guide" link
 - [ ] **STAD-04**: User can reach a stadium's page from a team's FanBase page via a "Stadium Guide" link
 

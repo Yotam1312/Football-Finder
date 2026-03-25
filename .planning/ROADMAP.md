@@ -47,7 +47,7 @@ See: [.planning/milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md
 ### Phases
 
 - [x] **Phase 19: DB + Backend** — Add lat/lng to Stadium model, create search and detail API endpoints (completed 2026-03-25)
-- [ ] **Phase 20: Stadium Guide Hub** — Hub page with search + Country→League→Team browse, navbar/bottom-nav update
+- [x] **Phase 20: Stadium Guide Hub** — Hub page with search + Country→League→Team browse, navbar/bottom-nav update (completed 2026-03-25)
 - [ ] **Phase 21: Stadium Detail Page** — Full stadium page: identity, OSM map, transport info, top FanBase posts
 - [ ] **Phase 22: Cross-Links** — Link from match detail page and FanBase team page to stadium page
 
@@ -136,6 +136,6 @@ Plans:
 | 17. Stadium Transport Component | v2.1 | — | Complete | 2026-03-24 |
 | 18. Getting There FanBase | v2.1 | — | Complete | 2026-03-24 |
 | 19. DB + Backend | 2/2 | Complete    | 2026-03-25 | - |
-| 20. Stadium Guide Hub | 1/2 | In Progress|  | - |
+| 20. Stadium Guide Hub | 2/2 | Complete   | 2026-03-25 | - |
 | 21. Stadium Detail Page | v2.2 | 0/TBD | Not started | - |
 | 22. Cross-Links | v2.2 | 0/TBD | Not started | - |
