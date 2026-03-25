@@ -77,8 +77,86 @@ export const searchStadiums = async (req: Request, res: Response) => {
 };
 
 // GET /api/stadiums/:id
-// Full stadium detail — implemented in Plan 02.
+// Returns the full detail view for a single stadium, including:
+//   - All transport fields (metros, trains, buses, walking time, etc.)
+//   - Coordinates (latitude/longitude) for the map embed in Phase 21
+//   - primaryTeam: the team with the most home matches at this stadium
+//   - pubRecPosts: top 5 PUB_RECOMMENDATION posts for the primary team
+//   - gettingTherePosts: top 5 GETTING_THERE posts for the primary team
+// Posts are ordered by upvoteCount DESC and exclude reported content.
+// If no matches have been played at this stadium yet, primaryTeam is null
+// and both post arrays are empty — this is a valid state, not an error.
 export const getStadiumById = async (req: Request, res: Response) => {
-  // Implemented in Plan 02
-  res.status(501).json({ error: 'Not implemented yet' });
+  try {
+    // Step 1: Validate that the id is a real integer (not "abc", not a float string)
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'id must be a number' });
+    }
+
+    // Step 2: Fetch the stadium record — all columns including transport + coordinates
+    const stadium = await prisma.stadium.findUnique({
+      where: { id },
+    });
+    if (!stadium) {
+      return res.status(404).json({ error: 'Stadium not found' });
+    }
+
+    // Step 3: Derive the primary team by counting how many times each team
+    // has been the home side at this stadium. The team with the most home
+    // matches is considered the "primary" team — this powers the community
+    // posts section on the Stadium Detail page (Phase 21).
+    const groups = await prisma.match.groupBy({
+      by: ['homeTeamId'],
+      where: { stadiumId: id },
+      _count: { homeTeamId: true },
+      orderBy: { _count: { homeTeamId: 'desc' } },
+      take: 1,
+    });
+    const primaryTeamId = groups[0]?.homeTeamId ?? null;
+
+    // Fetch the primary team's display data if we found one
+    let primaryTeam = null;
+    if (primaryTeamId) {
+      primaryTeam = await prisma.team.findUnique({
+        where: { id: primaryTeamId },
+        select: { id: true, name: true, logoUrl: true },
+      });
+    }
+
+    // Step 4: Fetch top 5 posts of each relevant type for the primary team.
+    // We only query posts if there is a primary team — a stadium with no match
+    // history has no community posts to show, so we short-circuit early.
+    // Promise.all runs both queries in parallel rather than sequentially.
+    let pubRecPosts: any[] = [];
+    let gettingTherePosts: any[] = [];
+
+    if (primaryTeamId) {
+      [pubRecPosts, gettingTherePosts] = await Promise.all([
+        prisma.post.findMany({
+          where: { teamId: primaryTeamId, postType: 'PUB_RECOMMENDATION', reported: false },
+          orderBy: { upvoteCount: 'desc' },
+          take: 5,
+        }),
+        prisma.post.findMany({
+          where: { teamId: primaryTeamId, postType: 'GETTING_THERE', reported: false },
+          orderBy: { upvoteCount: 'desc' },
+          take: 5,
+        }),
+      ]);
+    }
+
+    // Step 5: Compose and return the full stadium response
+    res.json({
+      stadium: {
+        ...stadium,
+        primaryTeam,
+        pubRecPosts,
+        gettingTherePosts,
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching stadium:', error);
+    res.status(500).json({ error: 'Failed to fetch stadium' });
+  }
 };
