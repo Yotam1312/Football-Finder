@@ -8,7 +8,18 @@ Football Finder is a web platform that helps football fans discover matches acro
 
 A traveler or local types a city and date range and instantly sees every football match happening there — no Googling, no scattered sites.
 
-## Current State
+## Current Milestone: v2.2 — Stadium Guide
+
+**Goal:** Transform the Transportation Guide page into a searchable stadium directory — every stadium gets its own page with transport data, an embedded map, and community content pulled from FanBase.
+
+**Target features:**
+- Stadium Guide hub at `/stadiums`: search by team/stadium name + Country → League → Team browse
+- Stadium pages: embedded OSM map, transport lines, Navigate button, top FanBase Pub Recs + Getting There tips
+- New `latitude`/`longitude` fields on Stadium model for map embedding
+- Cross-links from match detail pages and FanBase team pages
+- Replaces `/transportation-guide` in navbar and bottom nav
+
+## Previous State
 
 **Version:** v2.1 — *Shipped 2026-03-24*
 
@@ -66,9 +77,7 @@ A traveler or local types a city and date range and instantly sees every footbal
 
 ## Next Milestone
 
-*Define with `/gsd:new-milestone` — candidate areas: global league expansion (v3.0), live scores, social features*
-
-### Active (next milestone)
+### Active (v2.2)
 
 ### Out of Scope
 
@@ -114,4 +123,4 @@ A traveler or local types a city and date range and instantly sees every footbal
 | Defer global league expansion to v3 | API rate limits and timezone complexity underestimated; MLS multi-tz needs careful sync.service work | — Pending v3 |
 
 ---
-*Last updated: 2026-03-24 — v2.1 milestone started*
+*Last updated: 2026-03-25 — v2.2 milestone started*
