@@ -38,7 +38,7 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 
 ### Navigation
 
-- [ ] **STAD-13**: The Stadium Guide hub replaces the Transportation Guide link in the navbar and bottom navigation bar (old `/transportation-guide` page is removed)
+- [x] **STAD-13**: The Stadium Guide hub replaces the Transportation Guide link in the navbar and bottom navigation bar (old `/transportation-guide` page is removed)
 
 ---
 
