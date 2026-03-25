@@ -59,9 +59,10 @@ export const getTeamsByLeague = async (req: Request, res: Response) => {
     }
 
     // Step 1: collect all distinct team IDs from matches in this league
+    // Also fetch stadiumId so we can derive which stadium each home team plays at
     const matches = await prisma.match.findMany({
       where: { leagueId },
-      select: { homeTeamId: true, awayTeamId: true },
+      select: { homeTeamId: true, awayTeamId: true, stadiumId: true },
     });
 
     // Build a deduplicated set of team IDs from both home and away sides
@@ -71,6 +72,16 @@ export const getTeamsByLeague = async (req: Request, res: Response) => {
       teamIdSet.add(m.awayTeamId);
     }
     const teamIds = Array.from(teamIdSet);
+
+    // Build a map of teamId -> stadiumId from home matches.
+    // A team's stadium is derived from the first home match that has a
+    // non-null stadiumId (home teams play at their own stadium).
+    const stadiumByTeam = new Map<number, number>();
+    for (const m of matches) {
+      if (m.stadiumId != null && !stadiumByTeam.has(m.homeTeamId)) {
+        stadiumByTeam.set(m.homeTeamId, m.stadiumId);
+      }
+    }
 
     // Step 2: fetch teams with post counts in one query (avoids N+1)
     const teams = await prisma.team.findMany({
@@ -84,7 +95,15 @@ export const getTeamsByLeague = async (req: Request, res: Response) => {
       orderBy: { name: 'asc' },
     });
 
-    res.json({ teams });
+    // Attach the derived stadiumId to each team (null if no home match has a stadium).
+    // The frontend filter `t.stadiumId != null` uses this to show only teams with known stadiums
+    // in the Stadium Guide browse flow (STAD-02).
+    const teamsWithStadium = teams.map(t => ({
+      ...t,
+      stadiumId: stadiumByTeam.get(t.id) ?? null,
+    }));
+
+    res.json({ teams: teamsWithStadium });
   } catch (error) {
     console.error('Error fetching teams by league:', error);
     res.status(500).json({ error: 'Failed to fetch teams' });
