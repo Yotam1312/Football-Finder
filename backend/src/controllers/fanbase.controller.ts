@@ -79,6 +79,7 @@ export const getTeamsByLeague = async (req: Request, res: Response) => {
         id: true,
         name: true,
         logoUrl: true,
+        stadiumId: true, // included so the Stadium Guide hub can link to a team's home stadium
         _count: { select: { posts: true } }, // post count badge shown on team cards (FAN-05)
       },
       orderBy: { name: 'asc' },

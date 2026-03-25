@@ -68,7 +68,9 @@ export interface MatchDetail extends Match {
 
 // Extends the base Team type with a post count — returned by league teams endpoint
 // and team detail endpoint. The _count field comes directly from Prisma's relation aggregate.
+// stadiumId is included so the Stadium Guide hub can link directly to a team's stadium.
 export interface TeamWithPostCount extends Team {
+  stadiumId: number | null;
   _count: { posts: number };
 }
 
@@ -79,6 +81,18 @@ export interface TeamSearchResult {
   name: string;
   logoUrl: string | null;
   league: { id: number; name: string; country: string } | null;
+}
+
+// Shape returned by GET /api/stadiums/search — Phase 19 endpoint.
+// Used by the Stadium Guide hub (Phase 20) to display search results.
+export interface StadiumSearchResult {
+  id: number;
+  name: string;
+  city: string;
+  googleMapsUrl: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  team: { id: number; name: string; logoUrl: string | null } | null;
 }
 
 // PostType matches the Prisma enum in schema.prisma

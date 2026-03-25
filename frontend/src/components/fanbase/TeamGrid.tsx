@@ -7,9 +7,13 @@ import { SkeletonCard } from '../SkeletonCard';
 interface TeamGridProps {
   teams: TeamWithPostCount[];
   isLoading: boolean;
+  // Optional navigation override — defaults to '/fanbase/team/:id'.
+  // Pass a function here to navigate differently (e.g. Stadium Guide hub can
+  // navigate to a team's stadium instead of its fanbase page).
+  getNavigateTo?: (team: TeamWithPostCount) => string;
 }
 
-export const TeamGrid: React.FC<TeamGridProps> = ({ teams, isLoading }) => {
+export const TeamGrid: React.FC<TeamGridProps> = ({ teams, isLoading, getNavigateTo }) => {
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -31,7 +35,7 @@ export const TeamGrid: React.FC<TeamGridProps> = ({ teams, isLoading }) => {
       {teams.map(team => (
         <button
           key={team.id}
-          onClick={() => navigate(`/fanbase/team/${team.id}`)}
+          onClick={() => navigate(getNavigateTo ? getNavigateTo(team) : `/fanbase/team/${team.id}`)}
           className="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all p-4 flex flex-col items-center gap-2 cursor-pointer min-h-[80px]"
         >
           {/* TeamLogo accepts 'sm' | 'lg' — using 'sm' (40px) for team grid cards */}

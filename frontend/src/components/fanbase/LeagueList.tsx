@@ -8,9 +8,12 @@ interface LeagueListProps {
   isLoading: boolean;
   country: string;  // e.g. "england" — already lowercased slug for URL
   onSelect: (league: League) => void;
+  // Optional base path — defaults to '/fanbase'. Pass '/stadiums' to reuse
+  // this component in the Stadium Guide hub without changing the fanbase routes.
+  basePath?: string;
 }
 
-export const LeagueList: React.FC<LeagueListProps> = ({ leagues, isLoading, country, onSelect }) => {
+export const LeagueList: React.FC<LeagueListProps> = ({ leagues, isLoading, country, onSelect, basePath }) => {
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -29,7 +32,7 @@ export const LeagueList: React.FC<LeagueListProps> = ({ leagues, isLoading, coun
           onClick={() => {
             onSelect(league);
             // Use league.id in the URL (avoids slug decode complexity)
-            navigate(`/fanbase/${country}/${league.id}`);
+            navigate(`${basePath ?? '/fanbase'}/${country}/${league.id}`);
           }}
           className="w-full bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-green-200 transition-all p-4 flex items-center gap-3 text-left"
         >

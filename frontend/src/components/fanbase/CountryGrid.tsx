@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 interface CountryGridProps {
   onSelect: (country: string) => void;
+  // Optional base path — defaults to '/fanbase'. Pass '/stadiums' to reuse
+  // this component in the Stadium Guide hub without changing the fanbase routes.
+  basePath?: string;
 }
 
 // We use flagcdn.com images instead of emoji flags because Windows doesn't
@@ -15,12 +18,12 @@ const COUNTRIES = [
   { name: 'France',  flagUrl: 'https://flagcdn.com/fr.svg' },
 ];
 
-export const CountryGrid: React.FC<CountryGridProps> = ({ onSelect }) => {
+export const CountryGrid: React.FC<CountryGridProps> = ({ onSelect, basePath }) => {
   const navigate = useNavigate();
 
   const handleSelect = (country: string) => {
     onSelect(country);
-    navigate('/fanbase/' + country.toLowerCase());
+    navigate(`${basePath ?? '/fanbase'}/${country.toLowerCase()}`);
   };
 
   return (
