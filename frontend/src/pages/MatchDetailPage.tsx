@@ -166,7 +166,11 @@ export const MatchDetailPage: React.FC = () => {
         {/* Getting to [Stadium] — shows transport options from DB (TRANS-03, TRANS-04).
             Only renders when match.stadium is set; TBC venues have no transport data. */}
         {match.stadium && (() => {
-          const { nearbyMetros, nearbyTrains, nearbyBuses, walkingTimeFromCenter, publicTransportInfo, parkingInfo } = match.stadium!;
+          const { nearbyMetros: _metros, nearbyTrains: _trains, nearbyBuses: _buses, walkingTimeFromCenter, publicTransportInfo, parkingInfo } = match.stadium!;
+          // Null-guard: pre-migration stadium rows have NULL in TEXT[] columns (no DEFAULT set in migration SQL)
+          const nearbyMetros = _metros ?? [];
+          const nearbyTrains = _trains ?? [];
+          const nearbyBuses  = _buses  ?? [];
 
           // Empty state: only transport line arrays count — walking time or parking alone does not fill the section
           const hasTransportLines = nearbyMetros.length > 0 || nearbyTrains.length > 0 || nearbyBuses.length > 0;
