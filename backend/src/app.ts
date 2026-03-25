@@ -13,6 +13,7 @@ import postsRoutes from './routes/posts.routes';
 import usersRoutes from './routes/users.routes';
 import contactRoutes from './routes/contact.routes';
 import uploadRoutes from './routes/upload.routes';
+import stadiumRoutes from './routes/stadium.routes';
 
 const app = express();
 
@@ -55,5 +56,6 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/stadiums', stadiumRoutes);
 
 export default app;

@@ -34,7 +34,12 @@ model Stadium {
   publicTransportInfo   String?    // Free-text general transport tip
   parkingInfo           String?    // Free-text parking notes
 
+  // Coordinates (Phase 19) — WGS-84 decimal degrees, null until populated via CSV/SQL
+  latitude  Float?   // WGS-84 decimal degrees — null until populated via CSV/SQL
+  longitude Float?   // WGS-84 decimal degrees — null until populated via CSV/SQL
+
   @@index([cityNormalized])
+  @@index([name])
 }
 
 model Team {
