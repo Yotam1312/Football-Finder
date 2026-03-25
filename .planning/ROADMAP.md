@@ -134,7 +134,7 @@ Plans:
 | 16. Transport Guide Redesign | v2.1 | — | Complete | 2026-03-24 |
 | 17. Stadium Transport Component | v2.1 | — | Complete | 2026-03-24 |
 | 18. Getting There FanBase | v2.1 | — | Complete | 2026-03-24 |
-| 19. DB + Backend | v2.2 | 0/2 | Not started | - |
+| 19. DB + Backend | 1/2 | In Progress|  | - |
 | 20. Stadium Guide Hub | v2.2 | 0/TBD | Not started | - |
 | 21. Stadium Detail Page | v2.2 | 0/TBD | Not started | - |
 | 22. Cross-Links | v2.2 | 0/TBD | Not started | - |
