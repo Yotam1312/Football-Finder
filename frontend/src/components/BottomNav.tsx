@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Users, User, Navigation, Phone } from 'lucide-react';
+import { Search, Users, User, MapPin, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Pages where the bottom nav should not appear.
@@ -17,10 +17,10 @@ const tabs = [
     matchPrefixes: ['/', '/results', '/match'],
   },
   {
-    label: 'Transport',
-    icon: Navigation,
-    path: '/transport',
-    matchPrefixes: ['/transport'],
+    label: 'Stadiums',
+    icon: MapPin,
+    path: '/stadiums',
+    matchPrefixes: ['/stadiums'],
   },
   {
     label: 'FanBase',

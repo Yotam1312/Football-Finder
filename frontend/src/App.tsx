@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { BottomNav } from './components/BottomNav';
@@ -12,7 +12,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { WelcomePage } from './pages/WelcomePage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ContactPage } from './pages/ContactPage';
-import { TransportPage } from './pages/TransportPage';
+import { StadiumGuidePage } from './pages/StadiumGuidePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // AnimatePresence enables smooth page transition animations.
@@ -38,9 +38,14 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/welcome"  element={<WelcomePage />} />
           <Route path="/profile"  element={<ProfilePage />} />
+          {/* Stadium Guide hub — all 3 steps handled by one component via useParams */}
+          <Route path="/stadiums"                    element={<StadiumGuidePage />} />
+          <Route path="/stadiums/:country"           element={<StadiumGuidePage />} />
+          <Route path="/stadiums/:country/:league"   element={<StadiumGuidePage />} />
+          {/* Redirect old Transport page URL to new Stadium Guide hub */}
+          <Route path="/transport" element={<Navigate to="/stadiums" replace />} />
           {/* Static info pages — Phase 5 polish */}
           <Route path="/contact"   element={<ContactPage />} />
-          <Route path="/transport" element={<TransportPage />} />
           {/* Catch-all — must be the last route; shows 404 page for unknown URLs */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

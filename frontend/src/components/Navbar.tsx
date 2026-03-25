@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Navigation, Users, Phone } from 'lucide-react';
+import { MapPin, Users, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 // Top navigation bar — shown on every page.
@@ -61,11 +61,11 @@ export const Navbar: React.FC = () => {
         <div className="flex-1 hidden md:flex items-center justify-center">
           <div className="flex items-center gap-12">
             <Link
-              to="/transport"
+              to="/stadiums"
               className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors min-h-[48px]"
             >
-              <Navigation className="w-4 h-4" />
-              Transportation &amp; Navigation
+              <MapPin className="w-4 h-4" />
+              Stadium Guide
             </Link>
             <Link
               to="/fanbase"

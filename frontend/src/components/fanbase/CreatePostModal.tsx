@@ -141,7 +141,9 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   // ── Photo upload state (Seat Tip only) ──
   // photoPreviewUrl: local object URL shown immediately after file selection (synchronous)
   // photoUploadedUrl: Azure Blob URL returned after the background upload completes
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  // _photoFile is stored but not read directly — setPhotoFile is used to track file state
+  // and to clear it on cancel/submit. Prefixed with _ to suppress unused-variable warning.
+  const [_photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(editPost?.photoUrl ?? null);
   const [photoUploadedUrl, setPhotoUploadedUrl] = useState<string | null>(editPost?.photoUrl ?? null);
   const [photoUploading, setPhotoUploading] = useState(false);
