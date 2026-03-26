@@ -80,7 +80,7 @@ export const StadiumDetailPage: React.FC = () => {
     fromAirportInfo, travelTimesInfo, paymentInfo,
     proTips, recommendedApps,
     budgetCheap, budgetStandard, budgetComfort,
-    gettingTherePosts,
+    gettingTherePosts, pubRecPosts,
   } = stadium;
 
   // Null-guard arrays — pre-migration rows may have null instead of []
@@ -90,6 +90,7 @@ export const StadiumDetailPage: React.FC = () => {
   const tips   = proTips       ?? [];
   const apps   = recommendedApps ?? [];
   const communityTips = gettingTherePosts ?? [];
+  const pubRecs = pubRecPosts ?? [];
 
   const hasTransportLines = metros.length > 0 || trains.length > 0 || buses.length > 0;
   const hasBudget = budgetCheap || budgetStandard || budgetComfort;
@@ -327,29 +328,85 @@ export const StadiumDetailPage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* 9. Community Tips — GETTING_THERE posts from FanBase */}
-        {communityTips.length > 0 && (
-          <SectionCard icon={<Users className="w-5 h-5" />} title="Fan Tips">
-            <div className="space-y-4">
-              {communityTips.map(post => (
-                <div key={post.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
-                  <p className="text-sm font-semibold text-gray-800 mb-1">{post.title}</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">{post.body}</p>
-
-                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
-                    {post.transportType && (
-                      <span className="bg-gray-100 px-2 py-0.5 rounded-full">{post.transportType}</span>
+        {/* 9. Pub Recommendations — PUB_RECOMMENDATION posts from FanBase */}
+        {primaryTeam && (
+          <SectionCard icon={<Users className="w-5 h-5" />} title="Pub Recommendations">
+            {pubRecs.length > 0 ? (
+              <div className="space-y-4">
+                {pubRecs.map(post => (
+                  <div key={post.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+                    {post.pubName && (
+                      <p className="text-sm font-semibold text-gray-800 mb-1">{post.pubName}</p>
                     )}
-                    {post.travelCost && <span>{post.travelCost}</span>}
-                    {post.travelTime && <span>{post.travelTime} min</span>}
-                    <span>by {post.authorName}</span>
+                    <p className="text-sm text-gray-600 leading-relaxed">{post.body}</p>
+                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                      {post.pubDistance && (
+                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{post.pubDistance}</span>
+                      )}
+                      <span>by {post.authorName}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500 mb-2">No pub tips yet for this stadium.</p>
+                <Link
+                  to={`/fanbase/team/${primaryTeam.id}`}
+                  className="text-sm font-medium text-green-600 hover:text-green-700"
+                >
+                  Be the first — post on FanBase →
+                </Link>
+              </div>
+            )}
 
-            {/* Link to the full FanBase page for this team */}
-            {primaryTeam && (
+            {pubRecs.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <Link
+                  to={`/fanbase/team/${primaryTeam.id}`}
+                  className="text-sm font-medium text-green-600 hover:text-green-700"
+                >
+                  See all pub tips for {primaryTeam.name} →
+                </Link>
+              </div>
+            )}
+          </SectionCard>
+        )}
+
+        {/* 10. Fan Transport Tips — GETTING_THERE posts from FanBase */}
+        {primaryTeam && (
+          <SectionCard icon={<Users className="w-5 h-5" />} title="Fan Tips">
+            {communityTips.length > 0 ? (
+              <div className="space-y-4">
+                {communityTips.map(post => (
+                  <div key={post.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+                    <p className="text-sm font-semibold text-gray-800 mb-1">{post.title}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed">{post.body}</p>
+
+                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                      {post.transportType && (
+                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{post.transportType}</span>
+                      )}
+                      {post.travelCost && <span>{post.travelCost}</span>}
+                      {post.travelTime && <span>{post.travelTime} min</span>}
+                      <span>by {post.authorName}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500 mb-2">No transport tips yet.</p>
+                <Link
+                  to={`/fanbase/team/${primaryTeam.id}`}
+                  className="text-sm font-medium text-green-600 hover:text-green-700"
+                >
+                  Share your experience on FanBase →
+                </Link>
+              </div>
+            )}
+
+            {communityTips.length > 0 && (
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <Link
                   to={`/fanbase/team/${primaryTeam.id}`}
@@ -364,7 +421,7 @@ export const StadiumDetailPage: React.FC = () => {
 
         {/* Empty state — no transport data at all */}
         {!hasTransportLines && !fromAirportInfo && !travelTimesInfo && !hasBudget &&
-         tips.length === 0 && communityTips.length === 0 && (
+         tips.length === 0 && communityTips.length === 0 && pubRecs.length === 0 && !primaryTeam && (
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-10 text-center">
             <MapPin className="w-10 h-10 text-gray-300 mx-auto mb-3" />
             <p className="text-gray-500 text-sm">
