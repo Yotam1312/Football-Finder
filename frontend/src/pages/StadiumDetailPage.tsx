@@ -4,9 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
   MapPin, Plane, Clock, CreditCard, Lightbulb,
-  Smartphone, Wallet, Car, Users, Navigation, ChevronLeft, Map,
+  Smartphone, Wallet, Car, Users, Navigation, ChevronLeft, Map, Building,
 } from 'lucide-react';
 import type { StadiumDetail } from '../types';
+import { StadiumLeafletMap } from '../components/stadiums/StadiumLeafletMap';
+import { NearbyStadiumsSection } from '../components/stadiums/NearbyStadiumsSection';
 
 // ─────────────────────────────────────────────
 // Shared section card wrapper — keeps all sections visually consistent
@@ -81,6 +83,7 @@ export const StadiumDetailPage: React.FC = () => {
     proTips, recommendedApps,
     budgetCheap, budgetStandard, budgetComfort,
     gettingTherePosts, pubRecPosts,
+    airportTransport, travelTimes, budgetBreakdown, paymentDetails, nearbyStadiums,
   } = stadium;
 
   // Null-guard arrays — pre-migration rows may have null instead of []
@@ -91,6 +94,7 @@ export const StadiumDetailPage: React.FC = () => {
   const apps   = recommendedApps ?? [];
   const communityTips = gettingTherePosts ?? [];
   const pubRecs = pubRecPosts ?? [];
+  const nearby = nearbyStadiums ?? [];
 
   const hasTransportLines = metros.length > 0 || trains.length > 0 || buses.length > 0;
   const hasBudget = budgetCheap || budgetStandard || budgetComfort;
@@ -160,7 +164,7 @@ export const StadiumDetailPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Map ─────────────────────────────── */}
+      {/* ── Map (Interactive Leaflet + OSM tiles) ─── */}
       {latitude != null && longitude != null && (
         <div className="max-w-3xl mx-auto px-4 pt-8">
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -168,12 +172,10 @@ export const StadiumDetailPage: React.FC = () => {
               <Map className="w-5 h-5 text-slate-600" />
               <h2 className="text-base font-bold text-gray-800">Location</h2>
             </div>
-            <iframe
-              title={`Map of ${name}`}
-              width="100%"
-              className="h-[280px] md:h-[360px]"
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=${longitude - 0.01},${latitude - 0.01},${longitude + 0.01},${latitude + 0.01}&layer=mapnik&marker=${latitude},${longitude}`}
-              style={{ border: 0 }}
+            <StadiumLeafletMap
+              stadiumName={name}
+              latitude={latitude}
+              longitude={longitude}
             />
           </div>
         </div>
@@ -241,50 +243,158 @@ export const StadiumDetailPage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* 2. From Airport */}
-        {fromAirportInfo && (
+        {/* 2. From Airport — prefer structured airportTransport JSON, fallback to string */}
+        {(airportTransport || fromAirportInfo) && (
           <SectionCard icon={<Plane className="w-5 h-5" />} title="From the Airport">
-            <p className="text-sm text-gray-700 leading-relaxed">{fromAirportInfo}</p>
+            {airportTransport ? (
+              <div className="space-y-3">
+                {airportTransport.metro && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Metro / Rail</p>
+                    <ol className="space-y-1.5 list-decimal list-inside">
+                      {airportTransport.metro.steps.map((step, i) => (
+                        <li key={i} className="text-sm text-gray-700">{step}</li>
+                      ))}
+                    </ol>
+                    <p className="text-xs text-gray-500 mt-1">{airportTransport.metro.time} &middot; {airportTransport.metro.cost}</p>
+                  </div>
+                )}
+                {airportTransport.taxi && (
+                  <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
+                    <span className="text-sm text-gray-700 font-medium">Taxi</span>
+                    <span className="text-sm text-gray-500">{airportTransport.taxi.time} &middot; {airportTransport.taxi.cost}</span>
+                  </div>
+                )}
+                {airportTransport.rideshare && (
+                  <div>
+                    <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
+                      <span className="text-sm text-gray-700 font-medium">Uber / Bolt</span>
+                      <span className="text-sm text-gray-500">{airportTransport.rideshare.time} &middot; {airportTransport.rideshare.cost}</span>
+                    </div>
+                    {airportTransport.rideshare.surgeWarning && (
+                      <p className="text-xs text-amber-600 mt-1.5 ml-1">{airportTransport.rideshare.surgeWarning}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-700 leading-relaxed">{fromAirportInfo}</p>
+            )}
           </SectionCard>
         )}
 
-        {/* 3. Travel Times */}
-        {travelTimesInfo && (
+        {/* 3. Travel Times — prefer structured travelTimes JSON, fallback to string */}
+        {(travelTimes || travelTimesInfo) && (
           <SectionCard icon={<Clock className="w-5 h-5" />} title="Travel Times">
-            <p className="text-sm text-gray-700 leading-relaxed">{travelTimesInfo}</p>
+            {travelTimes ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {travelTimes.metro && (
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-3 text-center">
+                    <p className="text-xs font-semibold text-green-700 uppercase tracking-wide mb-1">Metro</p>
+                    <p className="text-sm text-green-800 font-medium">{travelTimes.metro}</p>
+                  </div>
+                )}
+                {travelTimes.bus && (
+                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 text-center">
+                    <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Bus</p>
+                    <p className="text-sm text-amber-800 font-medium">{travelTimes.bus}</p>
+                  </div>
+                )}
+                {travelTimes.taxi && (
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 text-center">
+                    <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">Taxi</p>
+                    <p className="text-sm text-blue-800 font-medium">{travelTimes.taxi}</p>
+                  </div>
+                )}
+                {travelTimes.walking && (
+                  <div className="bg-purple-50 border border-purple-100 rounded-lg p-3 text-center">
+                    <p className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-1">Walking</p>
+                    <p className="text-sm text-purple-800 font-medium">{travelTimes.walking}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-700 leading-relaxed">{travelTimesInfo}</p>
+            )}
           </SectionCard>
         )}
 
-        {/* 4. Budget Breakdown */}
-        {hasBudget && (
+        {/* 4. Budget Breakdown — prefer structured budgetBreakdown JSON, fallback to strings */}
+        {(budgetBreakdown || hasBudget) && (
           <SectionCard icon={<Wallet className="w-5 h-5" />} title="Budget Breakdown">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {budgetCheap && (
+            {budgetBreakdown ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="bg-green-50 border border-green-100 rounded-lg p-4">
                   <p className="text-xs font-bold text-green-700 uppercase tracking-wide mb-1">Budget</p>
-                  <p className="text-sm text-green-800 leading-snug">{budgetCheap}</p>
+                  <p className="text-sm text-green-800 font-semibold">{budgetBreakdown.budget.cost}</p>
+                  <p className="text-xs text-green-700 mt-1">{budgetBreakdown.budget.how}</p>
                 </div>
-              )}
-              {budgetStandard && (
                 <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
                   <p className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">Standard</p>
-                  <p className="text-sm text-blue-800 leading-snug">{budgetStandard}</p>
+                  <p className="text-sm text-blue-800 font-semibold">{budgetBreakdown.standard.cost}</p>
+                  <p className="text-xs text-blue-700 mt-1">{budgetBreakdown.standard.how}</p>
                 </div>
-              )}
-              {budgetComfort && (
                 <div className="bg-purple-50 border border-purple-100 rounded-lg p-4">
                   <p className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-1">Comfort</p>
-                  <p className="text-sm text-purple-800 leading-snug">{budgetComfort}</p>
+                  <p className="text-sm text-purple-800 font-semibold">{budgetBreakdown.comfort.cost}</p>
+                  <p className="text-xs text-purple-700 mt-1">{budgetBreakdown.comfort.how}</p>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {budgetCheap && (
+                  <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+                    <p className="text-xs font-bold text-green-700 uppercase tracking-wide mb-1">Budget</p>
+                    <p className="text-sm text-green-800 leading-snug">{budgetCheap}</p>
+                  </div>
+                )}
+                {budgetStandard && (
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                    <p className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">Standard</p>
+                    <p className="text-sm text-blue-800 leading-snug">{budgetStandard}</p>
+                  </div>
+                )}
+                {budgetComfort && (
+                  <div className="bg-purple-50 border border-purple-100 rounded-lg p-4">
+                    <p className="text-xs font-bold text-purple-700 uppercase tracking-wide mb-1">Comfort</p>
+                    <p className="text-sm text-purple-800 leading-snug">{budgetComfort}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </SectionCard>
         )}
 
-        {/* 5. Payment Methods */}
-        {paymentInfo && (
-          <SectionCard icon={<CreditCard className="w-5 h-5" />} title="Payment Methods">
-            <p className="text-sm text-gray-700 leading-relaxed">{paymentInfo}</p>
+        {/* 5. Payment & Tickets — prefer structured paymentDetails JSON, fallback to string */}
+        {(paymentDetails || paymentInfo) && (
+          <SectionCard icon={<CreditCard className="w-5 h-5" />} title="Payment & Tickets">
+            {paymentDetails ? (
+              <div className="space-y-3">
+                {paymentDetails.acceptedCards.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Accepted</p>
+                    <div className="flex flex-wrap gap-2">
+                      {paymentDetails.acceptedCards.map(card => (
+                        <span key={card} className="bg-green-50 text-green-700 border border-green-200 text-sm font-medium px-3 py-1 rounded-full">
+                          {card}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {paymentDetails.recommendedTravelCard && (
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
+                    <p className="text-xs font-semibold text-blue-700 uppercase tracking-widest mb-1">Recommended Card</p>
+                    <p className="text-sm text-blue-800">{paymentDetails.recommendedTravelCard}</p>
+                  </div>
+                )}
+                {paymentDetails.tips && (
+                  <p className="text-sm text-gray-600 leading-relaxed">{paymentDetails.tips}</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-700 leading-relaxed">{paymentInfo}</p>
+            )}
           </SectionCard>
         )}
 
@@ -373,12 +483,12 @@ export const StadiumDetailPage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* 10. Fan Transport Tips — GETTING_THERE posts from FanBase */}
+        {/* 10. Community Tips — GETTING_THERE posts from FanBase (top 3) */}
         {primaryTeam && (
-          <SectionCard icon={<Users className="w-5 h-5" />} title="Fan Tips">
+          <SectionCard icon={<Users className="w-5 h-5" />} title="Community Tips">
             {communityTips.length > 0 ? (
               <div className="space-y-4">
-                {communityTips.map(post => (
+                {communityTips.slice(0, 3).map(post => (
                   <div key={post.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
                     <p className="text-sm font-semibold text-gray-800 mb-1">{post.title}</p>
                     <p className="text-sm text-gray-600 leading-relaxed">{post.body}</p>
@@ -398,7 +508,7 @@ export const StadiumDetailPage: React.FC = () => {
               <div className="text-center py-4">
                 <p className="text-sm text-gray-500 mb-2">No transport tips yet.</p>
                 <Link
-                  to={`/fanbase/team/${primaryTeam.id}`}
+                  to={`/fanbase/team/${primaryTeam.id}?tab=getting-there`}
                   className="text-sm font-medium text-green-600 hover:text-green-700"
                 >
                   Share your experience on FanBase →
@@ -409,13 +519,20 @@ export const StadiumDetailPage: React.FC = () => {
             {communityTips.length > 0 && (
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <Link
-                  to={`/fanbase/team/${primaryTeam.id}`}
+                  to={`/fanbase/team/${primaryTeam.id}?tab=getting-there`}
                   className="text-sm font-medium text-green-600 hover:text-green-700"
                 >
-                  See all fan posts for {primaryTeam.name} →
+                  View all tips in FanBase →
                 </Link>
               </div>
             )}
+          </SectionCard>
+        )}
+
+        {/* 11. Nearby Stadiums — up to 3 stadiums within 20 km */}
+        {nearby.length > 0 && (
+          <SectionCard icon={<Building className="w-5 h-5" />} title="Nearby Stadiums">
+            <NearbyStadiumsSection stadiums={nearby} />
           </SectionCard>
         )}
 
