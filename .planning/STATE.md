@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v2.2
-milestone_name: — Stadium Guide
+milestone: v2.3
+milestone_name: — TBD
 status: planning
-stopped_at: Completed 22-02-PLAN.md
-last_updated: "2026-03-27T08:37:00.758Z"
-last_activity: 2026-03-25 — Roadmap created, 4 phases mapped to 13 requirements
+stopped_at: v2.2 archived
+last_updated: "2026-03-27T11:00:00.000Z"
+last_activity: 2026-03-27 — v2.2 milestone archived, ready for next milestone
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 8
-  completed_plans: 8
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
   percent: 0
 ---
 
@@ -18,45 +18,36 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-25)
+See: .planning/PROJECT.md (updated 2026-03-27)
 
 **Core value:** A traveler or local types a city and date range and instantly sees every football match happening there — no Googling, no scattered sites.
-**Current focus:** v2.2 — Stadium Guide (Phase 19 next)
+**Current focus:** v2.2 complete — ready to plan next milestone
 
 ## Current Position
 
-Phase: 0 of 4 (not started)
+Phase: — (no active milestone)
 Plan: —
-Status: Roadmap ready — ready to plan Phase 19
-Last activity: 2026-03-25 — Roadmap created, 4 phases mapped to 13 requirements
+Status: v2.2 archived — run `/gsd:new-milestone` to define next milestone
+Last activity: 2026-03-27 — v2.2 milestone archived
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [░░░░░░░░░░] —
 
 ## Performance Metrics
 
-**Velocity:**
-- Total plans completed: 0 (this milestone)
-- Average duration: —
-- Total execution time: —
+**Velocity (v2.2):**
+- Total plans completed: 9
+- Phases completed: 5
+- Timeline: 2026-03-25 → 2026-03-27 (3 days)
 
-**By Phase:**
+**By Phase (v2.2):**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 19 | TBD | - | - |
-| 20 | TBD | - | - |
-| 21 | TBD | - | - |
-| 22 | TBD | - | - |
-
-**Recent Trend:** No data yet
-| Phase 19-db-backend P01 | 15 | 2 tasks | 6 files |
-| Phase 19 P02 | 8 | 2 tasks | 2 files |
-| Phase 20 P01 | 278 | 2 tasks | 9 files |
-| Phase 20 P02 | 240 | 2 tasks | 6 files |
-| Phase 20 P03 | 5 | 1 tasks | 1 files |
-| Phase 21 P01 | 128 | 2 tasks | 1 files |
-| Phase 22-stadium-transport-detail P01 | 15 | 2 tasks | 5 files |
-| Phase 22-stadium-transport-detail P02 | 10 | 2 tasks | 5 files |
+| Phase | Plans | Duration |
+|-------|-------|----------|
+| 19 — DB + Backend | 2 | ~1 day |
+| 20 — Stadium Guide Hub | 3 | ~1 day |
+| 21 — Stadium Detail Page | 1 | ~1 day |
+| 22 — Stadium Transport Detail | 2 | ~1 day |
+| 23 — Stadium Page Structure | 1 | < 1 hour |
 
 ## Accumulated Context
 
@@ -66,13 +57,21 @@ Progress: [░░░░░░░░░░] 0%
 - Add lat/lng coordinates to stadium records (new in v2.2) — user-managed via SQL/CSV after Phase 19 migration
 - `transportType` backend validation — enforce Metro/Bus/Train/Taxi/Walking/Other at API layer
 - Pre-flight for global league expansion (v3.0): upgrade API-Football plan, verify league IDs, MLS timezone table
+- Clean up dead code: `NearbyStadiumsSection.tsx`, `nearbyStadiums` backend query, `pubRecPosts` backend query
+- Add FanBase → Stadium link in `TeamFanBasePage` using `team.stadiumId`
+
+### Roadmap Evolution
+
+- Phase 23 added: Stadium Page Structure — consistent section order (Hero, Location, Getting There, Travel Times, Budget Breakdown, Payment & Tickets, Pro Tips, Recommended Apps, Parking, Community Tips)
+- Phase 24 (stadium hero background image) added then removed — deferred
 
 ### Blockers/Concerns
 
-- API-Football free plan capped at seasons 2022-2024 — need paid plan before v3.0 league work (v2.2 unaffected)
+- API-Football free plan capped at seasons 2022-2024 — need paid plan before v3.0 league work
+- Stadium coordinate data (lat/lng) and transport JSON data require manual seeding by user — not automated
 
 ## Session Continuity
 
-Last session: 2026-03-27T08:33:12.379Z
-Stopped at: Completed 22-02-PLAN.md
+Last session: 2026-03-27
+Stopped at: v2.2 archived
 Resume file: None
