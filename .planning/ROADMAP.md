@@ -107,7 +107,7 @@ Plans:
   1. `Stadium` table has `airportTransport`, `travelTimes`, `paymentInfo`, `proTips`, `recommendedApps`, `budgetBreakdown` JSON fields; migration runs cleanly
   2. Stadium detail page renders "From Airport", "Travel Times", "Payment & Tickets", "Pro Tips", "Recommended Apps", and "Budget Breakdown" sections when data is present
   3. "Community Tips" section shows up to 3 Getting There posts and links to `/fanbase/[team-slug]?tab=getting-there`
-  4. An interactive Leaflet map renders with stadium marker and markers for nearby transport stops
+  4. An interactive Leaflet map renders with a stadium marker (transport stop markers deferred until coordinate data exists)
   5. "Nearby Stadiums" section shows up to 3 stadiums within 20 km, each linking to their stadium page
   6. All sections are hidden gracefully (no broken UI) when their data is null or empty
 **Plans**: 2 plans
@@ -143,4 +143,4 @@ Plans:
 | 19. DB + Backend | 2/2 | Complete    | 2026-03-25 | - |
 | 20. Stadium Guide Hub | 3/3 | Complete    | 2026-03-25 | - |
 | 21. Stadium Detail Page | 1/1 | Complete    | 2026-03-26 | - |
-| 22. Stadium Transport Detail | v2.2 | 0/2 | Not started | - |
+| 22. Stadium Transport Detail | 1/2 | In Progress|  | - |

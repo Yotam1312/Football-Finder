@@ -19,8 +19,6 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 
 - [x] **STAD-01**: User can search for a stadium by typing a team or stadium name from the Stadium Guide hub and see matching results
 - [x] **STAD-02**: User can browse to a stadium via Country → League → Team navigation from the Stadium Guide hub
-- [ ] **STAD-03**: User can reach a stadium's page from the match detail page via a "Stadium Guide" link
-- [ ] **STAD-04**: User can reach a stadium's page from a team's FanBase page via a "Stadium Guide" link
 
 ### Stadium Page
 
@@ -40,6 +38,20 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 
 - [x] **STAD-13**: The Stadium Guide hub replaces the Transportation Guide link in the navbar and bottom navigation bar (old `/transportation-guide` page is removed)
 
+### Stadium Transport Detail — Extended Sections (Phase 22)
+
+- [x] **STAD-14**: Stadium model gains JSON fields: `airportTransport`, `travelTimes`, `paymentInfo`, `proTips`, `recommendedApps`, `budgetBreakdown`; migration runs cleanly and the detail endpoint returns them
+- [ ] **STAD-15**: Stadium detail page shows an "From Airport" section with metro route steps/time/cost, taxi cost/time, and Uber/Bolt cost/time and surge warning
+- [ ] **STAD-16**: Stadium detail page shows a "Travel Times" section with from-city-centre times for metro, bus, taxi, and walking
+- [ ] **STAD-17**: Stadium detail page shows a "Payment & Tickets" section with accepted card types, recommended travel cards, and tips
+- [ ] **STAD-18**: Stadium detail page shows a "Pro Tips" section listing practical advice (arrive early, best metro line, surge pricing, last train check)
+- [ ] **STAD-19**: Stadium detail page shows a "Recommended Apps" section listing local metro app, Google Maps, Uber/Bolt
+- [ ] **STAD-20**: Stadium detail page shows a "Budget Breakdown" section with budget/standard/comfort tiers and cost ranges
+- [ ] **STAD-21**: Stadium detail page shows a "Community Tips" section with the top 3 FanBase "Getting There" posts and a "View all tips in FanBase →" link to `/fanbase/[team-slug]?tab=getting-there`
+- [ ] **STAD-22**: Stadium detail page includes an interactive map (Leaflet + OpenStreetMap tiles) showing the stadium marker; transport stop markers shown only when coordinate data is available (Phase 22 ships stadium marker only)
+- [x] **STAD-23**: Stadium detail page shows a "Nearby Stadiums" section with up to 3 stadiums within 20 km, each linking to their own stadium page
+- [ ] **STAD-24**: All new sections are hidden gracefully (no broken UI) when their data fields are null or empty
+
 ---
 
 ## Future Requirements (deferred)
@@ -47,7 +59,6 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 - User-submitted corrections to stadium data (address, transport info)
 - Stadium capacity and founding year on stadium page
 - Photo gallery for stadiums (fan-submitted)
-- "Nearby stadiums" section on stadium page
 - Stadium-scoped posts (separate from team FanBase) — currently FanBase posts are used instead
 
 ---
@@ -76,5 +87,14 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 | STAD-08 | Phase 21 | — | pending |
 | STAD-09 | Phase 21 | — | pending |
 | STAD-10 | Phase 21 | — | pending |
-| STAD-03 | Phase 22 | — | pending |
-| STAD-04 | Phase 22 | — | pending |
+| STAD-14 | Phase 22 | — | pending |
+| STAD-15 | Phase 22 | — | pending |
+| STAD-16 | Phase 22 | — | pending |
+| STAD-17 | Phase 22 | — | pending |
+| STAD-18 | Phase 22 | — | pending |
+| STAD-19 | Phase 22 | — | pending |
+| STAD-20 | Phase 22 | — | pending |
+| STAD-21 | Phase 22 | — | pending |
+| STAD-22 | Phase 22 | — | pending |
+| STAD-23 | Phase 22 | — | pending |
+| STAD-24 | Phase 22 | — | pending |
