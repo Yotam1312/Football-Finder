@@ -83,6 +83,14 @@ export interface TeamSearchResult {
   league: { id: number; name: string; country: string } | null;
 }
 
+// Shape returned by GET /api/stadiums?leagueId=X — used by the Stadium Guide browse grid.
+export interface StadiumBrowseResult {
+  id: number;
+  name: string;
+  city: string;
+  team: { id: number; name: string; logoUrl: string | null } | null;
+}
+
 // Shape returned by GET /api/stadiums/search — Phase 19 endpoint.
 // Used by the Stadium Guide hub (Phase 20) to display search results.
 export interface StadiumSearchResult {
@@ -93,6 +101,91 @@ export interface StadiumSearchResult {
   latitude: number | null;
   longitude: number | null;
   team: { id: number; name: string; logoUrl: string | null } | null;
+}
+
+// ─────────────────────────────────────────────
+// STADIUM TRANSPORT JSON TYPES (Phase 22)
+// ─────────────────────────────────────────────
+
+// Structured airport-to-stadium transport data.
+// Each mode (metro, taxi, rideshare) is nullable — only show what's available.
+export interface AirportTransport {
+  metro: { steps: string[]; time: string; cost: string } | null;
+  taxi: { time: string; cost: string } | null;
+  rideshare: { time: string; cost: string; surgeWarning: string | null } | null;
+}
+
+// Structured travel times from city centre — each mode is nullable.
+export interface TravelTimes {
+  metro: string | null;
+  bus: string | null;
+  taxi: string | null;
+  walking: string | null;
+}
+
+// Budget breakdown with 3 tiers: budget, standard, comfort.
+export interface BudgetBreakdown {
+  budget: { how: string; cost: string };
+  standard: { how: string; cost: string };
+  comfort: { how: string; cost: string };
+}
+
+// Structured payment and ticket info for local transport.
+export interface PaymentDetails {
+  acceptedCards: string[];
+  recommendedTravelCard: string | null;
+  tips: string | null;
+}
+
+// A nearby stadium returned by the detail endpoint.
+export interface NearbyStadium {
+  id: number;
+  name: string;
+  city: string;
+  distance: number;  // km, rounded to 1 decimal
+  team: { id: number; name: string; logoUrl: string | null } | null;
+}
+
+// Full stadium detail shape — returned by GET /api/stadiums/:id (Phase 21).
+// Extends the base transport fields with the new guide sections and community posts.
+export interface StadiumDetail {
+  id: number;
+  name: string;
+  city: string;
+  cityNormalized: string;
+  timezone: string;
+  googleMapsUrl: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  // Transport (Phase 15)
+  nearbyMetros: string[];
+  nearbyTrains: string[];
+  nearbyBuses: string[];
+  walkingTimeFromCenter: string | null;
+  publicTransportInfo: string | null;
+  parkingInfo: string | null;
+  // Transport guide (Phase 21)
+  fromAirportInfo: string | null;
+  travelTimesInfo: string | null;
+  paymentInfo: string | null;
+  proTips: string[];
+  recommendedApps: string[];
+  budgetCheap: string | null;
+  budgetStandard: string | null;
+  budgetComfort: string | null;
+  // Structured JSON fields (Phase 22) — richer versions of the flat string fields above
+  airportTransport: AirportTransport | null;
+  travelTimes: TravelTimes | null;
+  budgetBreakdown: BudgetBreakdown | null;
+  paymentDetails: PaymentDetails | null;
+  // Nearest major station address — shown with a "Copy" button on the detail page
+  centralStation: string | null;
+  // Nearby stadiums within 20 km
+  nearbyStadiums: NearbyStadium[];
+  // Community data derived from match history
+  primaryTeam: { id: number; name: string; logoUrl: string | null } | null;
+  pubRecPosts: Post[];
+  gettingTherePosts: Post[];
 }
 
 // PostType matches the Prisma enum in schema.prisma

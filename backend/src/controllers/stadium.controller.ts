@@ -76,6 +76,104 @@ export const searchStadiums = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/stadiums?leagueId=X
+// Returns all stadiums used in the given league, each with their primary home team.
+// "Primary" = the team with the most home matches at that stadium in this league.
+// Used by the Stadium Guide browse grid (sidebar + card layout).
+export const getStadiumsByLeague = async (req: Request, res: Response) => {
+  try {
+    const leagueId = parseInt(req.query.leagueId as string, 10);
+    if (isNaN(leagueId)) {
+      return res.status(400).json({ error: 'leagueId must be a number' });
+    }
+
+    // Count home matches per (stadium, team) pair in this league.
+    // We need both fields in `by` so we can later find the dominant team per stadium.
+    const groups = await prisma.match.groupBy({
+      by: ['stadiumId', 'homeTeamId'],
+      where: {
+        leagueId,
+        stadiumId: { not: null },
+      },
+      _count: { homeTeamId: true },
+    });
+
+    if (groups.length === 0) {
+      return res.json({ stadiums: [] });
+    }
+
+    // Aggregate counts in JS: build a nested map stadiumId → teamId → matchCount
+    const stadiumTeamCounts = new Map<number, Map<number, number>>();
+    for (const g of groups) {
+      if (g.stadiumId == null) continue;
+      if (!stadiumTeamCounts.has(g.stadiumId)) {
+        stadiumTeamCounts.set(g.stadiumId, new Map());
+      }
+      stadiumTeamCounts.get(g.stadiumId)!.set(g.homeTeamId, g._count.homeTeamId);
+    }
+
+    // For each stadium, pick the team with the most home matches as the "primary" team
+    const stadiumPrimaryTeam = new Map<number, number>();
+    for (const [stadiumId, teamCounts] of stadiumTeamCounts) {
+      let maxCount = 0;
+      let primaryTeamId = 0;
+      for (const [teamId, count] of teamCounts) {
+        if (count > maxCount) {
+          maxCount = count;
+          primaryTeamId = teamId;
+        }
+      }
+      if (primaryTeamId) stadiumPrimaryTeam.set(stadiumId, primaryTeamId);
+    }
+
+    const stadiumIds = [...stadiumPrimaryTeam.keys()];
+    const teamIds = [...new Set(stadiumPrimaryTeam.values())];
+
+    // Fetch stadium records and team records in parallel to minimise round-trips
+    const [stadiums, teams] = await Promise.all([
+      prisma.stadium.findMany({
+        where: { id: { in: stadiumIds } },
+        select: { id: true, name: true, city: true },
+        orderBy: { name: 'asc' },
+      }),
+      prisma.team.findMany({
+        where: { id: { in: teamIds } },
+        select: { id: true, name: true, logoUrl: true },
+      }),
+    ]);
+
+    const teamMap = new Map(teams.map(t => [t.id, t]));
+
+    // Compose final response: stadium + its primary team
+    const results = stadiums.map(s => ({
+      id: s.id,
+      name: s.name,
+      city: s.city,
+      team: teamMap.get(stadiumPrimaryTeam.get(s.id)!) ?? null,
+    }));
+
+    res.json({ stadiums: results });
+  } catch (error) {
+    console.error('Error fetching stadiums by league:', error);
+    res.status(500).json({ error: 'Failed to fetch stadiums' });
+  }
+};
+
+// Returns distance in kilometres between two lat/lng points using the Haversine formula.
+// Used to find nearby stadiums within a given radius.
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth's radius in km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 // GET /api/stadiums/:id
 // Returns the full detail view for a single stadium, including:
 //   - All transport fields (metros, trains, buses, walking time, etc.)
@@ -146,13 +244,55 @@ export const getStadiumById = async (req: Request, res: Response) => {
       ]);
     }
 
-    // Step 5: Compose and return the full stadium response
+    // Step 5: Find nearby stadiums within 20 km using Haversine distance
+    let nearbyStadiums: Array<{ id: number; name: string; city: string; distance: number; team: { id: number; name: string; logoUrl: string | null } | null }> = [];
+
+    if (stadium.latitude != null && stadium.longitude != null) {
+      // Fetch all other stadiums that have coordinates
+      const allOtherStadiums = await prisma.stadium.findMany({
+        where: {
+          id: { not: id },
+          latitude: { not: null },
+          longitude: { not: null },
+        },
+        select: {
+          id: true,
+          name: true,
+          city: true,
+          latitude: true,
+          longitude: true,
+          // Get the most recent home team for display (same pattern as searchStadiums)
+          matches: {
+            select: {
+              homeTeam: { select: { id: true, name: true, logoUrl: true } },
+            },
+            orderBy: { matchDate: 'desc' },
+            take: 1,
+          },
+        },
+      });
+
+      nearbyStadiums = allOtherStadiums
+        .map(s => ({
+          id: s.id,
+          name: s.name,
+          city: s.city,
+          distance: Math.round(haversineKm(stadium.latitude!, stadium.longitude!, s.latitude!, s.longitude!) * 10) / 10,
+          team: s.matches[0]?.homeTeam ?? null,
+        }))
+        .filter(s => s.distance <= 20)
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 3);
+    }
+
+    // Step 6: Compose and return the full stadium response
     res.json({
       stadium: {
         ...stadium,
         primaryTeam,
         pubRecPosts,
         gettingTherePosts,
+        nearbyStadiums,
       },
     });
   } catch (error) {
