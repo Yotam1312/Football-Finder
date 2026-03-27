@@ -49,7 +49,7 @@ See: [.planning/milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md
 - [x] **Phase 19: DB + Backend** — Add lat/lng to Stadium model, create search and detail API endpoints (completed 2026-03-25)
 - [x] **Phase 20: Stadium Guide Hub** — Hub page with search + Country→League→Team browse, navbar/bottom-nav update (completed 2026-03-25)
 - [x] **Phase 21: Stadium Detail Page** — Full stadium page: identity, OSM map, transport info, top FanBase posts (completed 2026-03-26)
-- [ ] **Phase 22: Stadium Transport Detail** — Extend the stadium detail page with full transport guide: airport routes, travel times, payment info, pro tips, apps, budget breakdown, community tips, interactive map, and nearby stadiums
+- [x] **Phase 22: Stadium Transport Detail** — Extend the stadium detail page with full transport guide: airport routes, travel times, payment info, pro tips, apps, budget breakdown, community tips, interactive map, and nearby stadiums (completed 2026-03-27)
 
 ### Phase Details
 
@@ -143,4 +143,4 @@ Plans:
 | 19. DB + Backend | 2/2 | Complete    | 2026-03-25 | - |
 | 20. Stadium Guide Hub | 3/3 | Complete    | 2026-03-25 | - |
 | 21. Stadium Detail Page | 1/1 | Complete    | 2026-03-26 | - |
-| 22. Stadium Transport Detail | 1/2 | In Progress|  | - |
+| 22. Stadium Transport Detail | 2/2 | Complete   | 2026-03-27 | - |
