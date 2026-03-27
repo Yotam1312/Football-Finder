@@ -5,7 +5,7 @@
 - [x] **v1.0** — Foundation & Launch (8 phases, 24 plans, 32/32 requirements) — *Shipped 2026-03-19* — [Archive](.planning/milestones/v1.0-ROADMAP.md)
 - [x] **v2.0 — Global & Real-Time** — OAuth, Photo Upload, Date Filters, UI Polish, Mobile Feel (5 phases, 12 plans) — *Shipped 2026-03-24* — [Archive](.planning/milestones/v2.0-ROADMAP.md)
 - [x] **v2.1 — Transport & Polish** — Admin auth, match detail polish, transport guide redesign, stadium transport component, community transport tips (5 phases, 7 plans, 10/10 requirements) — *Shipped 2026-03-24* — [Archive](.planning/milestones/v2.1-ROADMAP.md)
-- 🚧 **v2.2 — Stadium Guide** — Phases 19-22 (in progress)
+- 🚧 **v2.2 — Stadium Guide** — Phases 19-23 (in progress)
 
 ---
 
@@ -50,6 +50,7 @@ See: [.planning/milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md
 - [x] **Phase 20: Stadium Guide Hub** — Hub page with search + Country→League→Team browse, navbar/bottom-nav update (completed 2026-03-25)
 - [x] **Phase 21: Stadium Detail Page** — Full stadium page: identity, OSM map, transport info, top FanBase posts (completed 2026-03-26)
 - [x] **Phase 22: Stadium Transport Detail** — Extend the stadium detail page with full transport guide: airport routes, travel times, payment info, pro tips, apps, budget breakdown, community tips, interactive map, and nearby stadiums (completed 2026-03-27)
+- [ ] **Phase 23: Stadium Page Structure** — Restructure each stadium page with consistent section order: Hero, Location, Getting There, Travel Times, Budget Breakdown, Payment & Tickets, Pro Tips, Recommended Apps, Parking, Community Tips
 
 ### Phase Details
 
@@ -116,6 +117,16 @@ Plans:
 - [ ] 22-01-PLAN.md — Schema migration (JSON fields) + backend nearby stadiums + seed extension + frontend types
 - [ ] 22-02-PLAN.md — Interactive Leaflet map + structured JSON sections + Community Tips fix + Nearby Stadiums UI
 
+### Phase 23: Stadium Page Structure
+
+**Goal:** Every stadium page renders sections in a consistent, user-friendly order: Hero → Location → Getting There → Travel Times → Budget Breakdown → Payment & Tickets → Pro Tips → Recommended Apps → Parking → Community Tips
+**Requirements**: STAD-PAGE-01
+**Depends on:** Phase 22
+**Plans:** 1 plan
+
+Plans:
+- [ ] 23-01-PLAN.md — Remove Nearby Stadiums + Pub Rec, fold airportTransport into Getting There, fix undefined variable bug
+
 ---
 
 ## Progress
@@ -143,4 +154,5 @@ Plans:
 | 19. DB + Backend | 2/2 | Complete    | 2026-03-25 | - |
 | 20. Stadium Guide Hub | 3/3 | Complete    | 2026-03-25 | - |
 | 21. Stadium Detail Page | 1/1 | Complete    | 2026-03-26 | - |
-| 22. Stadium Transport Detail | 2/2 | Complete   | 2026-03-27 | - |
+| 22. Stadium Transport Detail | 2/2 | Complete    | 2026-03-27 | - |
+| 23. Stadium Page Structure | 0/1 | Planning | - |
