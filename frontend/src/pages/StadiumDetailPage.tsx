@@ -185,8 +185,8 @@ export const StadiumDetailPage: React.FC = () => {
       {/* ── Content sections ────────────────── */}
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-5">
 
-        {/* 1. Transport Overview — metro, train, bus, walking, central station */}
-        {(hasTransportLines || walkingTimeFromCenter || publicTransportInfo || centralStation) && (
+        {/* 1. Transport Overview — metro, train, bus, walking, central station, airport */}
+        {(hasTransportLines || walkingTimeFromCenter || publicTransportInfo || centralStation || airportTransport) && (
           <SectionCard icon={<MapPin className="w-5 h-5" />} title="Getting There">
             <div className="space-y-4">
 
@@ -265,6 +265,55 @@ export const StadiumDetailPage: React.FC = () => {
               {publicTransportInfo && (
                 <div className="bg-green-50 border border-green-100 rounded-lg px-4 py-3">
                   <p className="text-sm text-green-800">{publicTransportInfo}</p>
+                </div>
+              )}
+
+              {/* From Airport — shown when airportTransport data is present */}
+              {airportTransport && (
+                <div className="border-t border-gray-100 pt-4 space-y-3">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">From Airport</p>
+
+                  {/* Metro route from airport */}
+                  {airportTransport.metro && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Metro</p>
+                      {airportTransport.metro.steps.length > 0 && (
+                        <ul className="space-y-0.5 mb-1">
+                          {airportTransport.metro.steps.map((step, i) => (
+                            <li key={i} className="text-sm text-gray-700">{step}</li>
+                          ))}
+                        </ul>
+                      )}
+                      <p className="text-xs text-gray-500">
+                        {airportTransport.metro.time} · {airportTransport.metro.cost}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Taxi from airport */}
+                  {airportTransport.taxi && (
+                    <div className="flex items-baseline justify-between bg-gray-50 rounded-lg px-4 py-3">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Taxi</p>
+                      <p className="text-sm text-gray-700">
+                        {airportTransport.taxi.time} · {airportTransport.taxi.cost}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Rideshare from airport */}
+                  {airportTransport.rideshare && (
+                    <div className="flex items-start justify-between bg-gray-50 rounded-lg px-4 py-3">
+                      <div>
+                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Rideshare</p>
+                        {airportTransport.rideshare.surgeWarning && (
+                          <p className="text-xs text-amber-600 mt-1">{airportTransport.rideshare.surgeWarning}</p>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-700 ml-4 text-right">
+                        {airportTransport.rideshare.time} · {airportTransport.rideshare.cost}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
