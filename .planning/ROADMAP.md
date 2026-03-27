@@ -48,8 +48,8 @@ See: [.planning/milestones/v2.1-ROADMAP.md](.planning/milestones/v2.1-ROADMAP.md
 
 - [x] **Phase 19: DB + Backend** — Add lat/lng to Stadium model, create search and detail API endpoints (completed 2026-03-25)
 - [x] **Phase 20: Stadium Guide Hub** — Hub page with search + Country→League→Team browse, navbar/bottom-nav update (completed 2026-03-25)
-- [ ] **Phase 21: Stadium Detail Page** — Full stadium page: identity, OSM map, transport info, top FanBase posts
-- [ ] **Phase 22: Cross-Links** — Link from match detail page and FanBase team page to stadium page
+- [x] **Phase 21: Stadium Detail Page** — Full stadium page: identity, OSM map, transport info, top FanBase posts (completed 2026-03-26)
+- [ ] **Phase 22: Stadium Transport Detail** — Extend the stadium detail page with full transport guide: airport routes, travel times, payment info, pro tips, apps, budget breakdown, community tips, interactive map, and nearby stadiums
 
 ### Phase Details
 
@@ -94,23 +94,27 @@ Plans:
   3. A "Navigate" button opens Google Maps directions in a new tab using the stored googleMapsUrl
   4. Transport section lists nearby metro/train/bus lines, walking time from centre, parking info, and general transport tip — each section hidden when data is empty
   5. Top 5 Pub Rec posts and top 5 Getting There posts (ordered by upvotes) are displayed; sections show an empty-state message when no posts exist
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 21-01: TBD
+- [ ] 21-01-PLAN.md — OSM map embed + Pub Recommendations section + community post empty states
 
-#### Phase 22: Cross-Links
-**Goal**: Users browsing a match or a FanBase team page can navigate directly to that stadium's page
+#### Phase 22: Stadium Transport Detail
+**Goal**: The stadium detail page becomes a complete transport guide — users see airport routes, travel times, payment tips, budget breakdown, community tips, an interactive map with markers, and nearby stadiums
 **Depends on**: Phase 21
-**Requirements**: STAD-03, STAD-04
+**Requirements**: STAD-14, STAD-15, STAD-16, STAD-17, STAD-18, STAD-19, STAD-20, STAD-21, STAD-22, STAD-23, STAD-24
 **Success Criteria** (what must be TRUE):
-  1. Match detail page shows a "Stadium Guide" link or button that navigates to the correct stadium page for that match's venue
-  2. FanBase team page shows a "Stadium Guide" link or button that navigates to the team's stadium page
-  3. Both links are absent (not broken) when a stadium page does not yet exist for that venue
-**Plans**: TBD
+  1. `Stadium` table has `airportTransport`, `travelTimes`, `paymentInfo`, `proTips`, `recommendedApps`, `budgetBreakdown` JSON fields; migration runs cleanly
+  2. Stadium detail page renders "From Airport", "Travel Times", "Payment & Tickets", "Pro Tips", "Recommended Apps", and "Budget Breakdown" sections when data is present
+  3. "Community Tips" section shows up to 3 Getting There posts and links to `/fanbase/[team-slug]?tab=getting-there`
+  4. An interactive Leaflet map renders with stadium marker and markers for nearby transport stops
+  5. "Nearby Stadiums" section shows up to 3 stadiums within 20 km, each linking to their stadium page
+  6. All sections are hidden gracefully (no broken UI) when their data is null or empty
+**Plans**: 2 plans
 
 Plans:
-- [ ] 22-01: TBD
+- [ ] 22-01-PLAN.md — Schema migration (JSON fields) + backend nearby stadiums + seed extension + frontend types
+- [ ] 22-02-PLAN.md — Interactive Leaflet map + structured JSON sections + Community Tips fix + Nearby Stadiums UI
 
 ---
 
@@ -137,6 +141,6 @@ Plans:
 | 17. Stadium Transport Component | v2.1 | — | Complete | 2026-03-24 |
 | 18. Getting There FanBase | v2.1 | — | Complete | 2026-03-24 |
 | 19. DB + Backend | 2/2 | Complete    | 2026-03-25 | - |
-| 20. Stadium Guide Hub | 3/3 | Complete   | 2026-03-25 | - |
-| 21. Stadium Detail Page | v2.2 | 0/TBD | Not started | - |
-| 22. Cross-Links | v2.2 | 0/TBD | Not started | - |
+| 20. Stadium Guide Hub | 3/3 | Complete    | 2026-03-25 | - |
+| 21. Stadium Detail Page | 1/1 | Complete    | 2026-03-26 | - |
+| 22. Stadium Transport Detail | v2.2 | 0/2 | Not started | - |

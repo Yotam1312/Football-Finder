@@ -24,12 +24,12 @@ Transform the generic Transportation Guide page into a structured Stadium Guide 
 
 ### Stadium Page
 
-- [ ] **STAD-05**: Stadium page shows stadium name, hosting team (with crest), and city
-- [ ] **STAD-06**: Stadium page shows an embedded OpenStreetMap map using the stadium's stored lat/lng coordinates
-- [ ] **STAD-07**: Stadium page shows a Navigate button that opens Google Maps directions to the stadium
-- [ ] **STAD-08**: Stadium page shows transport options: nearby metro/train/bus lines, walking time from centre, general transport tip, and parking info
-- [ ] **STAD-09**: Stadium page shows the top 5 Pub Recommendation posts from the team's FanBase, ordered by upvotes
-- [ ] **STAD-10**: Stadium page shows the top 5 Getting There posts from the team's FanBase, ordered by upvotes
+- [x] **STAD-05**: Stadium page shows stadium name, hosting team (with crest), and city
+- [x] **STAD-06**: Stadium page shows an embedded OpenStreetMap map using the stadium's stored lat/lng coordinates
+- [x] **STAD-07**: Stadium page shows a Navigate button that opens Google Maps directions to the stadium
+- [x] **STAD-08**: Stadium page shows transport options: nearby metro/train/bus lines, walking time from centre, general transport tip, and parking info
+- [x] **STAD-09**: Stadium page shows the top 5 Pub Recommendation posts from the team's FanBase, ordered by upvotes
+- [x] **STAD-10**: Stadium page shows the top 5 Getting There posts from the team's FanBase, ordered by upvotes
 
 ### Infrastructure
 

@@ -38,6 +38,22 @@ model Stadium {
   latitude  Float?   // WGS-84 decimal degrees — null until populated via CSV/SQL
   longitude Float?   // WGS-84 decimal degrees — null until populated via CSV/SQL
 
+  // Transport guide fields (Phase 21) — populated via seed script; null until seeded
+  fromAirportInfo   String?    // How to get from the nearest airport (metro, taxi, Uber)
+  travelTimesInfo   String?    // Travel times from city centre and key areas
+  paymentInfo       String?    // Payment methods accepted on local transport
+  proTips           String[]   // Array of match-day pro tips
+  recommendedApps   String[]   // Recommended transport apps (e.g. Citymapper, TMB)
+  budgetCheap       String?    // Cheapest option e.g. "€4–8 — Metro with day pass"
+  budgetStandard    String?    // Mid-range e.g. "€15–25 — Bolt/taxi from centre"
+  budgetComfort     String?    // Premium e.g. "€50–70 — Private transfer"
+
+  // Structured transport data (Phase 22) — richer JSON versions of the flat string fields above
+  airportTransport  Json?   // Structured airport-to-stadium routes (metro steps, taxi, rideshare)
+  travelTimes       Json?   // Structured travel times from city centre (metro, bus, taxi, walking)
+  budgetBreakdown   Json?   // Structured budget tiers (budget/standard/comfort with how + cost)
+  paymentDetails    Json?   // Structured payment info (avoids naming conflict with paymentInfo String?)
+
   @@index([cityNormalized])
   @@index([name])
 }
