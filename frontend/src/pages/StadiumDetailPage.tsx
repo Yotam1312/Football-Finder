@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
-  MapPin, Plane, Clock, CreditCard, Lightbulb,
-  Smartphone, Wallet, Car, Users, Navigation, ChevronLeft, Map, Building,
+  MapPin, Clock, CreditCard, Lightbulb,
+  Smartphone, Wallet, Car, Users, Navigation, ChevronLeft, Map, Copy, Check,
 } from 'lucide-react';
 import type { StadiumDetail } from '../types';
 import { StadiumLeafletMap } from '../components/stadiums/StadiumLeafletMap';
-import { NearbyStadiumsSection } from '../components/stadiums/NearbyStadiumsSection';
 
 // ─────────────────────────────────────────────
 // Shared section card wrapper — keeps all sections visually consistent
@@ -35,6 +34,9 @@ const SectionCard: React.FC<SectionCardProps> = ({ icon, title, children }) => (
 export const StadiumDetailPage: React.FC = () => {
   const { stadiumId } = useParams<{ stadiumId: string }>();
   const id = parseInt(stadiumId ?? '', 10);
+
+  // Tracks whether the central station address was just copied — resets after 2 s
+  const [stationCopied, setStationCopied] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['stadium', id],
@@ -79,11 +81,12 @@ export const StadiumDetailPage: React.FC = () => {
     name, city, googleMapsUrl, primaryTeam, latitude, longitude,
     nearbyMetros, nearbyTrains, nearbyBuses,
     walkingTimeFromCenter, publicTransportInfo, parkingInfo,
-    fromAirportInfo, travelTimesInfo, paymentInfo,
+    travelTimesInfo, paymentInfo,
     proTips, recommendedApps,
     budgetCheap, budgetStandard, budgetComfort,
-    gettingTherePosts, pubRecPosts,
-    airportTransport, travelTimes, budgetBreakdown, paymentDetails, nearbyStadiums,
+    gettingTherePosts,
+    travelTimes, budgetBreakdown, paymentDetails,
+    centralStation, airportTransport,
   } = stadium;
 
   // Null-guard arrays — pre-migration rows may have null instead of []
@@ -93,8 +96,6 @@ export const StadiumDetailPage: React.FC = () => {
   const tips   = proTips       ?? [];
   const apps   = recommendedApps ?? [];
   const communityTips = gettingTherePosts ?? [];
-  const pubRecs = pubRecPosts ?? [];
-  const nearby = nearbyStadiums ?? [];
 
   const hasTransportLines = metros.length > 0 || trains.length > 0 || buses.length > 0;
   const hasBudget = budgetCheap || budgetStandard || budgetComfort;
@@ -184,10 +185,37 @@ export const StadiumDetailPage: React.FC = () => {
       {/* ── Content sections ────────────────── */}
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-5">
 
-        {/* 1. Transport Overview — metro, train, bus, walking */}
-        {(hasTransportLines || walkingTimeFromCenter || publicTransportInfo) && (
+        {/* 1. Transport Overview — metro, train, bus, walking, central station */}
+        {(hasTransportLines || walkingTimeFromCenter || publicTransportInfo || centralStation) && (
           <SectionCard icon={<MapPin className="w-5 h-5" />} title="Getting There">
             <div className="space-y-4">
+
+              {/* Nearest central station — shown with a copy-to-clipboard button */}
+              {centralStation && (
+                <div className="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg px-4 py-3">
+                  <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Nearest Station</p>
+                    <p className="text-sm text-gray-700">{centralStation}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      // Use the native Clipboard API to copy the address
+                      navigator.clipboard.writeText(centralStation).then(() => {
+                        setStationCopied(true);
+                        // Reset the "Copied!" state after 2 seconds
+                        setTimeout(() => setStationCopied(false), 2000);
+                      });
+                    }}
+                    className="ml-4 flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 rounded-lg px-3 py-1.5 transition-colors"
+                    aria-label="Copy station address"
+                  >
+                    {stationCopied
+                      ? <><Check className="w-3.5 h-3.5 text-green-600" /><span className="text-green-600">Copied!</span></>
+                      : <><Copy className="w-3.5 h-3.5" />Copy</>
+                    }
+                  </button>
+                </div>
+              )}
               {metros.length > 0 && (
                 <div>
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Metro</p>
@@ -243,47 +271,7 @@ export const StadiumDetailPage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* 2. From Airport — prefer structured airportTransport JSON, fallback to string */}
-        {(airportTransport || fromAirportInfo) && (
-          <SectionCard icon={<Plane className="w-5 h-5" />} title="From the Airport">
-            {airportTransport ? (
-              <div className="space-y-3">
-                {airportTransport.metro && (
-                  <div>
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Metro / Rail</p>
-                    <ol className="space-y-1.5 list-decimal list-inside">
-                      {airportTransport.metro.steps.map((step, i) => (
-                        <li key={i} className="text-sm text-gray-700">{step}</li>
-                      ))}
-                    </ol>
-                    <p className="text-xs text-gray-500 mt-1">{airportTransport.metro.time} &middot; {airportTransport.metro.cost}</p>
-                  </div>
-                )}
-                {airportTransport.taxi && (
-                  <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
-                    <span className="text-sm text-gray-700 font-medium">Taxi</span>
-                    <span className="text-sm text-gray-500">{airportTransport.taxi.time} &middot; {airportTransport.taxi.cost}</span>
-                  </div>
-                )}
-                {airportTransport.rideshare && (
-                  <div>
-                    <div className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
-                      <span className="text-sm text-gray-700 font-medium">Uber / Bolt</span>
-                      <span className="text-sm text-gray-500">{airportTransport.rideshare.time} &middot; {airportTransport.rideshare.cost}</span>
-                    </div>
-                    {airportTransport.rideshare.surgeWarning && (
-                      <p className="text-xs text-amber-600 mt-1.5 ml-1">{airportTransport.rideshare.surgeWarning}</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-sm text-gray-700 leading-relaxed">{fromAirportInfo}</p>
-            )}
-          </SectionCard>
-        )}
-
-        {/* 3. Travel Times — prefer structured travelTimes JSON, fallback to string */}
+        {/* 2. Travel Times — prefer structured travelTimes JSON, fallback to string */}
         {(travelTimes || travelTimesInfo) && (
           <SectionCard icon={<Clock className="w-5 h-5" />} title="Travel Times">
             {travelTimes ? (
@@ -438,52 +426,7 @@ export const StadiumDetailPage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* 9. Pub Recommendations — PUB_RECOMMENDATION posts from FanBase */}
-        {primaryTeam && (
-          <SectionCard icon={<Users className="w-5 h-5" />} title="Pub Recommendations">
-            {pubRecs.length > 0 ? (
-              <div className="space-y-4">
-                {pubRecs.map(post => (
-                  <div key={post.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
-                    {post.pubName && (
-                      <p className="text-sm font-semibold text-gray-800 mb-1">{post.pubName}</p>
-                    )}
-                    <p className="text-sm text-gray-600 leading-relaxed">{post.body}</p>
-                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
-                      {post.pubDistance && (
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{post.pubDistance}</span>
-                      )}
-                      <span>by {post.authorName}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-4">
-                <p className="text-sm text-gray-500 mb-2">No pub tips yet for this stadium.</p>
-                <Link
-                  to={`/fanbase/team/${primaryTeam.id}`}
-                  className="text-sm font-medium text-green-600 hover:text-green-700"
-                >
-                  Be the first — post on FanBase →
-                </Link>
-              </div>
-            )}
-
-            {pubRecs.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <Link
-                  to={`/fanbase/team/${primaryTeam.id}`}
-                  className="text-sm font-medium text-green-600 hover:text-green-700"
-                >
-                  See all pub tips for {primaryTeam.name} →
-                </Link>
-              </div>
-            )}
-          </SectionCard>
-        )}
-
-        {/* 10. Community Tips — GETTING_THERE posts from FanBase (top 3) */}
+        {/* 9. Community Tips — GETTING_THERE posts from FanBase (top 3) */}
         {primaryTeam && (
           <SectionCard icon={<Users className="w-5 h-5" />} title="Community Tips">
             {communityTips.length > 0 ? (
@@ -529,16 +472,9 @@ export const StadiumDetailPage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* 11. Nearby Stadiums — up to 3 stadiums within 20 km */}
-        {nearby.length > 0 && (
-          <SectionCard icon={<Building className="w-5 h-5" />} title="Nearby Stadiums">
-            <NearbyStadiumsSection stadiums={nearby} />
-          </SectionCard>
-        )}
-
         {/* Empty state — no transport data at all */}
-        {!hasTransportLines && !fromAirportInfo && !travelTimesInfo && !hasBudget &&
-         tips.length === 0 && communityTips.length === 0 && pubRecs.length === 0 && !primaryTeam && (
+        {!hasTransportLines && !airportTransport && !travelTimesInfo && !hasBudget &&
+         !centralStation && tips.length === 0 && communityTips.length === 0 && !primaryTeam && (
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-10 text-center">
             <MapPin className="w-10 h-10 text-gray-300 mx-auto mb-3" />
             <p className="text-gray-500 text-sm">
