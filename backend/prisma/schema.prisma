@@ -54,6 +54,9 @@ model Stadium {
   budgetBreakdown   Json?   // Structured budget tiers (budget/standard/comfort with how + cost)
   paymentDetails    Json?   // Structured payment info (avoids naming conflict with paymentInfo String?)
 
+  // Nearest major station — full address shown on the Stadium Detail page with a "Copy" button
+  centralStation    String?  // e.g. "King's Cross St Pancras, Euston Road, London N1C 4AH"
+
   @@index([cityNormalized])
   @@index([name])
 }

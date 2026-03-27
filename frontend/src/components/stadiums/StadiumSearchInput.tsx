@@ -54,7 +54,7 @@ export const StadiumSearchInput: React.FC = () => {
         onKeyDown={handleKeyDown}
         placeholder="Search by team or stadium name..."
         aria-label="Search for a stadium"
-        className="w-full border border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm"
+        className="w-full border border-slate-600 bg-slate-700/60 backdrop-blur-sm rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent shadow-lg"
       />
 
       {/* Search dropdown — only shown when focused and query is 2+ chars */}

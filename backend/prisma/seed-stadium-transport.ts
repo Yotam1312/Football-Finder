@@ -57,6 +57,7 @@ const stadiumData = [
         recommendedTravelCard: 'Oyster card or contactless bank card',
         tips: 'Cash is not accepted on buses or at tube gates.',
       },
+      centralStation: "King's Cross St Pancras, Euston Road, London N1C 4AH",
     },
   },
   {
@@ -95,6 +96,7 @@ const stadiumData = [
         recommendedTravelCard: 'T-Casual 10-trip card (€11.35)',
         tips: 'Buy a T-Casual at the airport — it covers metro, bus, and FGC.',
       },
+      centralStation: 'Barcelona Sants, Plaça dels Països Catalans, 08014 Barcelona',
     },
   },
   {
@@ -132,6 +134,7 @@ const stadiumData = [
         recommendedTravelCard: 'Bayern Ticket MVV day pass',
         tips: 'Bayern Ticket covers all MVV transport all day — costs less than two single fares.',
       },
+      centralStation: 'München Hauptbahnhof, Arnulfstraße 1, 80335 München',
     },
   },
   {
@@ -169,6 +172,7 @@ const stadiumData = [
         recommendedTravelCard: 'Saveaway day ticket (~£6)',
         tips: 'Contactless payment accepted on Arriva and Stagecoach buses.',
       },
+      centralStation: 'Liverpool Lime Street, Lime Street, Liverpool L1 1JD',
     },
   },
 ];

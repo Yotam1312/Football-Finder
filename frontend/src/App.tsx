@@ -13,6 +13,7 @@ import { WelcomePage } from './pages/WelcomePage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ContactPage } from './pages/ContactPage';
 import { StadiumGuidePage } from './pages/StadiumGuidePage';
+import { StadiumDetailPage } from './pages/StadiumDetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // AnimatePresence enables smooth page transition animations.
@@ -38,10 +39,10 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/welcome"  element={<WelcomePage />} />
           <Route path="/profile"  element={<ProfilePage />} />
-          {/* Stadium Guide hub — all 3 steps handled by one component via useParams */}
-          <Route path="/stadiums"                    element={<StadiumGuidePage />} />
-          <Route path="/stadiums/:country"           element={<StadiumGuidePage />} />
-          <Route path="/stadiums/:country/:league"   element={<StadiumGuidePage />} />
+          {/* Stadium Guide hub — sidebar + grid layout */}
+          <Route path="/stadiums" element={<StadiumGuidePage />} />
+          {/* Stadium detail — full transport guide */}
+          <Route path="/stadiums/:stadiumId" element={<StadiumDetailPage />} />
           {/* Redirect old Transport page URL to new Stadium Guide hub */}
           <Route path="/transport" element={<Navigate to="/stadiums" replace />} />
           {/* Static info pages — Phase 5 polish */}

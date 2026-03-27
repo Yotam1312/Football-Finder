@@ -178,6 +178,8 @@ export interface StadiumDetail {
   travelTimes: TravelTimes | null;
   budgetBreakdown: BudgetBreakdown | null;
   paymentDetails: PaymentDetails | null;
+  // Nearest major station address — shown with a "Copy" button on the detail page
+  centralStation: string | null;
   // Nearby stadiums within 20 km
   nearbyStadiums: NearbyStadium[];
   // Community data derived from match history

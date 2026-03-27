@@ -262,6 +262,14 @@ export const MatchDetailPage: React.FC = () => {
                       Get Directions
                     </a>
                   )}
+
+                  {/* Link to the full stadium transport guide */}
+                  <Link
+                    to={`/stadiums/${match.stadium!.id}`}
+                    className="block text-center text-sm font-medium text-slate-500 hover:text-slate-700 mt-3 transition-colors"
+                  >
+                    View full transport guide →
+                  </Link>
                 </div>
               ) : (
                 /* TRANS-04: Empty state — no transport lines, but still show Get Directions */

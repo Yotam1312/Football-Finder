@@ -1,73 +1,54 @@
-import React, { useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { SlidersHorizontal, MapPin } from 'lucide-react';
+import { useFanbaseCountries } from '../hooks/useFanbaseCountries';
 import { useFanbaseLeagues } from '../hooks/useFanbaseLeagues';
-import { useFanbaseTeams } from '../hooks/useFanbaseTeams';
-import { CountryGrid } from '../components/fanbase/CountryGrid';
-import { LeagueList } from '../components/fanbase/LeagueList';
-import { TeamGrid } from '../components/fanbase/TeamGrid';
+import { useStadiumsByLeague } from '../hooks/useStadiumsByLeague';
 import { StadiumHubHero } from '../components/stadiums/StadiumHubHero';
-import { StadiumSearchInput } from '../components/stadiums/StadiumSearchInput';
-import { StadiumBreadcrumb } from '../components/stadiums/StadiumBreadcrumb';
+import { StadiumFilterSidebar } from '../components/stadiums/StadiumFilterSidebar';
+import { StadiumCard } from '../components/stadiums/StadiumCard';
 
-// Simple fade-in animation for each browse step section
-const stepAnimation = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.25 },
-};
-
-// Stadium Guide hub page — handles all 3 browse routes via useParams:
-//   /stadiums                     → country grid
-//   /stadiums/:country            → league list
-//   /stadiums/:country/:league    → team grid (navigates to /stadiums/:stadiumId)
+// Stadium Guide hub — sidebar + grid layout.
+// Users pick a country and league in the left sidebar; the right side shows
+// all stadiums for that league as clickable cards.
+// This is different from FanBase: browse state is local (not URL-based),
+// and the destination is a stadium page — not a team fan community.
 export const StadiumGuidePage: React.FC = () => {
-  const { country, league: leagueParam } = useParams<{ country?: string; league?: string }>();
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [selectedLeagueId, setSelectedLeagueId] = useState<number | null>(null);
+  const [sidebarOpenOnMobile, setSidebarOpenOnMobile] = useState(false);
 
-  // Capitalize country slug to match DB values (e.g. "england" -> "England")
-  const countryName = country
-    ? country.charAt(0).toUpperCase() + country.slice(1)
-    : undefined;
+  // Fetch countries for the sidebar (cached — rarely changes)
+  const { data: countriesData } = useFanbaseCountries();
+  const countries = countriesData?.countries ?? [];
 
-  // Fetch data — hooks are conditional via the enabled flag internally.
-  // Destructure isError + refetch so we can show inline Retry UI on fetch failures
-  // (per user decision: browse error states in CONTEXT.md).
+  // Fetch leagues when a country is selected
+  const { data: leaguesData, isLoading: leaguesLoading } = useFanbaseLeagues(
+    selectedCountry ?? undefined
+  );
+  const leagues = leaguesData?.leagues ?? [];
+
+  // Fetch stadiums when a league is selected
   const {
-    data: leaguesData,
-    isLoading: leaguesLoading,
-    isError: leaguesError,
-    refetch: refetchLeagues,
-  } = useFanbaseLeagues(countryName);
-  const {
-    data: teamsData,
-    isLoading: teamsLoading,
-    isError: teamsError,
-    refetch: refetchTeams,
-  } = useFanbaseTeams(leagueParam);
+    data: stadiumsData,
+    isLoading: stadiumsLoading,
+    isError: stadiumsError,
+    refetch: refetchStadiums,
+  } = useStadiumsByLeague(selectedLeagueId);
+  const stadiums = stadiumsData?.stadiums ?? [];
 
-  // Find the league name for the breadcrumb
-  const activeLeague = leaguesData?.leagues.find(l => String(l.id) === leagueParam);
+  // When the user picks a country, reset the league selection
+  const handleCountrySelect = (country: string) => {
+    setSelectedCountry(country);
+    setSelectedLeagueId(null);
+    // Close mobile sidebar after selecting a country so the league list is visible
+  };
 
-  // Filter out teams that have no stadium assigned — they can't navigate anywhere
-  const teamsWithStadium = (teamsData?.teams ?? []).filter(t => t.stadiumId != null);
-
-  // Refs for auto-scroll to next step on mobile
-  const leagueRef = useRef<HTMLDivElement>(null);
-  const teamRef = useRef<HTMLDivElement>(null);
-
-  // When country param changes (user selected a country), scroll to step 2
-  useEffect(() => {
-    if (country && leagueRef.current) {
-      leagueRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [country]);
-
-  // When league param changes (user selected a league), scroll to step 3
-  useEffect(() => {
-    if (leagueParam && teamRef.current) {
-      teamRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [leagueParam]);
+  const handleLeagueSelect = (leagueId: number) => {
+    setSelectedLeagueId(leagueId);
+    // Close mobile sidebar so the grid becomes visible on small screens
+    setSidebarOpenOnMobile(false);
+  };
 
   return (
     <motion.div
@@ -75,107 +56,109 @@ export const StadiumGuidePage: React.FC = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="min-h-screen bg-green-50 pb-20 md:pb-0"
+      className="min-h-screen bg-gray-100 pb-20 md:pb-0"
     >
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        {/* Hero banner with MapPin icon */}
-        <StadiumHubHero />
+      {/* Dark slate hero with search bar */}
+      <StadiumHubHero />
 
-        {/* Search bar — debounced autocomplete for stadium/team names */}
-        <div className="mb-10">
-          <StadiumSearchInput />
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Mobile: filter toggle button */}
+        <div className="md:hidden mb-4">
+          <button
+            onClick={() => setSidebarOpenOnMobile(open => !open)}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            {sidebarOpenOnMobile ? 'Hide filters' : 'Filter by country & league'}
+          </button>
         </div>
 
-        {/* Browse section heading */}
-        <h2 className="text-lg font-semibold text-gray-800 mb-6">
-          Or browse by country
-        </h2>
-
-        {/* Breadcrumb — only meaningful once a country is selected */}
-        {country && (
-          <StadiumBreadcrumb
-            country={country}
-            leagueName={activeLeague?.name}
+        <div className="flex gap-6 items-start">
+          {/* Left sidebar — country + league selector */}
+          <StadiumFilterSidebar
+            countries={countries}
+            selectedCountry={selectedCountry}
+            onCountrySelect={handleCountrySelect}
+            leagues={leagues}
+            leaguesLoading={leaguesLoading}
+            selectedLeagueId={selectedLeagueId}
+            onLeagueSelect={handleLeagueSelect}
+            isOpenOnMobile={sidebarOpenOnMobile}
           />
-        )}
 
-        {/* Step 1: Country selection */}
-        <motion.section {...stepAnimation}>
-          <CountryGrid
-            onSelect={() => {/* navigation handled inside CountryGrid via basePath */}}
-            basePath="/stadiums"
-          />
-        </motion.section>
+          {/* Right side — stadium grid */}
+          <main className="flex-1 min-w-0">
+            {/* No league selected yet — prompt the user */}
+            {!selectedLeagueId && !stadiumsLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-24 text-center"
+              >
+                <MapPin className="w-12 h-12 text-gray-300 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-500 mb-1">
+                  Select a league to browse stadiums
+                </h3>
+                <p className="text-sm text-gray-400">
+                  Choose a country{selectedCountry ? ', then a league' : ' from the sidebar'}.
+                </p>
+              </motion.div>
+            )}
 
-        {/* Step 2: League selection — only shown when country is selected */}
-        {country && (
-          <motion.section
-            ref={leagueRef as React.RefObject<HTMLElement>}
-            className="mt-12 scroll-mt-8"
-            {...stepAnimation}
-          >
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              {leagueParam ? '2. League' : `2. Select a league in ${countryName}`}
-            </h2>
+            {/* Loading skeletons */}
+            {stadiumsLoading && (
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-xl border border-gray-200 p-5 animate-pulse"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-full bg-gray-200" />
+                      <div className="h-3 bg-gray-200 rounded w-24" />
+                    </div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  </div>
+                ))}
+              </div>
+            )}
 
-            {/* Inline error state for league fetch failure (per user decision) */}
-            {leaguesError && !leaguesLoading && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-center justify-between">
-                <p className="text-sm text-red-700">Couldn't load leagues. Try again.</p>
+            {/* Error state */}
+            {stadiumsError && !stadiumsLoading && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex items-center justify-between">
+                <p className="text-sm text-red-700">Couldn't load stadiums. Try again.</p>
                 <button
-                  onClick={() => refetchLeagues()}
-                  className="text-sm font-medium text-red-700 hover:text-red-800 bg-white border border-red-300 rounded-md px-3 py-1 transition-colors"
+                  onClick={() => refetchStadiums()}
+                  className="text-sm font-medium text-red-700 hover:text-red-800 bg-white border border-red-300 rounded-md px-3 py-1.5 transition-colors"
                 >
                   Retry
                 </button>
               </div>
             )}
 
-            {!leaguesError && (
-              <LeagueList
-                leagues={leaguesData?.leagues ?? []}
-                isLoading={leaguesLoading}
-                country={country}
-                onSelect={() => {/* navigation handled inside LeagueList via basePath */}}
-                basePath="/stadiums"
-              />
+            {/* Stadium grid */}
+            {!stadiumsLoading && !stadiumsError && stadiums.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25 }}
+                className="grid grid-cols-2 lg:grid-cols-3 gap-4"
+              >
+                {stadiums.map(stadium => (
+                  <StadiumCard key={stadium.id} stadium={stadium} />
+                ))}
+              </motion.div>
             )}
-          </motion.section>
-        )}
 
-        {/* Step 3: Team selection — only shown when country and league are selected */}
-        {country && leagueParam && (
-          <motion.section
-            ref={teamRef as React.RefObject<HTMLElement>}
-            className="mt-12 scroll-mt-8"
-            {...stepAnimation}
-          >
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
-              3. Select a team
-            </h2>
-
-            {/* Inline error state for team fetch failure (per user decision) */}
-            {teamsError && !teamsLoading && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-center justify-between">
-                <p className="text-sm text-red-700">Couldn't load teams. Try again.</p>
-                <button
-                  onClick={() => refetchTeams()}
-                  className="text-sm font-medium text-red-700 hover:text-red-800 bg-white border border-red-300 rounded-md px-3 py-1 transition-colors"
-                >
-                  Retry
-                </button>
+            {/* League selected but no stadiums found */}
+            {!stadiumsLoading && !stadiumsError && selectedLeagueId && stadiums.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <p className="text-gray-500 text-sm">No stadiums found for this league.</p>
               </div>
             )}
-
-            {!teamsError && (
-              <TeamGrid
-                teams={teamsWithStadium}
-                isLoading={teamsLoading}
-                getNavigateTo={(team) => `/stadiums/${team.stadiumId}`}
-              />
-            )}
-          </motion.section>
-        )}
+          </main>
+        </div>
       </div>
     </motion.div>
   );
