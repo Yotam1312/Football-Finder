@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.3
 milestone_name: — Multi-Game Search & UX Overhaul
-status: planning
-stopped_at: Completed 24-01-PLAN.md
-last_updated: "2026-03-29T08:34:34.115Z"
-last_activity: 2026-03-27 — Roadmap created for v2.3 (5 phases, 34 requirements)
+status: in-progress
+stopped_at: Completed 24-02-PLAN.md
+last_updated: "2026-03-29T08:37:26.000Z"
+last_activity: 2026-03-29 — Completed Phase 24 Plan 02 (transportType validation + Stadium Guide link + codebase review)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 2
-  completed_plans: 1
-  percent: 0
+  completed_plans: 2
+  percent: 50
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-27)
 ## Current Position
 
 Phase: 24 of 28 (Code Cleanup & Tech Debt)
-Plan: —
-Status: Ready to plan
-Last activity: 2026-03-27 — Roadmap created for v2.3 (5 phases, 34 requirements)
+Plan: 2 of 2 (Complete)
+Status: Phase 24 complete
+Last activity: 2026-03-29 — Completed Phase 24 Plan 02 (transportType validation + Stadium Guide link + codebase review)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Progress: [░░░░░░░░░░] 0%
 - v2.2: Leaflet + OpenStreetMap for maps — no API key, free, interactive
 - v2.3: Phase 25 (Multi-Game Search) gets its own backend endpoint — parallel city queries, grouped response
 - [Phase 24]: Removed haversineKm, nearbyStadiums, and pubRecPosts as dead code with no active consumers; kept gettingTherePosts and primaryTeam as active fields
+- [Phase 24 P02]: transportType validation uses local VALID_TRANSPORT_TYPES constant (not Prisma enum import) — matches existing postType validation pattern; getTeamById derives stadiumId with separate findFirst query, same pattern as getTeamsByLeague
 
 ### Pending Todos
 
@@ -73,6 +74,6 @@ Progress: [░░░░░░░░░░] 0%
 
 ## Session Continuity
 
-Last session: 2026-03-29T08:34:34.110Z
-Stopped at: Completed 24-01-PLAN.md
+Last session: 2026-03-29T08:37:26.000Z
+Stopped at: Completed 24-02-PLAN.md
 Resume file: None

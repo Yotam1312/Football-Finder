@@ -54,7 +54,7 @@ See: [.planning/milestones/v2.2-ROADMAP.md](.planning/milestones/v2.2-ROADMAP.md
 
 ## Phases
 
-- [ ] **Phase 24: Code Cleanup & Tech Debt** - Remove dead files, orphaned queries, and fix validation gaps left from v2.2
+- [x] **Phase 24: Code Cleanup & Tech Debt** - Remove dead files, orphaned queries, and fix validation gaps left from v2.2 (completed 2026-03-29)
 - [ ] **Phase 25: Multi-Game Search** - Add multi-city trip planning mode to the homepage search form and results page
 - [ ] **Phase 26: Stadium Detail Redesign** - DB migration for new content fields + tabbed UI (Transport, Matchday Guide, Food & Drink, Stadium Rules)
 - [ ] **Phase 27: Stadium Guide Hub Redesign** - Refreshed hub cards with team crests, capacity, and a Featured Stadiums section
@@ -153,7 +153,7 @@ Plans:
 | 9–13. OAuth → Mobile Feel | v2.0 | 12/12 | Complete | 2026-03-24 |
 | 14–18. Admin Auth → Getting There FanBase | v2.1 | 7/7 | Complete | 2026-03-24 |
 | 19–23. Stadium Guide | v2.2 | 9/9 | Complete | 2026-03-27 |
-| 24. Code Cleanup & Tech Debt | 1/2 | In Progress|  | - |
+| 24. Code Cleanup & Tech Debt | 2/2 | Complete   | 2026-03-29 | - |
 | 25. Multi-Game Search | v2.3 | 0/3 | Not started | - |
 | 26. Stadium Detail Redesign | v2.3 | 0/4 | Not started | - |
 | 27. Stadium Guide Hub Redesign | v2.3 | 0/1 | Not started | - |

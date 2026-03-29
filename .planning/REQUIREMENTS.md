@@ -15,9 +15,9 @@
 - [x] **CLEAN-03**: `pubRecPosts` query removed from `getStadiumById` controller; `pubRecPosts` field removed from the `StadiumDetail` response type
 - [x] **CLEAN-04**: Orphaned `token.helpers.ts` file from v1 is deleted
 - [x] **CLEAN-05**: Stale "Phase 4 feature" comment removed from `frontend/src/types/index.ts`
-- [ ] **CLEAN-06**: `transportType` field on Getting There posts validated at the backend API layer (accepts: Metro / Bus / Train / Taxi / Walking / Other; rejects anything else with 400)
-- [ ] **CLEAN-07**: FanBase team page shows a "Stadium Guide →" link when `team.stadiumId` is non-null
-- [ ] **CLEAN-08**: Full codebase review run; any additional orphaned files, unused DB fields, or dead code identified and removed
+- [x] **CLEAN-06**: `transportType` field on Getting There posts validated at the backend API layer (accepts: Metro / Bus / Train / Taxi / Walking / Other; rejects anything else with 400)
+- [x] **CLEAN-07**: FanBase team page shows a "Stadium Guide →" link when `team.stadiumId` is non-null
+- [x] **CLEAN-08**: Full codebase review run; any additional orphaned files, unused DB fields, or dead code identified and removed
 
 ### Multi-Game Search
 
@@ -90,9 +90,9 @@
 | CLEAN-03 | Phase 24 | Complete |
 | CLEAN-04 | Phase 24 | Complete |
 | CLEAN-05 | Phase 24 | Complete |
-| CLEAN-06 | Phase 24 | Pending |
-| CLEAN-07 | Phase 24 | Pending |
-| CLEAN-08 | Phase 24 | Pending |
+| CLEAN-06 | Phase 24 | Complete |
+| CLEAN-07 | Phase 24 | Complete |
+| CLEAN-08 | Phase 24 | Complete |
 | SEARCH-01 | Phase 25 | Pending |
 | SEARCH-02 | Phase 25 | Pending |
 | SEARCH-03 | Phase 25 | Pending |
