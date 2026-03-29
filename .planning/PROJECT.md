@@ -40,9 +40,16 @@ A traveler or local types a city and date range and instantly sees every footbal
 - FanBase team page (`TeamFanBasePage`) has `stadiumId` in the team type but never renders a "Stadium Guide →" link
 - Global league expansion (South America, MLS, Asia) — deferred to v3.0
 
-## Next Milestone
+## Current Milestone: v2.3 — Multi-Game Search & UX Overhaul
 
-*(Not yet planned — run `/gsd:new-milestone` to define v2.3 or v3.0)*
+**Goal:** Introduce multi-city trip planning search, redesign Stadium Guide and FanBase team pages with richer content tabs, and clean up all known tech debt.
+
+**Target features:**
+- Multi-Game search: fan can plan a trip across multiple cities/dates in one search
+- Stadium detail page: tabbed layout (Transport, Matchday Guide, Food & Drink, Stadium Rules) with new DB fields
+- Stadium Guide hub: refreshed card design with team crests and capacity
+- FanBase team page: filter pills, better header, category-specific empty states
+- Tech debt sweep: dead code, orphaned files, dead backend queries, backend validation gaps
 
 ## Requirements
 
