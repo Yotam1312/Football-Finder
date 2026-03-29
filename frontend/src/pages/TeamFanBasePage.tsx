@@ -201,6 +201,15 @@ export const TeamFanBasePage: React.FC = () => {
                   <p className="text-gray-500 text-sm mt-0.5">
                     FanBase · {team._count.posts} {team._count.posts === 1 ? 'post' : 'posts'}
                   </p>
+                  {/* Stadium Guide link — only shown when the team has a known stadium */}
+                  {team.stadiumId != null && (
+                    <Link
+                      to={`/stadiums/${team.stadiumId}`}
+                      className="text-sm text-green-600 hover:underline mt-0.5 inline-block"
+                    >
+                      Stadium Guide →
+                    </Link>
+                  )}
                 </div>
               </div>
 

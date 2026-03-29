@@ -25,9 +25,7 @@ describe('GET /api/stadiums/:id', () => {
       const res = await request(app).get(`/api/stadiums/${stadiumId}`);
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('stadium');
-      expect(res.body.stadium).toHaveProperty('pubRecPosts');
       expect(res.body.stadium).toHaveProperty('gettingTherePosts');
-      expect(Array.isArray(res.body.stadium.pubRecPosts)).toBe(true);
       expect(Array.isArray(res.body.stadium.gettingTherePosts)).toBe(true);
     }
   });

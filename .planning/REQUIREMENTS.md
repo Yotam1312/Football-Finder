@@ -1,100 +1,121 @@
----
-milestone: v2.2
-name: Stadium Guide
-version: 1.0
-created: 2026-03-25
----
+# Requirements — v2.3 Multi-Game Search & UX Overhaul
 
-# Milestone v2.2 — Stadium Guide Requirements
+**Milestone goal:** Introduce multi-city trip planning search, redesign Stadium Guide and FanBase team pages with richer content tabs, and clean up all known tech debt.
 
-## Overview
-
-Transform the generic Transportation Guide page into a structured Stadium Guide directory. Every stadium gets its own page with an embedded map, transport data, and community content pulled from FanBase. Users can find any stadium via search or Country → League → Team browse.
+**Status:** Roadmap created — ready to execute
 
 ---
 
-## Requirements
+## v2.3 Requirements
 
-### Discovery
+### Code Cleanup & Tech Debt
 
-- [x] **STAD-01**: User can search for a stadium by typing a team or stadium name from the Stadium Guide hub and see matching results
-- [x] **STAD-02**: User can browse to a stadium via Country → League → Team navigation from the Stadium Guide hub
+- [x] **CLEAN-01**: Dead file `NearbyStadiumsSection.tsx` is deleted from the codebase
+- [x] **CLEAN-02**: `nearbyStadiums` Haversine computation removed from `getStadiumById` controller; `NearbyStadium` interface and `nearbyStadiums` field removed from the `StadiumDetail` response type
+- [x] **CLEAN-03**: `pubRecPosts` query removed from `getStadiumById` controller; `pubRecPosts` field removed from the `StadiumDetail` response type
+- [x] **CLEAN-04**: Orphaned `token.helpers.ts` file from v1 is deleted
+- [x] **CLEAN-05**: Stale "Phase 4 feature" comment removed from `frontend/src/types/index.ts`
+- [x] **CLEAN-06**: `transportType` field on Getting There posts validated at the backend API layer (accepts: Metro / Bus / Train / Taxi / Walking / Other; rejects anything else with 400)
+- [x] **CLEAN-07**: FanBase team page shows a "Stadium Guide →" link when `team.stadiumId` is non-null
+- [x] **CLEAN-08**: Full codebase review run; any additional orphaned files, unused DB fields, or dead code identified and removed
 
-### Stadium Page
+### Multi-Game Search
 
-- [x] **STAD-05**: Stadium page shows stadium name, hosting team (with crest), and city
-- [x] **STAD-06**: Stadium page shows an embedded OpenStreetMap map using the stadium's stored lat/lng coordinates
-- [x] **STAD-07**: Stadium page shows a Navigate button that opens Google Maps directions to the stadium
-- [x] **STAD-08**: Stadium page shows transport options: nearby metro/train/bus lines, walking time from centre, general transport tip, and parking info
-- [x] **STAD-09**: Stadium page shows the top 5 Pub Recommendation posts from the team's FanBase, ordered by upvotes
-- [x] **STAD-10**: Stadium page shows the top 5 Getting There posts from the team's FanBase, ordered by upvotes
+- [ ] **SEARCH-01**: Homepage search form has a "Single Game / Multiple Games" toggle; Single Game mode is the default and behaves identically to current behavior
+- [ ] **SEARCH-02**: Selecting "Multiple Games" expands the form to show multiple city + date-range input pairs
+- [ ] **SEARCH-03**: User can add more city/date legs with an "Add Game" button (minimum 2, no hard maximum)
+- [ ] **SEARCH-04**: User can remove any individual leg (except when only one leg remains in the set)
+- [ ] **SEARCH-05**: Searching in Multiple Games mode returns results grouped into separate sections per city (e.g., "London — 3 matches", "Madrid — 2 matches"), each with its own match list
+- [ ] **SEARCH-06**: Empty results per city show a per-section "No matches found" state rather than a full-page empty state
 
-### Infrastructure
+### Stadium Guide Hub Redesign
 
-- [x] **STAD-11**: Stadium records in the database include `latitude` and `longitude` coordinate fields (populated via SQL/CSV)
-- [x] **STAD-12**: Backend exposes a stadium search endpoint (search by team name or stadium name) and a stadium detail endpoint (returning transport data and top FanBase posts)
+- [ ] **STAD-HUB-01**: Stadium Guide hub (`/stadiums`) has a refreshed visual layout with a branded header consistent with the site's green identity
+- [ ] **STAD-HUB-02**: Stadium cards show team crest, stadium name, city, and capacity (capacity hidden gracefully if null)
+- [ ] **STAD-HUB-03**: Hub page has a "Featured Stadiums" section at the top highlighting the most iconic/largest stadiums
 
-### Navigation
+### Stadium Detail Page Redesign
 
-- [x] **STAD-13**: The Stadium Guide hub replaces the Transportation Guide link in the navbar and bottom navigation bar (old `/transportation-guide` page is removed)
+- [ ] **STAD-DETAIL-01**: Stadium detail page (`/stadiums/:id`) has a green hero header with a floating team identity card (team logo, stadium name, city, home team — logo floats half-on/half-off the header)
+- [ ] **STAD-DETAIL-02**: Stadium detail page uses a 4-tab navigation bar: Transport, Matchday Guide, Food & Drink, Stadium Rules; each tab has a line-art icon
+- [ ] **STAD-DETAIL-03**: Transport tab shows a 3-column card grid: Public Transit (metro/bus/train steps), Driving & Parking, and Address (with prominent green "Open in Google Maps" button); collapses to 1-column on mobile
+- [ ] **STAD-DETAIL-04**: Matchday Guide tab shows a vertical arrival timeline (e.g., -3h, -2h, 0h) on the left and two pro-tip cards on the right (e.g., "Download the App", "Cashless Stadium")
+- [ ] **STAD-DETAIL-05**: Food & Drink tab shows inside-stadium options and local recommendations in a two-column split; food categories use icons; includes a "Find Nearby Pubs" external link/button
+- [ ] **STAD-DETAIL-06**: Stadium Rules tab shows bag policy as a checklist with green ✓ / red ✗ icons, and prohibited items as a multi-column list with red ✗ icons; "Important Policies" uses a red-tinted alert header
+- [ ] **STAD-DETAIL-07**: Stadium model gains `matchdayGuide`, `foodAndDrink`, and `stadiumRules` JSON fields; Prisma migration runs; `GET /api/stadiums/:id` returns these fields
+- [ ] **STAD-DETAIL-08**: All new tab content sections are hidden gracefully (empty state message) when their data is null
+- [ ] **STAD-DETAIL-09**: Stadium detail layout is fully responsive; all tab content collapses from multi-column to single-column on mobile
 
-### Stadium Transport Detail — Extended Sections (Phase 22)
+### FanBase Team Page Redesign
 
-- [x] **STAD-14**: Stadium model gains JSON fields: `airportTransport`, `travelTimes`, `paymentInfo`, `proTips`, `recommendedApps`, `budgetBreakdown`; migration runs cleanly and the detail endpoint returns them
-- [x] **STAD-15**: Stadium detail page shows an "From Airport" section with metro route steps/time/cost, taxi cost/time, and Uber/Bolt cost/time and surge warning
-- [x] **STAD-16**: Stadium detail page shows a "Travel Times" section with from-city-centre times for metro, bus, taxi, and walking
-- [x] **STAD-17**: Stadium detail page shows a "Payment & Tickets" section with accepted card types, recommended travel cards, and tips
-- [x] **STAD-18**: Stadium detail page shows a "Pro Tips" section listing practical advice (arrive early, best metro line, surge pricing, last train check)
-- [x] **STAD-19**: Stadium detail page shows a "Recommended Apps" section listing local metro app, Google Maps, Uber/Bolt
-- [x] **STAD-20**: Stadium detail page shows a "Budget Breakdown" section with budget/standard/comfort tiers and cost ranges
-- [x] **STAD-21**: Stadium detail page shows a "Community Tips" section with the top 3 FanBase "Getting There" posts and a "View all tips in FanBase →" link to `/fanbase/[team-slug]?tab=getting-there`
-- [x] **STAD-22**: Stadium detail page includes an interactive map (Leaflet + OpenStreetMap tiles) showing the stadium marker; transport stop markers shown only when coordinate data is available (Phase 22 ships stadium marker only)
-- [x] **STAD-23**: Stadium detail page shows a "Nearby Stadiums" section with up to 3 stadiums within 20 km, each linking to their own stadium page
-- [x] **STAD-24**: All new sections are hidden gracefully (no broken UI) when their data fields are null or empty
+- [ ] **FAN-01**: FanBase team page has a redesigned header: team crest, "[Team Name] FanBase" title, "Community tips and experiences from fellow fans" tagline, and a prominent green "+ Add Your Tip" button
+- [ ] **FAN-02**: Post type filter renders as horizontal scrollable pills: All, Where to Sit, Local Crowd, Pubs & Food, I'm Going (mapping to existing post types SEAT_TIP, GENERAL, PUB_RECOMMENDATION, IM_GOING)
+- [ ] **FAN-03**: Selecting a filter pill shows only posts of that type; "All" shows all post types combined
+- [ ] **FAN-04**: Each category shows a contextual empty state when no posts exist ("No posts in this category yet — Be the first to share your experience!")
+- [ ] **FAN-05**: "Where to Sit" empty state includes a photo-share placeholder with dashed border, camera icon, and "Share Your Seat" button
+- [ ] **FAN-06**: "Pubs & Food" empty state includes a "Recommend a Place" CTA with location pin icon
+- [ ] **FAN-07**: "+ Add Your Tip" and category-specific CTA buttons verify authentication before opening the submission modal; unauthenticated users are prompted to sign in
+- [ ] **FAN-08**: Getting There tab / section co-exists with the new pill filter system (not removed)
 
 ---
 
-## Future Requirements (deferred)
+## Future Requirements (Deferred)
 
-- User-submitted corrections to stadium data (address, transport info)
-- Stadium capacity and founding year on stadium page
-- Photo gallery for stadiums (fan-submitted)
-- Stadium-scoped posts (separate from team FanBase) — currently FanBase posts are used instead
+- Global league expansion (South America, MLS, Asia) — v3.0
+- Live scores — v3.0
+- FanBase post search / keyword search — v3.0
+- Trending posts cross-team feed — v3.0
+- Stadium food/drink data via third-party API (e.g., Google Places) — future
+- Google One Tap overlay — future minor update
+- Push notifications / email match reminders — not yet prioritized
 
 ---
 
-## Out of Scope
+## Out of Scope (v2.3)
 
-- Google Maps Embed API (requires billing) — using OpenStreetMap iframe (free)
-- Stadium ticket sales integration — commercial deals required
-- Live stadium occupancy / attendance data
-- Stadium virtual tours
+- In-app ticket purchasing
+- PWA / offline support
+- Stadium food menu data automated import (manual seeding only in v2.3)
+- Matchday Guide timeline data automated import (manual seeding only in v2.3)
+- Social graph (follow users, DMs)
 
 ---
 
 ## Traceability
 
-| REQ-ID | Phase | Plan | Status |
-|--------|-------|------|--------|
-| STAD-11 | Phase 19 | — | pending |
-| STAD-12 | Phase 19 | — | pending |
-| STAD-01 | Phase 20 | — | pending |
-| STAD-02 | Phase 20 | — | pending |
-| STAD-13 | Phase 20 | — | pending |
-| STAD-05 | Phase 21 | — | pending |
-| STAD-06 | Phase 21 | — | pending |
-| STAD-07 | Phase 21 | — | pending |
-| STAD-08 | Phase 21 | — | pending |
-| STAD-09 | Phase 21 | — | pending |
-| STAD-10 | Phase 21 | — | pending |
-| STAD-14 | Phase 22 | — | pending |
-| STAD-15 | Phase 22 | — | pending |
-| STAD-16 | Phase 22 | — | pending |
-| STAD-17 | Phase 22 | — | pending |
-| STAD-18 | Phase 22 | — | pending |
-| STAD-19 | Phase 22 | — | pending |
-| STAD-20 | Phase 22 | — | pending |
-| STAD-21 | Phase 22 | — | pending |
-| STAD-22 | Phase 22 | — | pending |
-| STAD-23 | Phase 22 | — | pending |
-| STAD-24 | Phase 22 | — | pending |
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| CLEAN-01 | Phase 24 | Complete |
+| CLEAN-02 | Phase 24 | Complete |
+| CLEAN-03 | Phase 24 | Complete |
+| CLEAN-04 | Phase 24 | Complete |
+| CLEAN-05 | Phase 24 | Complete |
+| CLEAN-06 | Phase 24 | Complete |
+| CLEAN-07 | Phase 24 | Complete |
+| CLEAN-08 | Phase 24 | Complete |
+| SEARCH-01 | Phase 25 | Pending |
+| SEARCH-02 | Phase 25 | Pending |
+| SEARCH-03 | Phase 25 | Pending |
+| SEARCH-04 | Phase 25 | Pending |
+| SEARCH-05 | Phase 25 | Pending |
+| SEARCH-06 | Phase 25 | Pending |
+| STAD-DETAIL-01 | Phase 26 | Pending |
+| STAD-DETAIL-02 | Phase 26 | Pending |
+| STAD-DETAIL-03 | Phase 26 | Pending |
+| STAD-DETAIL-04 | Phase 26 | Pending |
+| STAD-DETAIL-05 | Phase 26 | Pending |
+| STAD-DETAIL-06 | Phase 26 | Pending |
+| STAD-DETAIL-07 | Phase 26 | Pending |
+| STAD-DETAIL-08 | Phase 26 | Pending |
+| STAD-DETAIL-09 | Phase 26 | Pending |
+| STAD-HUB-01 | Phase 27 | Pending |
+| STAD-HUB-02 | Phase 27 | Pending |
+| STAD-HUB-03 | Phase 27 | Pending |
+| FAN-01 | Phase 28 | Pending |
+| FAN-02 | Phase 28 | Pending |
+| FAN-03 | Phase 28 | Pending |
+| FAN-04 | Phase 28 | Pending |
+| FAN-05 | Phase 28 | Pending |
+| FAN-06 | Phase 28 | Pending |
+| FAN-07 | Phase 28 | Pending |
+| FAN-08 | Phase 28 | Pending |

@@ -137,15 +137,6 @@ export interface PaymentDetails {
   tips: string | null;
 }
 
-// A nearby stadium returned by the detail endpoint.
-export interface NearbyStadium {
-  id: number;
-  name: string;
-  city: string;
-  distance: number;  // km, rounded to 1 decimal
-  team: { id: number; name: string; logoUrl: string | null } | null;
-}
-
 // Full stadium detail shape — returned by GET /api/stadiums/:id (Phase 21).
 // Extends the base transport fields with the new guide sections and community posts.
 export interface StadiumDetail {
@@ -180,11 +171,8 @@ export interface StadiumDetail {
   paymentDetails: PaymentDetails | null;
   // Nearest major station address — shown with a "Copy" button on the detail page
   centralStation: string | null;
-  // Nearby stadiums within 20 km
-  nearbyStadiums: NearbyStadium[];
   // Community data derived from match history
   primaryTeam: { id: number; name: string; logoUrl: string | null } | null;
-  pubRecPosts: Post[];
   gettingTherePosts: Post[];
 }
 
@@ -201,7 +189,7 @@ export interface Post {
   title: string;
   body: string;
   authorName: string;
-  photoUrl: string | null;       // SEAT_TIP only — Phase 4 feature
+  photoUrl: string | null;       // SEAT_TIP only
   seatSection: string | null;    // SEAT_TIP only
   seatRow: string | null;        // SEAT_TIP only
   seatNumber: string | null;     // SEAT_TIP only

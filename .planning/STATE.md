@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
 milestone: v2.3
-milestone_name: — TBD
-status: planning
-stopped_at: v2.2 archived
-last_updated: "2026-03-27T11:00:00.000Z"
-last_activity: 2026-03-27 — v2.2 milestone archived, ready for next milestone
+milestone_name: — Multi-Game Search & UX Overhaul
+status: in-progress
+stopped_at: Completed 24-02-PLAN.md
+last_updated: "2026-03-29T08:37:26.000Z"
+last_activity: 2026-03-29 — Completed Phase 24 Plan 02 (transportType validation + Stadium Guide link + codebase review)
 progress:
-  total_phases: 0
+  total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_plans: 2
+  completed_plans: 2
+  percent: 50
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-27)
 
 **Core value:** A traveler or local types a city and date range and instantly sees every football match happening there — no Googling, no scattered sites.
-**Current focus:** v2.2 complete — ready to plan next milestone
+**Current focus:** v2.3 — Phase 24 ready to plan
 
 ## Current Position
 
-Phase: — (no active milestone)
-Plan: —
-Status: v2.2 archived — run `/gsd:new-milestone` to define next milestone
-Last activity: 2026-03-27 — v2.2 milestone archived
+Phase: 24 of 28 (Code Cleanup & Tech Debt)
+Plan: 2 of 2 (Complete)
+Status: Phase 24 complete
+Last activity: 2026-03-29 — Completed Phase 24 Plan 02 (transportType validation + Stadium Guide link + codebase review)
 
-Progress: [░░░░░░░░░░] —
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -48,30 +48,32 @@ Progress: [░░░░░░░░░░] —
 | 21 — Stadium Detail Page | 1 | ~1 day |
 | 22 — Stadium Transport Detail | 2 | ~1 day |
 | 23 — Stadium Page Structure | 1 | < 1 hour |
+| Phase 24 P01 | 3 | 3 tasks | 5 files |
 
 ## Accumulated Context
 
+### Decisions
+
+- v2.2: JSON fields for stadium transport data (airport, travel times, budget, payment) — flexible schema without migrations per content update
+- v2.2: Leaflet + OpenStreetMap for maps — no API key, free, interactive
+- v2.3: Phase 25 (Multi-Game Search) gets its own backend endpoint — parallel city queries, grouped response
+- [Phase 24]: Removed haversineKm, nearbyStadiums, and pubRecPosts as dead code with no active consumers; kept gettingTherePosts and primaryTeam as active fields
+- [Phase 24 P02]: transportType validation uses local VALID_TRANSPORT_TYPES constant (not Prisma enum import) — matches existing postType validation pattern; getTeamById derives stadiumId with separate findFirst query, same pattern as getTeamsByLeague
+
 ### Pending Todos
 
-- Add transport data to stadium records (CSV/SQL ready per user) — out of code scope, user-managed
-- Add lat/lng coordinates to stadium records (new in v2.2) — user-managed via SQL/CSV after Phase 19 migration
-- `transportType` backend validation — enforce Metro/Bus/Train/Taxi/Walking/Other at API layer
+- Add transport data to stadium records (CSV/SQL) — user-managed after Phase 19 migration
+- Add lat/lng coordinates to stadium records — user-managed
+- Seed `matchdayGuide`, `foodAndDrink`, `stadiumRules` JSON data per stadium after Phase 26 migration
 - Pre-flight for global league expansion (v3.0): upgrade API-Football plan, verify league IDs, MLS timezone table
-- Clean up dead code: `NearbyStadiumsSection.tsx`, `nearbyStadiums` backend query, `pubRecPosts` backend query
-- Add FanBase → Stadium link in `TeamFanBasePage` using `team.stadiumId`
-
-### Roadmap Evolution
-
-- Phase 23 added: Stadium Page Structure — consistent section order (Hero, Location, Getting There, Travel Times, Budget Breakdown, Payment & Tickets, Pro Tips, Recommended Apps, Parking, Community Tips)
-- Phase 24 (stadium hero background image) added then removed — deferred
 
 ### Blockers/Concerns
 
 - API-Football free plan capped at seasons 2022-2024 — need paid plan before v3.0 league work
-- Stadium coordinate data (lat/lng) and transport JSON data require manual seeding by user — not automated
+- New tab content (Matchday Guide, Food & Drink, Stadium Rules) requires manual seeding — no automated import in v2.3
 
 ## Session Continuity
 
-Last session: 2026-03-27
-Stopped at: v2.2 archived
+Last session: 2026-03-29T08:37:26.000Z
+Stopped at: Completed 24-02-PLAN.md
 Resume file: None

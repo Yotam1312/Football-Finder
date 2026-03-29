@@ -39,6 +39,13 @@ export const createPost = async (req: Request, res: Response) => {
       });
     }
 
+    // Validate transportType when provided — only GETTING_THERE posts use this field,
+    // but we validate it regardless of postType to reject bad data early.
+    const VALID_TRANSPORT_TYPES = ['Metro', 'Bus', 'Train', 'Taxi', 'Walking', 'Other'];
+    if (transportType !== undefined && !VALID_TRANSPORT_TYPES.includes(transportType)) {
+      return res.status(400).json({ error: 'Invalid transport type' });
+    }
+
     if (!teamId) {
       return res.status(400).json({ error: 'teamId is required' });
     }
@@ -173,6 +180,12 @@ export const editPost = async (req: Request, res: Response) => {
     }
 
     const body = req.body;
+
+    // Validate transportType when it is being updated
+    const VALID_TRANSPORT_TYPES = ['Metro', 'Bus', 'Train', 'Taxi', 'Walking', 'Other'];
+    if (body.transportType !== undefined && !VALID_TRANSPORT_TYPES.includes(body.transportType)) {
+      return res.status(400).json({ error: 'Invalid transport type' });
+    }
 
     // Only update fields that are explicitly present in the request body.
     // Spreading undefined values into the data object would overwrite existing data with undefined,

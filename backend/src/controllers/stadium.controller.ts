@@ -159,31 +159,15 @@ export const getStadiumsByLeague = async (req: Request, res: Response) => {
   }
 };
 
-// Returns distance in kilometres between two lat/lng points using the Haversine formula.
-// Used to find nearby stadiums within a given radius.
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371; // Earth's radius in km
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
 // GET /api/stadiums/:id
 // Returns the full detail view for a single stadium, including:
 //   - All transport fields (metros, trains, buses, walking time, etc.)
-//   - Coordinates (latitude/longitude) for the map embed in Phase 21
+//   - Coordinates (latitude/longitude) for the Leaflet map
 //   - primaryTeam: the team with the most home matches at this stadium
-//   - pubRecPosts: top 5 PUB_RECOMMENDATION posts for the primary team
 //   - gettingTherePosts: top 5 GETTING_THERE posts for the primary team
 // Posts are ordered by upvoteCount DESC and exclude reported content.
 // If no matches have been played at this stadium yet, primaryTeam is null
-// and both post arrays are empty — this is a valid state, not an error.
+// and the post array is empty — this is a valid state, not an error.
 export const getStadiumById = async (req: Request, res: Response) => {
   try {
     // Step 1: Validate that the id is a real integer (not "abc", not a float string)
@@ -222,77 +206,25 @@ export const getStadiumById = async (req: Request, res: Response) => {
       });
     }
 
-    // Step 4: Fetch top 5 posts of each relevant type for the primary team.
-    // We only query posts if there is a primary team — a stadium with no match
-    // history has no community posts to show, so we short-circuit early.
-    // Promise.all runs both queries in parallel rather than sequentially.
-    let pubRecPosts: any[] = [];
+    // Step 4: Fetch top 5 GETTING_THERE posts for the primary team.
+    // Only runs if there is a primary team — a stadium with no match history
+    // has no community posts to show.
     let gettingTherePosts: any[] = [];
 
     if (primaryTeamId) {
-      [pubRecPosts, gettingTherePosts] = await Promise.all([
-        prisma.post.findMany({
-          where: { teamId: primaryTeamId, postType: 'PUB_RECOMMENDATION', reported: false },
-          orderBy: { upvoteCount: 'desc' },
-          take: 5,
-        }),
-        prisma.post.findMany({
-          where: { teamId: primaryTeamId, postType: 'GETTING_THERE', reported: false },
-          orderBy: { upvoteCount: 'desc' },
-          take: 5,
-        }),
-      ]);
-    }
-
-    // Step 5: Find nearby stadiums within 20 km using Haversine distance
-    let nearbyStadiums: Array<{ id: number; name: string; city: string; distance: number; team: { id: number; name: string; logoUrl: string | null } | null }> = [];
-
-    if (stadium.latitude != null && stadium.longitude != null) {
-      // Fetch all other stadiums that have coordinates
-      const allOtherStadiums = await prisma.stadium.findMany({
-        where: {
-          id: { not: id },
-          latitude: { not: null },
-          longitude: { not: null },
-        },
-        select: {
-          id: true,
-          name: true,
-          city: true,
-          latitude: true,
-          longitude: true,
-          // Get the most recent home team for display (same pattern as searchStadiums)
-          matches: {
-            select: {
-              homeTeam: { select: { id: true, name: true, logoUrl: true } },
-            },
-            orderBy: { matchDate: 'desc' },
-            take: 1,
-          },
-        },
+      gettingTherePosts = await prisma.post.findMany({
+        where: { teamId: primaryTeamId, postType: 'GETTING_THERE', reported: false },
+        orderBy: { upvoteCount: 'desc' },
+        take: 5,
       });
-
-      nearbyStadiums = allOtherStadiums
-        .map(s => ({
-          id: s.id,
-          name: s.name,
-          city: s.city,
-          distance: Math.round(haversineKm(stadium.latitude!, stadium.longitude!, s.latitude!, s.longitude!) * 10) / 10,
-          team: s.matches[0]?.homeTeam ?? null,
-        }))
-        .filter(s => s.distance <= 20)
-        .sort((a, b) => a.distance - b.distance)
-        .slice(0, 3);
     }
 
-    // Step 6: Compose and return the full stadium response
+    // Step 5: Compose and return the full stadium response
     res.json({
       stadium: {
         ...stadium,
         primaryTeam,
-        pubRecPosts,
         gettingTherePosts,
-        nearbyStadiums,
       },
     });
   } catch (error) {
