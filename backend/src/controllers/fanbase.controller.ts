@@ -160,7 +160,8 @@ export const searchTeams = async (req: Request, res: Response) => {
 };
 
 // GET /api/fanbase/team/:teamId
-// Returns a single team with its total post count.
+// Returns a single team with its total post count and derived stadiumId.
+// stadiumId is derived from the first home match at a known stadium — null if none exists.
 // Returns 404 if the team does not exist.
 export const getTeamById = async (req: Request, res: Response) => {
   try {
@@ -183,7 +184,20 @@ export const getTeamById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Team not found' });
     }
 
-    res.json({ team });
+    // Derive stadiumId: find the first home match for this team that has a stadium.
+    // We use the same logic as getTeamsByLeague — home teams play at their own stadium,
+    // so the stadiumId on a home match is the team's ground.
+    const homeMatch = await prisma.match.findFirst({
+      where: {
+        homeTeamId: teamId,
+        stadiumId: { not: null },
+      },
+      select: { stadiumId: true },
+    });
+
+    const stadiumId = homeMatch?.stadiumId ?? null;
+
+    res.json({ team: { ...team, stadiumId } });
   } catch (error) {
     console.error('Error fetching team:', error);
     res.status(500).json({ error: 'Failed to fetch team' });
